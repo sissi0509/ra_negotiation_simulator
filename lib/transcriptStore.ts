@@ -1,11 +1,11 @@
 // File-system transcript store — acts as a simple database until a real one is chosen.
-// Each completed conversation is written to transcripts/transcript_<run_id>.json
-// Migration path: read all files, insert rows into your DB, then delete this folder.
+// Each completed conversation is written to db/transcripts/transcript_<run_id>.json
+// Migration path: read all files, insert rows into your DB, then delete db/.
 import fs from "fs";
 import path from "path";
 import type { Transcript } from "@/lib/transcript";
 
-const TRANSCRIPTS_DIR = path.join(process.cwd(), "transcripts");
+const TRANSCRIPTS_DIR = path.join(process.cwd(), "db", "transcripts");
 
 function ensureDir(): void {
   if (!fs.existsSync(TRANSCRIPTS_DIR)) {

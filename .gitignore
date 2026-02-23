@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# saved transcripts (user data — migrate to DB when ready)
-/transcripts
+# local data store — migrate to real DB when ready
+/db

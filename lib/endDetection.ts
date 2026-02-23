@@ -45,7 +45,9 @@ const AI_END_PHRASES = [
   "we're walking away",
 ];
 
-// Phrases detected in the user's message that signal they want to end
+// Phrases detected in the user's message that signal they want to end.
+// Keep only unambiguous farewells — "no thanks" and "not interested" were
+// removed because they fire mid-negotiation (e.g. "no thanks, but what about equity?").
 const USER_END_PHRASES = [
   "goodbye",
   "good bye",
@@ -63,8 +65,6 @@ const USER_END_PHRASES = [
   "end this",
   "stop the negotiation",
   "let's stop",
-  "no thanks",
-  "not interested",
 ];
 
 // Standalone "bye" — word boundary prevents matching "maybe", "nearby", etc.
@@ -73,7 +73,11 @@ const STANDALONE_BYE = /\bbye\b/i;
 export function isConversationOver(text: string): boolean {
   if (!text) return false;
   const lower = text.toLowerCase();
-  return AI_END_PHRASES.some((phrase) => lower.includes(phrase));
+  // Remove question sentences before matching so that rhetorical closing
+  // questions like "do we have a deal?" don't trigger a false positive.
+  // The regex strips every run of non-sentence-ending characters up to a "?".
+  const withoutQuestions = lower.replace(/[^.!?]*\?/g, "");
+  return AI_END_PHRASES.some((phrase) => withoutQuestions.includes(phrase));
 }
 
 export function isUserSigningOff(text: string): boolean {

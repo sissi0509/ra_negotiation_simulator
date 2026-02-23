@@ -8,10 +8,12 @@ import ChatWindow, { Message } from "@/components/ChatWindow";
 import MessageInput from "@/components/MessageInput";
 import EndStatePrompt from "@/components/EndStatePrompt";
 import ExportModal from "@/components/ExportModal";
+import ActionBar from "@/components/ActionBar";
 import scenarios from "@/data/scenarios.json";
 import personalities from "@/data/personalities.json";
 import { isConversationOver, isUserSigningOff } from "@/lib/endDetection";
 import { buildTranscript } from "@/lib/transcript";
+import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY as DEBRIEF_SESSION_KEY_CONST } from "@/app/debrief/page";
 
 const SESSION_KEY = "negotiation_session_id";
 
@@ -152,6 +154,22 @@ export default function Home() {
     setConversationEnded(true);
   }
 
+  function handleDebrief() {
+    if (!scenario || !personality || !startedAt) return;
+    const transcript = buildTranscript(
+      messages,
+      scenario.id,
+      scenario.name,
+      personality.id,
+      personality.name,
+      startedAt
+    );
+    // Clear any stale debrief session so the new transcript always takes priority
+    localStorage.removeItem(DEBRIEF_SESSION_KEY_CONST);
+    localStorage.setItem(DEBRIEF_PENDING_KEY, JSON.stringify(transcript));
+    window.location.href = "/debrief";
+  }
+
   function handleReset() {
     if (sessionId) {
       fetch(`/api/session?id=${sessionId}`, { method: "DELETE" }).catch(() => {});
@@ -188,26 +206,13 @@ export default function Home() {
               {personality.name} {scenario.counterpart_role}
             </p>
           </div>
-          <button
-            onClick={handleExport}
-            disabled={messages.filter((m) => m.role !== "error").length === 0}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Export
-          </button>
-          <button
-            onClick={handleEnd}
-            disabled={conversationEnded}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            End Conversation
-          </button>
-          <button
-            onClick={handleReset}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-50"
-          >
-            Reset
-          </button>
+          <ActionBar
+            onExport={handleExport}
+            onEnd={handleEnd}
+            onReset={handleReset}
+            canExport={messages.filter((m) => m.role !== "error").length > 0}
+            conversationEnded={conversationEnded}
+          />
         </header>
 
         <ChatWindow
@@ -216,8 +221,14 @@ export default function Home() {
           counterpartRole={scenario.counterpart_role}
         />
 
+        {messages.length >= 30 && (
+          <div className="bg-amber-50 px-6 py-2 text-center text-xs text-amber-700 border-t border-amber-100">
+            This conversation is getting long — consider resetting to keep responses accurate.
+          </div>
+        )}
+
         {conversationEnded ? (
-          <EndStatePrompt onStartNew={handleReset} onExport={handleExport} />
+          <EndStatePrompt onStartNew={handleReset} onExport={handleExport} onDebrief={handleDebrief} />
         ) : (
           <MessageInput onSend={handleSend} disabled={isLoading} />
         )}

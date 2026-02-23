@@ -12,9 +12,10 @@ interface Props {
   messages: Message[];
   isLoading: boolean;
   counterpartRole: string;
+  theme?: "gray" | "indigo";
 }
 
-export default function ChatWindow({ messages, isLoading, counterpartRole }: Props) {
+export default function ChatWindow({ messages, isLoading, counterpartRole, theme = "gray" }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,6 +43,8 @@ export default function ChatWindow({ messages, isLoading, counterpartRole }: Pro
               className={`max-w-[70%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                 isUser
                   ? "rounded-tr-sm bg-gray-900 text-white"
+                  : theme === "indigo"
+                  ? "rounded-tl-sm bg-indigo-50 text-gray-900"
                   : "rounded-tl-sm bg-gray-100 text-gray-900"
               }`}
             >
@@ -51,20 +54,14 @@ export default function ChatWindow({ messages, isLoading, counterpartRole }: Pro
         );
       })}
 
-      {messages.length >= 30 && (
-        <div className="sticky bottom-0 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-center text-xs text-amber-700">
-          This conversation is getting long — consider resetting to keep responses accurate.
-        </div>
-      )}
-
       {isLoading && (
         <div className="flex flex-col items-start gap-1">
           <span className="text-xs text-gray-400">{counterpartRole}</span>
-          <div className="rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-3">
+          <div className={`rounded-2xl rounded-tl-sm px-4 py-3 ${theme === "indigo" ? "bg-indigo-50" : "bg-gray-100"}`}>
             <div className="flex gap-1">
-              <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:0ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:150ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:300ms]" />
+              <span className={`h-2 w-2 animate-bounce rounded-full [animation-delay:0ms] ${theme === "indigo" ? "bg-indigo-300" : "bg-gray-400"}`} />
+              <span className={`h-2 w-2 animate-bounce rounded-full [animation-delay:150ms] ${theme === "indigo" ? "bg-indigo-300" : "bg-gray-400"}`} />
+              <span className={`h-2 w-2 animate-bounce rounded-full [animation-delay:300ms] ${theme === "indigo" ? "bg-indigo-300" : "bg-gray-400"}`} />
             </div>
           </div>
         </div>
