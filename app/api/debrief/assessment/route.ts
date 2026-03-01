@@ -1,12 +1,10 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
-import { buildAssessmentPrompt } from "@/lib/debriefPrompt";
+import { buildAssessmentPrompt, DebriefPlan } from "@/lib/debriefPrompt";
 import { Transcript } from "@/lib/transcript";
 import { DebriefStoredMessage } from "@/lib/debriefSessionStore";
-
-const client = new Anthropic();
+import { callClaude } from "@/lib/callClaude";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -14,29 +12,30 @@ export async function POST(req: NextRequest) {
     run_id,
     debrief_id,
     transcript,
+    plan,
     messages,
-    summary,
+    sessionSummary,
   }: {
     run_id: string;
     debrief_id: string;
     transcript: Transcript;
+    plan: DebriefPlan;
     messages: DebriefStoredMessage[];
-    summary: string;
+    sessionSummary: string;
   } = body;
 
-  if (!run_id || !debrief_id || !transcript || !messages || !summary) {
+  if (!run_id || !debrief_id || !transcript || !plan || !messages || !sessionSummary) {
     return NextResponse.json(
-      { error: "Missing required fields: run_id, debrief_id, transcript, messages, summary." },
+      { error: "Missing required fields: run_id, debrief_id, transcript, plan, messages, sessionSummary." },
       { status: 400 }
     );
   }
 
-  const prompt = buildAssessmentPrompt(transcript, messages, summary);
+  const prompt = buildAssessmentPrompt(transcript, plan, messages, sessionSummary);
 
   try {
-    const response = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 1024,
+    const response = await callClaude({
+      max_tokens: 1500,
       messages: [{ role: "user", content: prompt }],
     });
 

@@ -1,12 +1,10 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 import { buildPlanPrompt, DebriefPlan } from "@/lib/debriefPrompt";
 import { saveDebriefSession } from "@/lib/debriefSessionStore";
 import { Transcript } from "@/lib/transcript";
-
-const client = new Anthropic();
+import { callClaude } from "@/lib/callClaude";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -32,8 +30,7 @@ export async function POST(req: NextRequest) {
   const prompt = buildPlanPrompt(transcript);
 
   try {
-    const response = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+    const response = await callClaude({
       max_tokens: 2048,
       messages: [{ role: "user", content: prompt }],
     });
@@ -59,6 +56,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validate new plan schema
+    if (
+      !Array.isArray(plan.key_moments) ||
+      typeof plan.initial_assessment_summary !== "string" ||
+      !Array.isArray(plan.additional_observations)
+    ) {
+      return NextResponse.json(
+        { error: "AI returned plan with unexpected schema." },
+        { status: 500 }
+      );
+    }
+
     // Save plan_<run_id>.json to db/debriefs/plans/
     const debriefDir = path.join(process.cwd(), "db", "debriefs", "plans");
     await fs.mkdir(debriefDir, { recursive: true });
@@ -78,7 +87,7 @@ export async function POST(req: NextRequest) {
       )
     );
 
-    // Save server-side session so Stage 2 can look up transcript metadata
+    // Save server-side session so Stage 2 can look up the transcript
     saveDebriefSession(debrief_id, {
       transcript: { ...transcript, run_id },
       plan,

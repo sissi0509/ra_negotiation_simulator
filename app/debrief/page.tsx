@@ -23,8 +23,6 @@ function generateId(): string {
   });
 }
 
-const REFLECTION_MARKER = "--- Reflection Summary ---";
-
 export default function DebriefPage() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [transcript, setTranscript] = useState<Transcript | null>(null);
@@ -35,19 +33,17 @@ export default function DebriefPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionActive, setSessionActive] = useState(false);
   const [debriefEnded, setDebriefEnded] = useState(false);
-  const [reflectionSummary, setReflectionSummary] = useState<string | null>(null);
+  const [sessionSummary, setSessionSummary] = useState<string | null>(null);
   const [assessment, setAssessment] = useState<string | null>(null);
-  const [isAssessmentLoading, setIsAssessmentLoading] = useState(false);
+  const [assessmentReady, setAssessmentReady] = useState(false);
+  const [assessmentVisible, setAssessmentVisible] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   const [showEndChoice, setShowEndChoice] = useState(false);
 
   // On mount: check for a pending transcript (new debrief) or an active session (page refresh).
-  // DEBRIEF_PENDING_KEY takes priority — its presence means the user explicitly started a new debrief.
-  // DEBRIEF_SESSION_KEY is only used when there is no pending transcript (i.e. page refresh mid-session).
   useEffect(() => {
     async function init() {
       // Priority 1: new debrief request from the simulator (or manual upload).
-      // Clear any in-progress state so the new transcript always wins.
       const pending = localStorage.getItem(DEBRIEF_PENDING_KEY);
       if (pending) {
         localStorage.removeItem(DEBRIEF_SESSION_KEY);
@@ -62,7 +58,6 @@ export default function DebriefPage() {
       }
 
       // Priority 2: mid-session page refresh — restore full state from localStorage.
-      // This survives server restarts because everything is stored client-side.
       const savedState = localStorage.getItem(DEBRIEF_STATE_KEY);
       if (savedState) {
         try {
@@ -92,7 +87,7 @@ export default function DebriefPage() {
         }
       }
 
-      // Priority 3: server session fallback (for sessions started before this change)
+      // Priority 3: server session fallback
       const sessionId = localStorage.getItem(DEBRIEF_SESSION_KEY);
       if (sessionId) {
         try {
@@ -127,8 +122,6 @@ export default function DebriefPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Save conversation state to localStorage after every message.
-  // This keeps the session alive across page refreshes and server restarts.
-  // All values used inside are listed as dependencies to avoid stale closures.
   useEffect(() => {
     if (!debriefId || !plan || !transcript || !Array.isArray(transcript.messages) || messages.length === 0) return;
     const state = {
@@ -144,7 +137,6 @@ export default function DebriefPage() {
   }, [messages, debriefId, plan, transcript, debriefStartedAt]);
 
   // Save completed debrief to db when session ends (natural or manual).
-  // reflectionSummary may be absent on manual end — save whatever is available.
   useEffect(() => {
     if (!debriefEnded || !transcript || !plan || !debriefId) return;
 
@@ -161,7 +153,7 @@ export default function DebriefPage() {
         transcript,
         plan,
         messages: apiMessages,
-        reflection_summary: reflectionSummary ?? "",
+        session_summary: sessionSummary ?? "",
         started_at: debriefStartedAt ?? new Date().toISOString(),
       }),
     }).catch(() => {}); // Best-effort — don't surface save errors to the user
@@ -194,11 +186,16 @@ export default function DebriefPage() {
       const { plan: newPlan }: { plan: DebriefPlan } = await planRes.json();
       setPlan(newPlan);
 
-      // Stage 2: get Alex's opening turn — plan only, no transcript
+      // Stage 2: get Sage's opening turn — include transcript for full context
       const debriefRes = await fetch("/api/debrief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: newPlan, messages: [], debrief_id: newDebriefId }),
+        body: JSON.stringify({
+          plan: newPlan,
+          messages: [],
+          debrief_id: newDebriefId,
+          transcript,
+        }),
       });
       if (!debriefRes.ok) throw new Error(`Debrief API error ${debriefRes.status}`);
       const { reply } = await debriefRes.json();
@@ -212,8 +209,51 @@ export default function DebriefPage() {
     }
   }
 
+  async function handleSessionComplete(summary: string, fullReply: string, currentPlan: DebriefPlan, currentMessages: Message[]) {
+    setSessionSummary(summary);
+    setDebriefEnded(true);
+
+    // Append Sage's closing message to the chat (shown briefly before report screen)
+    const closingMsg: Message = {
+      role: "assistant",
+      text: fullReply,
+      timestamp: new Date().toISOString(),
+    };
+    const allMessages = [...currentMessages, closingMsg];
+    setMessages(allMessages);
+
+    // Auto-fire Stage 3 in background
+    if (!transcript || !debriefId) return;
+    const apiMessages = allMessages
+      .filter((m) => m.role === "user" || m.role === "assistant")
+      .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
+
+    try {
+      const res = await fetch("/api/debrief/assessment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          run_id: transcript.run_id,
+          debrief_id: debriefId,
+          transcript,
+          plan: currentPlan,
+          messages: apiMessages,
+          sessionSummary: summary,
+        }),
+      });
+      if (res.ok) {
+        const { assessment: result } = await res.json();
+        setAssessment(result);
+      }
+    } catch {
+      // Silently fail — button stays enabled so user sees the error state
+    } finally {
+      setAssessmentReady(true);
+    }
+  }
+
   async function handleSend(text: string) {
-    if (!plan || !debriefId) return;
+    if (!plan || !debriefId || !transcript) return;
 
     const userMsg: Message = { role: "user", text, timestamp: new Date().toISOString() };
     const next = [...messages, userMsg];
@@ -228,19 +268,17 @@ export default function DebriefPage() {
       const res = await fetch("/api/debrief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, messages: apiMessages, debrief_id: debriefId }),
+        body: JSON.stringify({ plan, messages: apiMessages, debrief_id: debriefId, transcript }),
       });
       if (!res.ok) throw new Error(`Debrief API error ${res.status}`);
-      const { reply } = await res.json();
+      const data: { reply: string; sessionSummary?: string } = await res.json();
 
-      const newMsg: Message = { role: "assistant", text: reply, timestamp: new Date().toISOString() };
-      setMessages((prev) => [...prev, newMsg]);
-
-      // Detect end of debrief
-      if (reply.includes(REFLECTION_MARKER)) {
-        const markerIdx = reply.indexOf(REFLECTION_MARKER);
-        setReflectionSummary(reply.slice(markerIdx));
-        setDebriefEnded(true);
+      if (data.sessionSummary) {
+        // Session complete — auto-fire Stage 3 and show report screen
+        await handleSessionComplete(data.sessionSummary, data.reply, plan, next);
+      } else {
+        const newMsg: Message = { role: "assistant", text: data.reply, timestamp: new Date().toISOString() };
+        setMessages((prev) => [...prev, newMsg]);
       }
     } catch {
       setMessages((prev) => [
@@ -256,42 +294,21 @@ export default function DebriefPage() {
     }
   }
 
-  async function handleGetAssessment() {
-    if (!transcript || !debriefId) return;
-    setIsAssessmentLoading(true);
-
-    const apiMessages = messages
-      .filter((m) => m.role === "user" || m.role === "assistant")
-      .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
-
-    try {
-      const res = await fetch("/api/debrief/assessment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          run_id: transcript.run_id,
-          debrief_id: debriefId,
-          transcript,
-          messages: apiMessages,
-          summary: reflectionSummary,
-        }),
-      });
-      if (!res.ok) throw new Error(`Assessment API error ${res.status}`);
-      const { assessment: result } = await res.json();
-      setAssessment(result);
-    } catch {
-      // Silently fail — user can retry
-    } finally {
-      setIsAssessmentLoading(false);
-    }
+  function handleRevealAssessment() {
+    setAssessmentVisible(true);
   }
 
   function handleDownload() {
-    if (!transcript || !reflectionSummary || !debriefId) return;
+    if (!transcript || !debriefId) return;
     const apiMessages = messages
       .filter((m) => m.role === "user" || m.role === "assistant")
       .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
-    const text = buildDebriefText(transcript, apiMessages, reflectionSummary, assessment ?? undefined);
+    const text = buildDebriefText(
+      transcript,
+      apiMessages,
+      sessionSummary ?? "",
+      assessment ?? undefined
+    );
     downloadDebrief(text, debriefId);
   }
 
@@ -305,7 +322,7 @@ export default function DebriefPage() {
     window.location.href = "/";
   }
 
-  // ── Report Screen (natural end with summary OR manual end choosing "View Report") ──
+  // ── Report Screen ──────────────────────────────────────────────────────────
   if (debriefEnded && transcript) {
     return (
       <div className="flex h-screen flex-col bg-white">
@@ -323,10 +340,11 @@ export default function DebriefPage() {
           {/* Left — report cards */}
           <div className="flex w-[65%] flex-col overflow-y-auto">
             <DebriefEndState
-              summary={reflectionSummary}
+              sessionSummary={sessionSummary}
               assessment={assessment}
-              isAssessmentLoading={isAssessmentLoading}
-              onGetAssessment={handleGetAssessment}
+              assessmentReady={assessmentReady}
+              assessmentVisible={assessmentVisible}
+              onRevealAssessment={handleRevealAssessment}
               onDownload={handleDownload}
               onBack={handleBack}
             />
@@ -371,7 +389,7 @@ export default function DebriefPage() {
             <ChatWindow
               messages={messages}
               isLoading={isLoading}
-              counterpartRole="Alex"
+              counterpartRole="Sage"
               theme="indigo"
             />
             {showEndChoice ? (

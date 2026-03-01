@@ -1,42 +1,40 @@
 "use client";
 
 interface Props {
-  summary?: string | null;
+  sessionSummary?: string | null;
   assessment?: string | null;
-  isAssessmentLoading?: boolean;
-  onGetAssessment: () => void;
+  assessmentReady?: boolean;
+  assessmentVisible?: boolean;
+  onRevealAssessment: () => void;
   onDownload: () => void;
   onBack: () => void;
 }
 
 export default function DebriefEndState({
-  summary = null,
+  sessionSummary = null,
   assessment = null,
-  isAssessmentLoading = false,
-  onGetAssessment,
+  assessmentReady = false,
+  assessmentVisible = false,
+  onRevealAssessment,
   onDownload,
   onBack,
 }: Props) {
-  const cleanSummary = summary
-    ? summary.replace(/^---\s*Reflection Summary\s*---\s*/i, "").trim()
-    : null;
-
   return (
     <div className="flex flex-col gap-6 px-8 py-8">
-      {/* Reflection Summary Card — only shown when available */}
-      {cleanSummary && (
+      {/* Session Themes Summary Card — shown immediately when available */}
+      {sessionSummary && (
         <div className="rounded-xl border border-indigo-100 bg-indigo-50 px-6 py-5">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-indigo-400">
-            Reflection Summary
+            Session Summary
           </p>
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
-            {cleanSummary}
+            {sessionSummary}
           </p>
         </div>
       )}
 
-      {/* Assessment: button prompt → loading → result */}
-      {assessment ? (
+      {/* Assessment: loading → button → revealed */}
+      {assessmentVisible && assessment ? (
         <div className="rounded-xl border border-emerald-100 bg-emerald-50 px-6 py-5">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-emerald-500">
             AI Perspective
@@ -55,11 +53,11 @@ export default function DebriefEndState({
             for improvement based on the full negotiation.
           </p>
           <button
-            onClick={onGetAssessment}
-            disabled={isAssessmentLoading}
+            onClick={onRevealAssessment}
+            disabled={!assessmentReady}
             className="rounded-md bg-indigo-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
           >
-            {isAssessmentLoading ? "Generating…" : "Get AI Perspective"}
+            {assessmentReady ? "Get AI Perspective" : "Assessment Loading…"}
           </button>
         </div>
       )}

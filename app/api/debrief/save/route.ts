@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     transcript,
     plan,
     messages,
-    reflection_summary,
+    session_summary,
     started_at,
   }: {
     run_id: string;
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     transcript: Transcript;
     plan: DebriefPlan;
     messages: DebriefStoredMessage[];
-    reflection_summary: string;
+    session_summary: string;
     started_at: string;
   } = body;
 
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         transcript,
         plan,
         messages,
-        reflection_summary,
+        session_summary: session_summary ?? "",
       },
       null,
       2

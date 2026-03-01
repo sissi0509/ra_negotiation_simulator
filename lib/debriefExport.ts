@@ -20,7 +20,7 @@ export function buildDebriefText(
 
   const body = messages
     .map((m) => {
-      const speaker = m.role === "user" ? "You" : "Alex";
+      const speaker = m.role === "user" ? "You" : "Sage";
       return `[${speaker}]: ${m.content}`;
     })
     .join("\n\n");

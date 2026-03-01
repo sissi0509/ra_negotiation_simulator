@@ -39,7 +39,7 @@ export default function DebriefLoadingScreen({
         <p className="text-center text-sm text-gray-500">
           {isLoading
             ? "Analyzing your negotiation…"
-            : "Alex will guide you through a structured reflection of your negotiation."}
+            : "Sage will guide you through a structured reflection of your negotiation."}
         </p>
 
         {error && (

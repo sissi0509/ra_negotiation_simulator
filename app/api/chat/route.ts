@@ -1,10 +1,8 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import scenarios from "@/data/scenarios.json";
 import personalities from "@/data/personalities.json";
 import { saveSession, StoredMessage } from "@/lib/sessionStore";
-
-const client = new Anthropic();
+import { callClaude } from "@/lib/callClaude";
 
 interface Message {
   role: "user" | "assistant";
@@ -34,8 +32,7 @@ export async function POST(req: NextRequest) {
       : (messages as Message[]);
 
   try {
-    const response = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+    const response = await callClaude({
       max_tokens: 512,
       system: systemPrompt,
       messages: apiMessages,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ScenarioSelector from "@/components/ScenarioSelector";
 import PersonalitySelector from "@/components/PersonalitySelector";
 import SceneModal from "@/components/SceneModal";
@@ -28,6 +28,8 @@ export default function Home() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState<string | null>(null);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const uploadRef = useRef<HTMLInputElement>(null);
   // True while we check localStorage / fetch the session — prevents the Setup
   // Screen from flashing before we know whether to show the Chat Screen instead.
   const [isInitializing, setIsInitializing] = useState(true);
@@ -185,6 +187,28 @@ export default function Home() {
     setSelectedPersonality("");
   }
 
+  function handleUploadTranscript(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadError(null);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const json = JSON.parse(ev.target?.result as string);
+        if (!Array.isArray(json.messages) || !json.scenario_name || !json.personality_name || !json.started_at) {
+          setUploadError("This doesn't look like a valid transcript. Please export one from the simulator.");
+          return;
+        }
+        localStorage.removeItem(DEBRIEF_SESSION_KEY_CONST);
+        localStorage.setItem(DEBRIEF_PENDING_KEY, JSON.stringify(json));
+        window.location.href = "/debrief";
+      } catch {
+        setUploadError("This doesn't look like a valid transcript. Please export one from the simulator.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
   function handleSend(text: string) {
     const userMsg: Message = { role: "user", text, timestamp: new Date().toISOString() };
     const next = [...messages, userMsg];
@@ -253,7 +277,7 @@ export default function Home() {
 
   // ── Setup Screen ─────────────────────────────────────────────────────────
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gray-50">
       <div className="flex w-full max-w-sm flex-col gap-6 rounded-xl border border-gray-200 bg-white px-8 py-10 shadow-sm">
         <h1 className="text-center text-xl font-semibold text-gray-900">
           Negotiation Simulator
@@ -277,6 +301,29 @@ export default function Home() {
         >
           Start
         </button>
+      </div>
+
+      {/* Upload card */}
+      <div className="flex w-full max-w-sm flex-col gap-3 rounded-xl border border-gray-100 bg-white px-8 py-6 shadow-sm">
+        <p className="text-center text-sm text-gray-500">
+          Already have a transcript?
+        </p>
+        <button
+          onClick={() => uploadRef.current?.click()}
+          className="rounded-md border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+        >
+          Upload to debrief
+        </button>
+        <input
+          ref={uploadRef}
+          type="file"
+          accept=".json"
+          className="hidden"
+          onChange={handleUploadTranscript}
+        />
+        {uploadError && (
+          <p className="text-center text-xs text-red-500">{uploadError}</p>
+        )}
       </div>
 
       {showModal && scenario && personality && (
