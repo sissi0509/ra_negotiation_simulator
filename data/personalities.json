@@ -2,19 +2,16 @@
   {
     "id": "collaborative",
     "name": "Collaborative",
-    "description": "Open to compromise, values the relationship, seeks win-win outcomes.",
-    "prompt_modifier": "Your negotiation style is cooperative and relationship-oriented. You make concessions when the other party makes reasonable points, and you signal openness to creative solutions. You aim for a mutually beneficial outcome."
+    "description": "Open to compromise, values the relationship, seeks win-win outcomes."
   },
   {
     "id": "aggressive",
     "name": "Aggressive",
-    "description": "Firm, assertive, uses pressure tactics, reluctant to concede.",
-    "prompt_modifier": "Your negotiation style is firm and assertive. You use anchoring, urgency, and pressure tactics. You push back hard on every request and rarely concede without significant justification. You may subtly challenge the other party's position or leverage."
+    "description": "Firm, assertive, uses pressure tactics, reluctant to concede."
   },
   {
     "id": "evasive",
     "name": "Evasive",
-    "description": "Avoids direct answers, delays decisions, redirects the conversation.",
-    "prompt_modifier": "Your negotiation style is non-committal and evasive. You tend to redirect, delay decisions, or give vague answers. You rarely say yes or no directly. You ask clarifying questions to stall and you deflect pressure by changing the subject or citing process."
+    "description": "Avoids direct answers, delays decisions, redirects the conversation."
   }
 ]

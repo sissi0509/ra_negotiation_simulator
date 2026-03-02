@@ -1,97 +1,107 @@
 # Final Assessment Protocol
 
-Generate the final assessment after the debrief session is complete.
+Generate a final assessment of the negotiation.
 
 You have four inputs:
 1. The original negotiation transcript — the primary subject of this assessment.
-2. The DebriefPlan (key moments + additional observations from the pre-assessment).
-3. The debrief conversation transcript — reference only. Use it to surface
-   additional insights about the negotiation that were not captured earlier.
-   Do not assess the debrief itself.
-4. The session themes summary from the debrief — reference only; do not
-   reproduce it verbatim.
+2. The DebriefPlan (key moments + additional observations from pre-assessment).
+3. The debrief conversation — use it to surface the user's stated reasoning or
+   intentions that were not visible from the transcript alone. Do not reference
+   the debrief conversation by name in your output. Do not assess the debrief
+   itself.
+4. The session themes summary — reference only; do not reproduce it verbatim.
 
-Produce exactly ONE output document: the Final Assessment.
+Produce exactly ONE output document with four sections.
 
-Do NOT generate a separate debrief summary — the debrief session already produces one.
+Do NOT include a debrief anchors or session reference section.
 Do NOT repeat the full DebriefPlan packets.
 Do NOT re-run the debrief protocol.
-Do NOT introduce new principles not grounded in the negotiation transcript or debrief.
+Do NOT introduce principles not grounded in the negotiation transcript.
 Do NOT assign personality labels or produce scoring tables.
-
----
-
-## Step 1 — Restate Context and Outcome
-
-Summarize the negotiation context and current outcome in 2–4 sentences.
-Do not rehash the full transcript.
-
----
-
-## Step 2 — Debrief Anchors
-
-- List the 2–3 key moment titles used in the debrief.
-- In 1–2 sentences, name the main skill themes addressed
-  (e.g., interest exploration, criteria grounding, de-escalation).
-
-Keep this section short and orienting. It is not a full debrief summary.
-
----
-
-## Step 3 — Evidence-Based Strengths
-
-Identify 2–3 skills or positive behaviors demonstrated in the negotiation.
-
-For each:
-- **What worked**: describe the skill or behavior (phrased behaviorally,
-  not as a personality trait).
-- **Evidence**: quote or paraphrase one line from the negotiation transcript.
-- **Why it matters**: explain the negotiation outcome this behavior supported.
-
-The debrief conversation may provide additional context about the user's intent
-or awareness behind a move — reference it if it adds genuine insight about the
-negotiation. Do not assess the debrief itself.
-
-If no clear strengths are present in the negotiation, note that neutrally and
-focus on Step 4. Do not fabricate strengths.
-
----
-
-## Step 4 — Remaining Development Priorities
-
-List 1–2 recurring gaps that were not resolved during the debrief.
-
-For each gap:
-- Describe it behaviorally (not as a personality label).
-- Explain the likely consequence if it continues.
-- Draw on additional_observations from the DebriefPlan if relevant.
-- Do not introduce new moments unless clearly supported by the negotiation
-  transcript and not already covered in the debrief.
-
----
-
-## Step 5 — Actionable Next Steps
-
-Provide a short practice plan the user can apply immediately:
-
-- **2–3 behavioral rules**: simple cues for the next negotiation.
-- **2 ready-to-use sentence templates**:
-  - One interest-focused line (e.g., "Can you help me understand what's
-    driving that timeline?")
-  - One objective-criteria or options/trade-off line (e.g., "What standard
-    would you use to evaluate that?")
-- **1 simple drill**: e.g., "Before your next negotiation, write down two
-  reasons the other side might want what they're asking for."
-
-Keep it short, practical, and consistent with the negotiation scenario.
 
 ---
 
 ## Output Format
 
-Structure your response with these five clearly labelled sections. Use
-plain prose — no scoring tables, no bullet-heavy lists for Steps 1–4.
-Step 5 may use a short bulleted list for the templates and drill.
+Write in plain prose. Do not use any markdown formatting:
+- No # or ## headers
+- No **bold** or *italic* markers
+- No horizontal rules (---)
+- No bullet lists in sections 1–3
+- Section 4 (Next Steps) may use a short plain list with a dash and space
+
+Write each section name as a plain label on its own line in title case,
+followed by a blank line, then the content. Separate sections with a blank
+line between them.
+
+The four section names are, in order: Context, Strengths, Areas for
+Improvement, Next Steps.
 
 Tone: direct, respectful, evidence-based. Not a grade. Not a lecture.
 Total length: moderate. Prioritize actionable content over completeness.
+Language: plain. No negotiation acronyms or jargon the user may not know.
+Never write "BATNA" — write "alternative option" or "outside offer" instead.
+Never write "ZOPA" or other field-specific terms without plain explanation.
+
+---
+
+## Section 1 — Context
+
+Summarize the negotiation scenario and outcome in 2–4 plain sentences.
+Do not rehash the full transcript.
+
+---
+
+## Section 2 — Strengths
+
+Identify 2–3 behaviors or decisions that worked well.
+
+For each strength, describe the behavior (phrased behaviorally, not as a
+personality trait), reference one line from the negotiation transcript as
+evidence, and explain what outcome it supported.
+
+The debrief conversation may reveal the user's intent behind a move — use
+that context if it adds genuine insight about the negotiation. Do not name
+the debrief explicitly.
+
+If no clear strengths are present, note that neutrally and focus on
+Areas for Improvement. Do not fabricate strengths.
+
+Write as flowing prose, not a bullet list.
+
+---
+
+## Section 3 — Areas for Improvement
+
+Cover ALL key_moments from the DebriefPlan, not only the moments the debrief
+conversation happened to reach. The debrief may have explored only a subset —
+the assessment must be comprehensive regardless.
+
+For each key_moment, describe the user's behaviour (what they did or did not
+do), explain the likely consequence if the pattern continues, and reference
+the diagnostic insight as context. Do not simply repeat the packet verbatim —
+synthesise it into flowing prose.
+
+Also incorporate any additional_observations from the DebriefPlan that add
+meaningful context beyond what the key_moments already cover.
+
+Do not introduce moments not supported by the transcript.
+
+Write as flowing prose, not a bullet list.
+
+---
+
+## Section 4 — Next Steps
+
+Provide a short, practical plan the user can apply immediately. Use a plain
+list format (dash and space before each item). Include:
+
+- 2–3 behavioral rules: simple cues for the next negotiation
+- 2 ready-to-use sentence templates:
+  - one interest-focused line (e.g., "Can you help me understand what's
+    driving that for you?")
+  - one objective-criteria line (e.g., "What standard would we use to
+    evaluate that?")
+- 1 simple drill they can do before their next negotiation
+
+Keep it short, practical, and grounded in this specific scenario.

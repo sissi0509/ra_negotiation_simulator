@@ -37,7 +37,7 @@ export default function DebriefEndState({
       {assessmentVisible && assessment ? (
         <div className="rounded-xl border border-emerald-100 bg-emerald-50 px-6 py-5">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-emerald-500">
-            AI Perspective
+            AI Assessment
           </p>
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
             {assessment}
@@ -57,7 +57,7 @@ export default function DebriefEndState({
             disabled={!assessmentReady}
             className="rounded-md bg-indigo-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
           >
-            {assessmentReady ? "Get AI Perspective" : "Assessment Loading…"}
+            {assessmentReady ? "Get AI Assessment" : "Assessment Loading…"}
           </button>
         </div>
       )}

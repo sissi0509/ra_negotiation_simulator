@@ -63,11 +63,12 @@ export async function POST(req: NextRequest) {
       saveDebriefSession(debrief_id, { ...session, messages: updatedMessages });
     }
 
-    // Detect session-complete marker and extract summary
-    const markerIdx = reply.indexOf(SESSION_COMPLETE_MARKER);
-    if (markerIdx !== -1) {
+    // Detect session-complete marker and extract summary.
+    // Use a regex so minor variations in spacing/capitalisation are caught.
+    const markerMatch = reply.match(/---\s*Session\s+Complete\s*---/i);
+    if (markerMatch?.index !== undefined) {
       const sessionSummary = reply
-        .slice(markerIdx + SESSION_COMPLETE_MARKER.length)
+        .slice(markerMatch.index + markerMatch[0].length)
         .trim();
       return NextResponse.json({ reply, sessionSummary });
     }

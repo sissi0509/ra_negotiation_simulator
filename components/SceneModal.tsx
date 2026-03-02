@@ -3,14 +3,12 @@ interface Scenario {
   name: string;
   description: string;
   counterpart_role: string;
-  system_prompt: string;
 }
 
 interface Personality {
   id: string;
   name: string;
   description: string;
-  prompt_modifier: string;
 }
 
 interface Props {

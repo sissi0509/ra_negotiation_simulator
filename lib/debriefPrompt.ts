@@ -96,7 +96,7 @@ export function buildDebriefSystemPrompt(
   const keyMomentsFormatted = plan.key_moments
     .map(
       (m, i) =>
-        `Moment ${i + 1} — ${m.title}\n  Evidence: ${m.transcript_evidence.join(" / ")}\n  What happened: ${m.what_happened}\n  Diagnostic insight: ${m.diagnostic_insight}\n  Why it mattered: ${m.why_it_mattered}\n  Improved move: ${m.improved_move.principle} / "${m.improved_move.alternative_response}"`
+        `Moment ${i + 1} — ${m.title}\n  Evidence: ${m.transcript_evidence.join(" / ")}\n  What happened: ${m.what_happened}\n  Diagnostic insight: ${m.diagnostic_insight}\n  Why it mattered: ${m.why_it_mattered}`
     )
     .join("\n\n");
 

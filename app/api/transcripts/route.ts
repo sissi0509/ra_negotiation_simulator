@@ -10,11 +10,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid transcript payload" }, { status: 400 });
   }
 
-  saveTranscript(transcript);
+  await saveTranscript(transcript);
   return NextResponse.json({ ok: true });
 }
 
-// GET /api/transcripts  — returns all completed transcripts (future: filter, paginate, move to DB)
+// GET /api/transcripts  — returns all completed transcripts
 export async function GET() {
-  return NextResponse.json(getAllTranscripts());
+  return NextResponse.json(await getAllTranscripts());
 }

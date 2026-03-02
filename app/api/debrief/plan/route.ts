@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 import { buildPlanPrompt, DebriefPlan } from "@/lib/debriefPrompt";
 import { saveDebriefSession } from "@/lib/debriefSessionStore";
 import { Transcript } from "@/lib/transcript";
-import { callClaude } from "@/lib/callClaude";
+import { callClaude, FALLBACK_MODEL } from "@/lib/callClaude";
+import { getDb } from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -27,13 +26,12 @@ export async function POST(req: NextRequest) {
   const run_id = transcript.run_id ?? crypto.randomUUID();
   const debrief_id: string = body.debrief_id ?? crypto.randomUUID();
 
-  const prompt = buildPlanPrompt(transcript);
-
   try {
-    const response = await callClaude({
-      max_tokens: 2048,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const prompt = buildPlanPrompt(transcript);
+    const response = await callClaude(
+      { max_tokens: 4096, messages: [{ role: "user", content: prompt }] },
+      FALLBACK_MODEL
+    );
 
     const text =
       response.content[0].type === "text" ? response.content[0].text : "";
@@ -68,23 +66,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Save plan_<run_id>.json to db/debriefs/plans/
-    const debriefDir = path.join(process.cwd(), "db", "debriefs", "plans");
-    await fs.mkdir(debriefDir, { recursive: true });
-    await fs.writeFile(
-      path.join(debriefDir, `plan_${run_id}.json`),
-      JSON.stringify(
-        {
-          run_id,
+    // Create the debrief document in MongoDB (plan stage)
+    const db = await getDb();
+    await db.collection("debriefs").updateOne(
+      { debrief_id },
+      {
+        $set: {
           debrief_id,
-          generated_at: new Date().toISOString(),
+          run_id,
           scenario_name: transcript.scenario_name,
           personality_name: transcript.personality_name,
           plan,
+          plan_generated_at: new Date(),
         },
-        null,
-        2
-      )
+      },
+      { upsert: true }
     );
 
     // Save server-side session so Stage 2 can look up the transcript

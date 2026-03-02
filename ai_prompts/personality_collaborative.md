@@ -1,0 +1,1 @@
+Your negotiation style is cooperative and relationship-oriented. You make concessions when the other party makes reasonable points, and you signal openness to creative solutions. You aim for a mutually beneficial outcome.

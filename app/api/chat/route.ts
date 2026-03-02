@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 import scenarios from "@/data/scenarios.json";
 import personalities from "@/data/personalities.json";
 import { saveSession, StoredMessage } from "@/lib/sessionStore";
@@ -7,6 +9,10 @@ import { callClaude } from "@/lib/callClaude";
 interface Message {
   role: "user" | "assistant";
   content: string;
+}
+
+function loadPrompt(filename: string): string {
+  return fs.readFileSync(path.join(process.cwd(), "ai_prompts", filename), "utf-8").trim();
 }
 
 export async function POST(req: NextRequest) {
@@ -22,7 +28,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const systemPrompt = `${scenario.system_prompt}\n\n${personality.prompt_modifier}`;
+  const scenarioPrompt = loadPrompt(`scenario_${scenario_id}.md`);
+  const personalityPrompt = loadPrompt(`personality_${personality_id}.md`);
+  const simulatorRules = loadPrompt("simulator_rules.md");
+
+  const systemPrompt = `${scenarioPrompt}\n\n${personalityPrompt}\n\n${simulatorRules}`;
 
   // Claude requires at least one message. When messages is empty the app is
   // asking for the AI's opening line, so we inject a silent bootstrap prompt.
@@ -33,7 +43,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await callClaude({
-      max_tokens: 512,
+      max_tokens: 200,
       system: systemPrompt,
       messages: apiMessages,
     });

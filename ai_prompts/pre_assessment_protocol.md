@@ -43,20 +43,34 @@ additional_observations for the final assessment only.
 
 ## Step 3 — Output Structured Key Moment Packets
 
+All fields focus on the USER's actions, decisions, and frames. The
+counterpart's behaviour is context only — never the subject of analysis.
+
 For each selected moment, produce the following fields:
 
 **title**
-Short descriptive label (e.g., "Premature Concession Under Pressure").
+Short descriptive label describing the user's action or decision pattern
+(e.g., "Premature Concession Under Pressure", "Competing Offer Not Used as
+Leverage"). Must not describe the counterpart's behaviour.
 
 **transcript_evidence**
-Array of 1–3 quoted lines from the transcript (user + counterpart if needed).
+Array of 1–3 quoted lines from the transcript (user + counterpart if needed
+for context).
 
 **what_happened**
-Brief neutral description in 2–3 sentences.
+2–3 sentences describing what the USER did or decided at this moment. The
+counterpart's behaviour may appear as a one-clause trigger or context, but
+the subject of every sentence must be the user's choice or action — not the
+counterpart's tactics.
 
 **diagnostic_insight**
-Which principle was weak or incomplete and how. Focus on observable behavior.
-Do not use heavy jargon.
+A hypothesis about which negotiation principle the USER may have applied
+weakly or incompletely, and how it appeared to show up in their behaviour.
+Write as a tentative observation — use framing such as "It appears…",
+"This suggests…", or "My hypothesis is…" rather than a firm verdict.
+Do not analyse the counterpart's tactics or missing behaviour.
+Use plain language — no acronyms or field-specific jargon. Never write
+"BATNA"; write "alternative option" or "outside offer" instead.
 
 **why_it_mattered**
 The strategic consequence of this moment.

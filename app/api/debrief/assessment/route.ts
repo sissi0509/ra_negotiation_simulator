@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 import { buildAssessmentPrompt, DebriefPlan } from "@/lib/debriefPrompt";
 import { Transcript } from "@/lib/transcript";
 import { DebriefStoredMessage } from "@/lib/debriefSessionStore";
 import { callClaude } from "@/lib/callClaude";
+import { getDb } from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -24,7 +23,7 @@ export async function POST(req: NextRequest) {
     sessionSummary: string;
   } = body;
 
-  if (!run_id || !debrief_id || !transcript || !plan || !messages || !sessionSummary) {
+  if (!run_id || !debrief_id || !transcript || !plan || !messages || sessionSummary === undefined) {
     return NextResponse.json(
       { error: "Missing required fields: run_id, debrief_id, transcript, plan, messages, sessionSummary." },
       { status: 400 }
@@ -35,27 +34,23 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await callClaude({
-      max_tokens: 1500,
+      max_tokens: 2048,
       messages: [{ role: "user", content: prompt }],
     });
 
     const assessment =
       response.content[0].type === "text" ? response.content[0].text : "";
 
-    const assessmentDir = path.join(process.cwd(), "db", "debriefs", "assessments");
-    await fs.mkdir(assessmentDir, { recursive: true });
-    await fs.writeFile(
-      path.join(assessmentDir, `assessment_${run_id}.json`),
-      JSON.stringify(
-        {
-          run_id,
-          debrief_id,
-          generated_at: new Date().toISOString(),
+    const db = await getDb();
+    await db.collection("debriefs").updateOne(
+      { debrief_id },
+      {
+        $set: {
           assessment,
+          assessment_generated_at: new Date(),
         },
-        null,
-        2
-      )
+      },
+      { upsert: true }
     );
 
     return NextResponse.json({ assessment });

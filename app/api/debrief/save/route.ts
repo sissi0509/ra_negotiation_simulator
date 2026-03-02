@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 import { Transcript } from "@/lib/transcript";
 import { DebriefPlan } from "@/lib/debriefPrompt";
 import { DebriefStoredMessage } from "@/lib/debriefSessionStore";
+import { getDb } from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -32,26 +31,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const debriefDir = path.join(process.cwd(), "db", "debriefs", "sessions");
-  await fs.mkdir(debriefDir, { recursive: true });
-  await fs.writeFile(
-    path.join(debriefDir, `debrief_${run_id}.json`),
-    JSON.stringify(
-      {
-        run_id,
+  const db = await getDb();
+  await db.collection("debriefs").updateOne(
+    { debrief_id },
+    {
+      $set: {
         debrief_id,
-        saved_at: new Date().toISOString(),
-        started_at,
+        run_id,
         scenario_name: transcript.scenario_name,
         personality_name: transcript.personality_name,
         transcript,
         plan,
         messages,
         session_summary: session_summary ?? "",
+        started_at,
+        saved_at: new Date(),
       },
-      null,
-      2
-    )
+    },
+    { upsert: true }
   );
 
   return NextResponse.json({ ok: true });

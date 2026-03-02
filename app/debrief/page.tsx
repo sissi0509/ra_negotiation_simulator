@@ -32,6 +32,7 @@ export default function DebriefPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionActive, setSessionActive] = useState(false);
+  const [sessionComplete, setSessionComplete] = useState(false);
   const [debriefEnded, setDebriefEnded] = useState(false);
   const [sessionSummary, setSessionSummary] = useState<string | null>(null);
   const [assessment, setAssessment] = useState<string | null>(null);
@@ -138,7 +139,7 @@ export default function DebriefPage() {
 
   // Save completed debrief to db when session ends (natural or manual).
   useEffect(() => {
-    if (!debriefEnded || !transcript || !plan || !debriefId) return;
+    if (!sessionComplete || !transcript || !plan || !debriefId) return;
 
     const apiMessages = messages
       .filter((m) => m.role === "user" || m.role === "assistant")
@@ -157,7 +158,7 @@ export default function DebriefPage() {
         started_at: debriefStartedAt ?? new Date().toISOString(),
       }),
     }).catch(() => {}); // Best-effort — don't surface save errors to the user
-  }, [debriefEnded]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sessionComplete]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Prevent flash of wrong screen while initialising
   if (isInitializing) return null;
@@ -182,7 +183,10 @@ export default function DebriefPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...transcript, debrief_id: newDebriefId }),
       });
-      if (!planRes.ok) throw new Error(`Plan API error ${planRes.status}`);
+      if (!planRes.ok) {
+        const errData = await planRes.json().catch(() => ({}));
+        throw new Error(errData.error || `Plan API error ${planRes.status}`);
+      }
       const { plan: newPlan }: { plan: DebriefPlan } = await planRes.json();
       setPlan(newPlan);
 
@@ -197,37 +201,26 @@ export default function DebriefPage() {
           transcript,
         }),
       });
-      if (!debriefRes.ok) throw new Error(`Debrief API error ${debriefRes.status}`);
+      if (!debriefRes.ok) {
+        const errData = await debriefRes.json().catch(() => ({}));
+        throw new Error(errData.error || `Debrief API error ${debriefRes.status}`);
+      }
       const { reply } = await debriefRes.json();
 
       setMessages([{ role: "assistant", text: reply, timestamp: new Date().toISOString() }]);
       setSessionActive(true);
-    } catch {
-      setStartError("Something went wrong starting the debrief. Please try again.");
+    } catch (err) {
+      setStartError(err instanceof Error ? err.message : "Something went wrong starting the debrief. Please try again.");
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function handleSessionComplete(summary: string, fullReply: string, currentPlan: DebriefPlan, currentMessages: Message[]) {
-    setSessionSummary(summary);
-    setDebriefEnded(true);
-
-    // Append Sage's closing message to the chat (shown briefly before report screen)
-    const closingMsg: Message = {
-      role: "assistant",
-      text: fullReply,
-      timestamp: new Date().toISOString(),
-    };
-    const allMessages = [...currentMessages, closingMsg];
-    setMessages(allMessages);
-
-    // Auto-fire Stage 3 in background
+  async function fireAssessment(currentPlan: DebriefPlan, currentMessages: Message[], summary: string) {
     if (!transcript || !debriefId) return;
-    const apiMessages = allMessages
+    const apiMessages = currentMessages
       .filter((m) => m.role === "user" || m.role === "assistant")
       .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
-
     try {
       const res = await fetch("/api/debrief/assessment", {
         method: "POST",
@@ -252,6 +245,27 @@ export default function DebriefPage() {
     }
   }
 
+  async function handleSessionComplete(summary: string, fullReply: string, currentPlan: DebriefPlan, currentMessages: Message[]) {
+    setSessionSummary(summary);
+    setSessionComplete(true);
+
+    // Append Sage's closing message to the chat — strip the session-complete marker
+    const markerIndex = fullReply.indexOf("--- Session Complete ---");
+    const displayText =
+      markerIndex >= 0
+        ? fullReply.slice(0, markerIndex).trim() || "Session complete."
+        : fullReply;
+    const closingMsg: Message = {
+      role: "assistant",
+      text: displayText,
+      timestamp: new Date().toISOString(),
+    };
+    const allMessages = [...currentMessages, closingMsg];
+    setMessages(allMessages);
+
+    fireAssessment(currentPlan, allMessages, summary); // fire in background — don't block UI
+  }
+
   async function handleSend(text: string) {
     if (!plan || !debriefId || !transcript) return;
 
@@ -273,7 +287,7 @@ export default function DebriefPage() {
       if (!res.ok) throw new Error(`Debrief API error ${res.status}`);
       const data: { reply: string; sessionSummary?: string } = await res.json();
 
-      if (data.sessionSummary) {
+      if (data.sessionSummary !== undefined) {
         // Session complete — auto-fire Stage 3 and show report screen
         await handleSessionComplete(data.sessionSummary, data.reply, plan, next);
       } else {
@@ -372,7 +386,7 @@ export default function DebriefPage() {
               {transcript.scenario_name} · {transcript.personality_name}
             </p>
           </div>
-          {!debriefEnded && !showEndChoice && (
+          {!sessionComplete && !showEndChoice && (
             <button
               onClick={() => setShowEndChoice(true)}
               className="rounded-md border border-indigo-200 px-3 py-1.5 text-sm text-indigo-600 transition-colors hover:bg-indigo-50"
@@ -399,7 +413,12 @@ export default function DebriefPage() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <button
-                    onClick={() => setDebriefEnded(true)}
+                    onClick={() => {
+                      if (!plan) return;
+                      setSessionComplete(true);
+                      setShowEndChoice(false);
+                      fireAssessment(plan, messages, sessionSummary ?? "");
+                    }}
                     className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500"
                   >
                     View Report
@@ -417,6 +436,16 @@ export default function DebriefPage() {
                     Cancel
                   </button>
                 </div>
+              </div>
+            ) : sessionComplete ? (
+              <div className="shrink-0 border-t border-indigo-100 bg-white px-6 py-5">
+                <button
+                  onClick={() => setDebriefEnded(true)}
+                  disabled={!assessmentReady}
+                  className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
+                >
+                  {assessmentReady ? "View Debrief Report" : "Preparing Report…"}
+                </button>
               </div>
             ) : (
               <MessageInput onSend={handleSend} disabled={isLoading} />

@@ -11,7 +11,7 @@ import ExportModal from "@/components/ExportModal";
 import ActionBar from "@/components/ActionBar";
 import scenarios from "@/data/scenarios.json";
 import personalities from "@/data/personalities.json";
-import { isConversationOver, isUserSigningOff } from "@/lib/endDetection";
+import { isUserSigningOff } from "@/lib/endDetection";
 import { buildTranscript } from "@/lib/transcript";
 import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY as DEBRIEF_SESSION_KEY_CONST } from "@/app/debrief/page";
 
@@ -122,7 +122,7 @@ export default function Home() {
         ...prev,
         { role: "assistant", text: reply, timestamp: new Date().toISOString() },
       ]);
-      if (forceEnd || isConversationOver(reply)) setConversationEnded(true);
+      if (forceEnd) setConversationEnded(true);
     } catch {
       setMessages((prev) => [
         ...prev,
