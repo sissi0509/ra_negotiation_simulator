@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { Message } from "@anthropic-ai/sdk/resources/messages";
 
 // Prefer the cheapest model; fall back to sonnet only when haiku is overloaded.
-const CHEAP_MODEL = "claude-haiku-4-5";
+const CHEAP_MODEL = "claude-haiku-4-5-20251001";
 const FALLBACK_MODEL = "claude-sonnet-4-6";
 
 const client = new Anthropic();

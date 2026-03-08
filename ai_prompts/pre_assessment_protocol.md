@@ -20,9 +20,9 @@ This internal scan guides moment selection.
 
 ---
 
-## Step 2 — Select Key Debrief Moments (2–3 Maximum)
+## Step 2 — Select Key Debrief Moments (Exactly 2)
 
-Select 2–3 moments that are:
+Select exactly 2 moments that are:
 
 - High leverage (shifted the direction of the negotiation)
 - Emotionally charged
@@ -35,9 +35,12 @@ Avoid:
 - One-off accidents
 - Purely situational constraints
 
-If more than 3 qualifying moments exist, prioritize the most developmentally
-impactful 2–3 for the debrief. Remaining moments may be noted in
+Always output exactly 2 key moments — never 1, never 3.
+If more than 2 qualifying moments exist, prioritize the most developmentally
+impactful 2 for the debrief. Remaining moments may be noted in
 additional_observations for the final assessment only.
+If only 1 strong moment is apparent, select the next most instructive moment
+even if it is less prominent — the debrief requires 2.
 
 ---
 
@@ -146,5 +149,5 @@ Bad examples (do not use):
 - Do not assign personality types.
 - Do not run reflection questions.
 - Do not provide a full negotiation evaluation.
-- Keep total key moments to 2–3 maximum.
+- Keep total key moments to exactly 2.
 - Produce only the DebriefPlan JSON object. Nothing else.

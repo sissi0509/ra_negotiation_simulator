@@ -207,8 +207,13 @@ export default function DebriefPage() {
       }
       const { reply } = await debriefRes.json();
 
-      setMessages([{ role: "assistant", text: reply, timestamp: new Date().toISOString() }]);
+      const chunks = reply.split("[BREAK]").map((c: string) => c.trim()).filter(Boolean);
       setSessionActive(true);
+      setMessages([{ role: "assistant", text: chunks[0] ?? reply, timestamp: new Date().toISOString() }]);
+      for (let i = 1; i < chunks.length; i++) {
+        await new Promise((r) => setTimeout(r, 600));
+        setMessages((prev) => [...prev, { role: "assistant", text: chunks[i], timestamp: new Date().toISOString() }]);
+      }
     } catch (err) {
       setStartError(err instanceof Error ? err.message : "Something went wrong starting the debrief. Please try again.");
     } finally {
@@ -255,13 +260,19 @@ export default function DebriefPage() {
       markerIndex >= 0
         ? fullReply.slice(0, markerIndex).trim() || "Session complete."
         : fullReply;
-    const closingMsg: Message = {
+    const chunks = displayText.split("[BREAK]").map((c) => c.trim()).filter(Boolean);
+    const closingChunks: Message[] = (chunks.length > 0 ? chunks : [displayText]).map((text) => ({
       role: "assistant",
-      text: displayText,
+      text,
       timestamp: new Date().toISOString(),
-    };
-    const allMessages = [...currentMessages, closingMsg];
-    setMessages(allMessages);
+    }));
+
+    let allMessages = currentMessages;
+    for (let i = 0; i < closingChunks.length; i++) {
+      if (i > 0) await new Promise((r) => setTimeout(r, 600));
+      allMessages = [...allMessages, closingChunks[i]];
+      setMessages(allMessages);
+    }
 
     fireAssessment(currentPlan, allMessages, summary); // fire in background — don't block UI
   }
@@ -291,8 +302,12 @@ export default function DebriefPage() {
         // Session complete — auto-fire Stage 3 and show report screen
         await handleSessionComplete(data.sessionSummary, data.reply, plan, next);
       } else {
-        const newMsg: Message = { role: "assistant", text: data.reply, timestamp: new Date().toISOString() };
-        setMessages((prev) => [...prev, newMsg]);
+        const chunks = data.reply.split("[BREAK]").map((c: string) => c.trim()).filter(Boolean);
+        setMessages((prev) => [...prev, { role: "assistant", text: chunks[0] ?? data.reply, timestamp: new Date().toISOString() }]);
+        for (let i = 1; i < chunks.length; i++) {
+          await new Promise((r) => setTimeout(r, 600));
+          setMessages((prev) => [...prev, { role: "assistant", text: chunks[i], timestamp: new Date().toISOString() }]);
+        }
       }
     } catch {
       setMessages((prev) => [

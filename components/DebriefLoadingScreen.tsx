@@ -1,3 +1,12 @@
+import { useState, useEffect } from "react";
+
+const LOADING_MESSAGES = [
+  "Analyzing your negotiation…",
+  "Still working…",
+  "Hang tight…",
+  "Almost ready…",
+];
+
 interface Props {
   scenarioName: string;
   personalityName: string;
@@ -15,7 +24,19 @@ export default function DebriefLoadingScreen({
   error = null,
   onStart,
 }: Props) {
+  const [msgIndex, setMsgIndex] = useState(0);
   const turnLabel = userTurnCount === 1 ? "1 turn" : `${userTurnCount} turns`;
+
+  useEffect(() => {
+    if (!isLoading) {
+      setMsgIndex(0);
+      return;
+    }
+    const id = setInterval(() => {
+      setMsgIndex((i) => (i + 1) % LOADING_MESSAGES.length);
+    }, 10000);
+    return () => clearInterval(id);
+  }, [isLoading]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50">
@@ -36,11 +57,40 @@ export default function DebriefLoadingScreen({
           </p>
         </div>
 
-        <p className="text-center text-sm text-gray-500">
-          {isLoading
-            ? "Analyzing your negotiation…"
-            : "Sage will guide you through a structured reflection of your negotiation."}
-        </p>
+        {isLoading ? (
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-xs text-gray-400">This may take 1–2 minutes.</p>
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-4 w-4 animate-spin text-indigo-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              <p className="text-sm text-gray-500">
+                {LOADING_MESSAGES[msgIndex]}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="text-center text-sm text-gray-500">
+            Sage will guide you through a structured reflection of your negotiation.
+          </p>
+        )}
 
         {error && (
           <p className="text-center text-xs text-red-500">{error}</p>
