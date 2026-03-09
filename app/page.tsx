@@ -9,8 +9,8 @@ import MessageInput from "@/components/MessageInput";
 import EndStatePrompt from "@/components/EndStatePrompt";
 import ExportModal from "@/components/ExportModal";
 import ActionBar from "@/components/ActionBar";
-import scenarios from "@/data/scenarios.json";
-import personalities from "@/data/personalities.json";
+import scenarios from "@/content/scenarios.json";
+import personalities from "@/content/personalities.json";
 import { isUserSigningOff } from "@/lib/endDetection";
 import { buildTranscript } from "@/lib/transcript";
 import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY as DEBRIEF_SESSION_KEY_CONST } from "@/app/debrief/page";
@@ -85,7 +85,8 @@ export default function Home() {
       sc.name,
       pers.id,
       pers.name,
-      startedAt
+      startedAt,
+      sessionId ?? undefined
     );
     fetch("/api/transcripts", {
       method: "POST",
@@ -164,7 +165,8 @@ export default function Home() {
       scenario.name,
       personality.id,
       personality.name,
-      startedAt
+      startedAt,
+      sessionId ?? undefined
     );
     // Clear any stale debrief session so the new transcript always takes priority
     localStorage.removeItem(DEBRIEF_SESSION_KEY_CONST);
@@ -265,7 +267,8 @@ export default function Home() {
               scenario.name,
               personality.id,
               personality.name,
-              startedAt
+              startedAt,
+              sessionId ?? undefined
             )}
             counterpartRole={scenario.counterpart_role}
             onClose={() => setShowExportModal(false)}

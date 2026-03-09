@@ -1,4 +1,4 @@
-import personalities from "@/data/personalities.json";
+import personalities from "@/content/personalities.json";
 
 interface Props {
   value: string;

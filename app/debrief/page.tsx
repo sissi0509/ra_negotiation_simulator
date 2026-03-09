@@ -40,6 +40,11 @@ export default function DebriefPage() {
   const [assessmentVisible, setAssessmentVisible] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   const [showEndChoice, setShowEndChoice] = useState(false);
+  const [endedByUser, setEndedByUser] = useState(false);
+  const [summaryError, setSummaryError] = useState<string | null>(null);
+  const [assessmentFailed, setAssessmentFailed] = useState(false);
+  const [assessmentRetryUsed, setAssessmentRetryUsed] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
 
   // On mount: check for a pending transcript (new debrief) or an active session (page refresh).
   useEffect(() => {
@@ -154,8 +159,9 @@ export default function DebriefPage() {
         transcript,
         plan,
         messages: apiMessages,
-        session_summary: sessionSummary ?? "",
+        debrief_summary: sessionSummary ?? "",
         started_at: debriefStartedAt ?? new Date().toISOString(),
+        ended_by: endedByUser ? "user" : "natural",
       }),
     }).catch(() => {}); // Best-effort — don't surface save errors to the user
   }, [sessionComplete]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -223,31 +229,47 @@ export default function DebriefPage() {
 
   async function fireAssessment(currentPlan: DebriefPlan, currentMessages: Message[], summary: string) {
     if (!transcript || !debriefId) return;
+    setAssessmentFailed(false);
     const apiMessages = currentMessages
       .filter((m) => m.role === "user" || m.role === "assistant")
       .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
-    try {
-      const res = await fetch("/api/debrief/assessment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          run_id: transcript.run_id,
-          debrief_id: debriefId,
-          transcript,
-          plan: currentPlan,
-          messages: apiMessages,
-          sessionSummary: summary,
-        }),
-      });
-      if (res.ok) {
-        const { assessment: result } = await res.json();
-        setAssessment(result);
+    const body = JSON.stringify({
+      run_id: transcript.run_id,
+      debrief_id: debriefId,
+      transcript,
+      plan: currentPlan,
+      messages: apiMessages,
+      sessionSummary: summary,
+    });
+
+    const MAX_ATTEMPTS = 3;
+    const RETRY_DELAY_MS = 2000;
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      try {
+        const res = await fetch("/api/debrief/assessment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body,
+        });
+        if (res.ok) {
+          const { assessment: result } = await res.json();
+          setAssessment(result);
+          setAssessmentReady(true);
+          return; // success — exit early
+        }
+      } catch {
+        // network error — will retry
       }
-    } catch {
-      // Silently fail — button stays enabled so user sees the error state
-    } finally {
-      setAssessmentReady(true);
+
+      if (attempt < MAX_ATTEMPTS) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+      }
     }
+
+    // All attempts exhausted
+    setAssessmentFailed(true);
+    setAssessmentReady(true);
   }
 
   async function handleSessionComplete(summary: string, fullReply: string, currentPlan: DebriefPlan, currentMessages: Message[]) {
@@ -323,6 +345,48 @@ export default function DebriefPage() {
     }
   }
 
+  async function handleManualEnd() {
+    if (!plan) return;
+    setSummaryError(null);
+    setIsLoading(true);
+
+    // Generate a partial summary of what was discussed before ending early.
+    // Keep the choice panel visible so errors can be shown and retried.
+    let summary = "";
+    try {
+      const apiMessages = messages
+        .filter((m) => m.role === "user" || m.role === "assistant")
+        .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
+      const res = await fetch("/api/debrief/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: apiMessages }),
+      });
+      if (!res.ok) throw new Error("Summary API failed");
+      const data = await res.json();
+      summary = data.summary ?? "";
+    } catch {
+      setIsLoading(false);
+      setSummaryError("Could not generate summary. Please try again.");
+      return;
+    }
+
+    setSessionSummary(summary || null);
+    setIsLoading(false);
+    setShowEndChoice(false);
+    setEndedByUser(true);
+    setSessionComplete(true);
+    fireAssessment(plan, messages, summary);
+  }
+
+  function handleRetryAssessment() {
+    if (!plan) return;
+    setAssessmentRetryUsed(true);
+    setAssessmentReady(false);
+    setAssessmentFailed(false);
+    fireAssessment(plan, messages, sessionSummary ?? "");
+  }
+
   function handleRevealAssessment() {
     setAssessmentVisible(true);
   }
@@ -348,6 +412,7 @@ export default function DebriefPage() {
     localStorage.removeItem(DEBRIEF_PENDING_KEY);
     localStorage.removeItem(DEBRIEF_SESSION_KEY);
     localStorage.removeItem(DEBRIEF_STATE_KEY);
+    localStorage.removeItem("negotiation_session_id");
     window.location.href = "/";
   }
 
@@ -373,7 +438,11 @@ export default function DebriefPage() {
               assessment={assessment}
               assessmentReady={assessmentReady}
               assessmentVisible={assessmentVisible}
+              assessmentFailed={assessmentFailed}
+              assessmentRetryUsed={assessmentRetryUsed}
+              endedByUser={endedByUser}
               onRevealAssessment={handleRevealAssessment}
+              onRetryAssessment={handleRetryAssessment}
               onDownload={handleDownload}
               onBack={handleBack}
             />
@@ -403,7 +472,7 @@ export default function DebriefPage() {
           </div>
           {!sessionComplete && !showEndChoice && (
             <button
-              onClick={() => setShowEndChoice(true)}
+              onClick={() => { setShowEndChoice(true); setShowExitConfirm(false); }}
               className="rounded-md border border-indigo-200 px-3 py-1.5 text-sm text-indigo-600 transition-colors hover:bg-indigo-50"
             >
               End Debrief
@@ -426,31 +495,54 @@ export default function DebriefPage() {
                 <p className="mb-3 text-sm font-medium text-gray-700">
                   How would you like to end the debrief?
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    onClick={() => {
-                      if (!plan) return;
-                      setSessionComplete(true);
-                      setShowEndChoice(false);
-                      fireAssessment(plan, messages, sessionSummary ?? "");
-                    }}
-                    className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500"
-                  >
-                    View Report
-                  </button>
-                  <button
-                    onClick={handleBack}
-                    className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
-                  >
-                    End Session
-                  </button>
-                  <button
-                    onClick={() => setShowEndChoice(false)}
-                    className="rounded-md px-4 py-2 text-sm text-gray-400 transition-colors hover:text-gray-600"
-                  >
-                    Cancel
-                  </button>
-                </div>
+                {showExitConfirm ? (
+                  <>
+                    <p className="mb-3 text-sm text-amber-700">
+                      Your session will not be saved. Are you sure you want to exit?
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        onClick={handleBack}
+                        className="rounded-md bg-gray-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-600"
+                      >
+                        Exit Anyway
+                      </button>
+                      <button
+                        onClick={() => setShowExitConfirm(false)}
+                        className="rounded-md px-4 py-2 text-sm text-gray-400 transition-colors hover:text-gray-600"
+                      >
+                        Go Back
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {summaryError && (
+                      <p className="mb-3 text-xs text-red-600">{summaryError}</p>
+                    )}
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        onClick={handleManualEnd}
+                        disabled={isLoading}
+                        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
+                      >
+                        {isLoading ? "Preparing…" : summaryError ? "Try Again" : "View Report"}
+                      </button>
+                      <button
+                        onClick={() => setShowExitConfirm(true)}
+                        className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+                      >
+                        End Session
+                      </button>
+                      <button
+                        onClick={() => setShowEndChoice(false)}
+                        className="rounded-md px-4 py-2 text-sm text-gray-400 transition-colors hover:text-gray-600"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             ) : sessionComplete ? (
               <div className="shrink-0 border-t border-indigo-100 bg-white px-6 py-5">

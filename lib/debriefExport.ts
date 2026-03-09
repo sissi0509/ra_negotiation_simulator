@@ -25,8 +25,12 @@ export function buildDebriefText(
     })
     .join("\n\n");
 
-  const summaryBlock = "\n\n" + summary;
-  const assessmentBlock = assessment ? "\n\n" + assessment : "";
+  const summaryBlock = summary
+    ? "\n\n---\n\n[Debrief Summary]\n\n" + summary
+    : "";
+  const assessmentBlock = assessment
+    ? "\n\n---\n\n[AI Assessment]\n\n" + assessment
+    : "";
 
   return header + body + summaryBlock + assessmentBlock;
 }

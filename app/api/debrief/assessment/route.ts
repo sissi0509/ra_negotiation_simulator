@@ -32,33 +32,33 @@ export async function POST(req: NextRequest) {
 
   const prompt = buildAssessmentPrompt(transcript, plan, messages, sessionSummary);
 
+  let assessment: string;
   try {
     const response = await callClaude({
       max_tokens: 2048,
       messages: [{ role: "user", content: prompt }],
     });
-
-    const assessment =
+    assessment =
       response.content[0].type === "text" ? response.content[0].text : "";
-
-    const db = await getDb();
-    await db.collection("debriefs").updateOne(
-      { debrief_id },
-      {
-        $set: {
-          assessment,
-          assessment_generated_at: new Date(),
-        },
-      },
-      { upsert: true }
-    );
-
-    return NextResponse.json({ assessment });
   } catch (err) {
-    console.error("Assessment API error:", err);
+    console.error("Assessment generation error:", err);
     return NextResponse.json(
       { error: "Failed to generate assessment." },
       { status: 500 }
     );
   }
+
+  // Save to DB best-effort — do not let a DB failure block the response.
+  try {
+    const db = await getDb();
+    await db.collection("debriefs").updateOne(
+      { debrief_id },
+      { $set: { assessment, assessment_generated_at: new Date() } },
+      { upsert: true }
+    );
+  } catch (dbErr) {
+    console.error("Failed to save assessment to DB:", dbErr);
+  }
+
+  return NextResponse.json({ assessment });
 }

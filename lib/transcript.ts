@@ -17,10 +17,11 @@ export function buildTranscript(
   scenario_name: string,
   personality_id: string,
   personality_name: string,
-  started_at: string
+  started_at: string,
+  run_id?: string
 ): Transcript {
   return {
-    run_id: crypto.randomUUID(),
+    run_id: run_id ?? crypto.randomUUID(),
     scenario_id,
     scenario_name,
     personality_id,

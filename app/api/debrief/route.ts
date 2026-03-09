@@ -7,6 +7,7 @@ import {
 } from "@/lib/debriefSessionStore";
 import { Transcript } from "@/lib/transcript";
 import { callClaude } from "@/lib/callClaude";
+import { getDb } from "@/lib/mongodb";
 
 const SESSION_COMPLETE_MARKER = "--- Session Complete ---";
 
@@ -54,13 +55,28 @@ export async function POST(req: NextRequest) {
     const reply =
       response.content[0].type === "text" ? response.content[0].text : "";
 
-    // Persist updated session so page-refresh can restore conversation
+    // Build the updated messages list (user messages sent + Sage's reply).
+    // The bootstrap "(Begin the debrief…)" message is excluded — it's not in `messages`.
+    const updatedMessages: DebriefStoredMessage[] = [
+      ...messages,
+      { role: "assistant", content: reply },
+    ];
+
+    // Persist to in-memory session store (page-refresh recovery)
     if (debrief_id && session) {
-      const updatedMessages: DebriefStoredMessage[] = [
-        ...messages,
-        { role: "assistant", content: reply },
-      ];
       saveDebriefSession(debrief_id, { ...session, messages: updatedMessages });
+    }
+
+    // Per-turn DB persistence — fire and forget, never block the response
+    if (debrief_id) {
+      getDb()
+        .then((db) =>
+          db.collection("debriefs").updateOne(
+            { debrief_id },
+            { $set: { messages: updatedMessages } }
+          )
+        )
+        .catch((err) => console.error("Per-turn DB save failed:", err));
     }
 
     // Detect session-complete marker and extract summary.

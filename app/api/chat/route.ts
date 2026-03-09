@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import scenarios from "@/data/scenarios.json";
-import personalities from "@/data/personalities.json";
+import scenarios from "@/content/scenarios.json";
+import personalities from "@/content/personalities.json";
 import { saveSession, StoredMessage } from "@/lib/sessionStore";
 import { callClaude } from "@/lib/callClaude";
+import { getDb } from "@/lib/mongodb";
 
 interface Message {
   role: "user" | "assistant";
@@ -59,6 +60,24 @@ export async function POST(req: NextRequest) {
         { role: "assistant", content: reply },
       ];
       saveSession(session_id, { scenario_id, personality_id, messages: savedMessages });
+
+      // Fire-and-forget: persist to MongoDB so session survives a server restart.
+      // Stored under run_id = session_id so the final transcript replaceOne merges cleanly.
+      const now = new Date().toISOString();
+      const transcriptMessages = savedMessages.map((m) => ({
+        role: m.role,
+        text: m.content,
+        timestamp: now,
+      }));
+      getDb()
+        .then((db) =>
+          db.collection("transcripts").updateOne(
+            { run_id: session_id },
+            { $set: { run_id: session_id, scenario_id, personality_id, messages: transcriptMessages, updated_at: new Date() } },
+            { upsert: true }
+          )
+        )
+        .catch((err) => console.error("Per-turn transcript DB save failed:", err));
     }
 
     return NextResponse.json({ reply });

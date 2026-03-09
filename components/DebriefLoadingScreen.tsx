@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { DEBRIEF_INTRO } from "@/content/debriefIntro";
 
 const LOADING_MESSAGES = [
   "Analyzing your negotiation…",
@@ -57,9 +58,12 @@ export default function DebriefLoadingScreen({
           </p>
         </div>
 
-        {isLoading ? (
+        <p className="text-center text-sm leading-relaxed text-gray-500">
+          {DEBRIEF_INTRO}
+        </p>
+
+        {isLoading && (
           <div className="flex flex-col items-center gap-2">
-            <p className="text-xs text-gray-400">This may take 1–2 minutes.</p>
             <div className="flex items-center gap-2">
               <svg
                 className="h-4 w-4 animate-spin text-indigo-400"
@@ -85,11 +89,8 @@ export default function DebriefLoadingScreen({
                 {LOADING_MESSAGES[msgIndex]}
               </p>
             </div>
+            <p className="text-xs text-gray-400">This may take 1–2 minutes.</p>
           </div>
-        ) : (
-          <p className="text-center text-sm text-gray-500">
-            Sage will guide you through a structured reflection of your negotiation.
-          </p>
         )}
 
         {error && (

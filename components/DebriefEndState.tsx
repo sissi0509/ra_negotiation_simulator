@@ -5,7 +5,11 @@ interface Props {
   assessment?: string | null;
   assessmentReady?: boolean;
   assessmentVisible?: boolean;
+  assessmentFailed?: boolean;
+  assessmentRetryUsed?: boolean;
+  endedByUser?: boolean;
   onRevealAssessment: () => void;
+  onRetryAssessment?: () => void;
   onDownload: () => void;
   onBack: () => void;
 }
@@ -15,7 +19,11 @@ export default function DebriefEndState({
   assessment = null,
   assessmentReady = false,
   assessmentVisible = false,
+  assessmentFailed = false,
+  assessmentRetryUsed = false,
+  endedByUser = false,
   onRevealAssessment,
+  onRetryAssessment,
   onDownload,
   onBack,
 }: Props) {
@@ -25,15 +33,20 @@ export default function DebriefEndState({
       {sessionSummary && (
         <div className="rounded-xl border border-indigo-100 bg-indigo-50 px-6 py-5">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-indigo-400">
-            Session Summary
+            {endedByUser ? "Partial Debrief Summary" : "Debrief Summary"}
           </p>
+          {endedByUser && (
+            <p className="mb-3 text-xs text-amber-600 font-medium">
+              You ended this session early — the following reflects what was covered before it was complete.
+            </p>
+          )}
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
             {sessionSummary}
           </p>
         </div>
       )}
 
-      {/* Assessment: loading → button → revealed */}
+      {/* Assessment: loading → button → revealed (or failed → retry) */}
       {assessmentVisible && assessment ? (
         <div className="rounded-xl border border-emerald-100 bg-emerald-50 px-6 py-5">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-emerald-500">
@@ -41,6 +54,33 @@ export default function DebriefEndState({
           </p>
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
             {assessment}
+          </p>
+        </div>
+      ) : assessmentFailed && !assessmentRetryUsed ? (
+        <div className="rounded-xl border border-red-100 bg-red-50 px-6 py-5">
+          <p className="mb-1 text-sm font-semibold text-red-700">
+            Assessment unavailable
+          </p>
+          <p className="mb-1 text-xs text-red-500">
+            We tried a few times but could not reach the AI. You can try once more — your session is already saved and nothing is lost.
+          </p>
+          <p className="mb-4 text-xs text-gray-400">
+            You may also close this page and come back later.
+          </p>
+          <button
+            onClick={onRetryAssessment}
+            className="rounded-md bg-red-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-red-500"
+          >
+            Try Again
+          </button>
+        </div>
+      ) : assessmentFailed && assessmentRetryUsed ? (
+        <div className="rounded-xl border border-gray-200 bg-gray-50 px-6 py-5">
+          <p className="mb-1 text-sm font-semibold text-gray-700">
+            Assessment unavailable
+          </p>
+          <p className="text-xs text-gray-500">
+            The AI could not be reached after multiple attempts. Your session is fully saved — only the assessment is missing. You can close this page safely.
           </p>
         </div>
       ) : (

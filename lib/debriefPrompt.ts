@@ -129,6 +129,31 @@ NEGOTIATION TRANSCRIPT (full context):
 ${formattedTranscript}`;
 }
 
+// ── Stage 2b: Partial summary (manual end) ───────────────────────────────────
+
+export function buildPartialSummaryPrompt(
+  messages: Array<{ role: string; content: string }>
+): { system: string; userMessage: string } {
+  const conversationText = messages
+    .map((m) => {
+      const speaker = m.role === "user" ? "User" : "Sage";
+      return `[${speaker}]: ${m.content}`;
+    })
+    .join("\n\n");
+
+  const system = "You are summarizing a partially completed debrief conversation.";
+
+  const userMessage = `[DEBRIEF CONVERSATION]
+${conversationText}
+
+Write a 2–3 sentence summary (plain prose, no headers or bullets) of what was
+actually discussed in this conversation. Address the user directly ("you").
+Focus only on what came up — do not mention what was not covered or planned.
+End with one short sentence noting the session was not completed.`;
+
+  return { system, userMessage };
+}
+
 // ── Stage 3: Assessment prompt ───────────────────────────────────────────────
 
 export function buildAssessmentPrompt(

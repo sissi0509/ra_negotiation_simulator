@@ -66,7 +66,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create the debrief document in MongoDB (plan stage)
+    // Create the initial debrief document in MongoDB — all metadata set here
+    // so per-turn message appends have a complete record to update.
     const db = await getDb();
     await db.collection("debriefs").updateOne(
       { debrief_id },
@@ -76,7 +77,10 @@ export async function POST(req: NextRequest) {
           run_id,
           scenario_name: transcript.scenario_name,
           personality_name: transcript.personality_name,
+          transcript,
           plan,
+          messages: [],
+          started_at: transcript.started_at,
           plan_generated_at: new Date(),
         },
       },

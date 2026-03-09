@@ -1,4 +1,4 @@
-import scenarios from "@/data/scenarios.json";
+import scenarios from "@/content/scenarios.json";
 
 interface Props {
   value: string;
