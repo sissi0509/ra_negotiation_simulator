@@ -11,6 +11,19 @@ import { getDb } from "@/lib/mongodb";
 
 const SESSION_COMPLETE_MARKER = "--- Session Complete ---";
 
+/**
+ * Split text into sentence-level chunks separated by [BREAK].
+ * Each sentence becomes its own bubble in the UI.
+ * Uses lookbehind on sentence-ending punctuation followed by whitespace.
+ */
+function splitSentences(text: string): string {
+  const sentences = text
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  return sentences.length > 1 ? sentences.join("\n[BREAK]\n") : text;
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const plan: DebriefPlan = body.plan;
@@ -47,7 +60,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await callClaude({
-      max_tokens: 512,
+      max_tokens: 300,
       system: systemPrompt,
       messages: apiMessages,
     });
@@ -57,6 +70,7 @@ export async function POST(req: NextRequest) {
 
     // Build the updated messages list (user messages sent + Sage's reply).
     // The bootstrap "(Begin the debrief…)" message is excluded — it's not in `messages`.
+    // Store the raw reply (no [BREAK]) so the model never sees formatting artifacts.
     const updatedMessages: DebriefStoredMessage[] = [
       ...messages,
       { role: "assistant", content: reply },
@@ -80,16 +94,17 @@ export async function POST(req: NextRequest) {
     }
 
     // Detect session-complete marker and extract summary.
-    // Use a regex so minor variations in spacing/capitalisation are caught.
     const markerMatch = reply.match(/---\s*Session\s+Complete\s*---/i);
     if (markerMatch?.index !== undefined) {
+      const chatPart = reply.slice(0, markerMatch.index).trim();
       const sessionSummary = reply
         .slice(markerMatch.index + markerMatch[0].length)
         .trim();
-      return NextResponse.json({ reply, sessionSummary });
+      const splitReply = splitSentences(chatPart) + "\n" + markerMatch[0] + "\n" + sessionSummary;
+      return NextResponse.json({ reply: splitReply, sessionSummary });
     }
 
-    return NextResponse.json({ reply });
+    return NextResponse.json({ reply: splitSentences(reply) });
   } catch (err) {
     console.error("Debrief chat API error:", err);
     return NextResponse.json(
