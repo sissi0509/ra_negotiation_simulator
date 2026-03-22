@@ -6,6 +6,7 @@ import personalities from "@/content/personalities.json";
 import { saveSession, StoredMessage } from "@/lib/sessionStore";
 import { callClaude } from "@/lib/callClaude";
 import { getDb } from "@/lib/mongodb";
+import { auth } from "@/auth";
 
 interface Message {
   role: "user" | "assistant";
@@ -17,6 +18,8 @@ function loadPrompt(filename: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  const user_id = session?.user?.email ?? null;
   const { scenario_id, personality_id, messages, session_id } = await req.json();
 
   const scenario = scenarios.find((s) => s.id === scenario_id);
@@ -73,7 +76,7 @@ export async function POST(req: NextRequest) {
         .then((db) =>
           db.collection("transcripts").updateOne(
             { run_id: session_id },
-            { $set: { run_id: session_id, scenario_id, personality_id, messages: transcriptMessages, updated_at: new Date() } },
+            { $set: { run_id: session_id, scenario_id, personality_id, messages: transcriptMessages, updated_at: new Date(), ...(user_id ? { user_id } : {}) } },
             { upsert: true }
           )
         )

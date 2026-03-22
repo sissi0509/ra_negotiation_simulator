@@ -10,6 +10,7 @@ import { Transcript } from "@/lib/transcript";
 import { DebriefPlan } from "@/lib/debriefPrompt";
 import { buildDebriefText, downloadDebrief } from "@/lib/debriefExport";
 import DebriefUpload from "@/components/DebriefUpload";
+import UserMenu from "@/components/UserMenu";
 
 export const DEBRIEF_PENDING_KEY = "debrief_pending";
 export const DEBRIEF_SESSION_KEY = "debrief_session_id";
@@ -45,6 +46,7 @@ export default function DebriefPage() {
   const [assessmentFailed, setAssessmentFailed] = useState(false);
   const [assessmentRetryUsed, setAssessmentRetryUsed] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [summaryRegenerating, setSummaryRegenerating] = useState(false);
 
   // On mount: check for a pending transcript (new debrief) or an active session (page refresh).
   useEffect(() => {
@@ -379,6 +381,27 @@ export default function DebriefPage() {
     fireAssessment(plan, messages, summary);
   }
 
+  async function handleRegenerateSummary() {
+    setSummaryRegenerating(true);
+    try {
+      const apiMessages = messages
+        .filter((m) => m.role === "user" || m.role === "assistant")
+        .map((m) => ({ role: m.role as "user" | "assistant", content: m.text }));
+      const res = await fetch("/api/debrief/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: apiMessages }),
+      });
+      if (!res.ok) throw new Error("Summary API failed");
+      const data = await res.json();
+      setSessionSummary(data.summary ?? null);
+    } catch {
+      // silently keep the old summary on failure
+    } finally {
+      setSummaryRegenerating(false);
+    }
+  }
+
   function handleRetryAssessment() {
     if (!plan) return;
     setAssessmentRetryUsed(true);
@@ -420,7 +443,7 @@ export default function DebriefPage() {
   if (debriefEnded && transcript) {
     return (
       <div className="flex h-screen flex-col bg-white">
-        <header className="shrink-0 flex items-center border-b border-indigo-100 px-6 py-4">
+        <header className="shrink-0 flex items-center justify-between border-b border-indigo-100 px-6 py-4">
           <div>
             <p className="text-xs font-medium uppercase tracking-wide text-indigo-400">
               Debrief Report
@@ -429,6 +452,7 @@ export default function DebriefPage() {
               {transcript.scenario_name} · {transcript.personality_name}
             </p>
           </div>
+          <UserMenu stage="report" />
         </header>
         <div className="flex min-h-0 flex-1 overflow-hidden">
           {/* Left — report cards */}
@@ -441,8 +465,10 @@ export default function DebriefPage() {
               assessmentFailed={assessmentFailed}
               assessmentRetryUsed={assessmentRetryUsed}
               endedByUser={endedByUser}
+              summaryRegenerating={summaryRegenerating}
               onRevealAssessment={handleRevealAssessment}
               onRetryAssessment={handleRetryAssessment}
+              onRegenerateSummary={handleRegenerateSummary}
               onDownload={handleDownload}
               onBack={handleBack}
             />
@@ -470,14 +496,17 @@ export default function DebriefPage() {
               {transcript.scenario_name} · {transcript.personality_name}
             </p>
           </div>
-          {!sessionComplete && !showEndChoice && (
-            <button
-              onClick={() => { setShowEndChoice(true); setShowExitConfirm(false); }}
-              className="rounded-md border border-indigo-200 px-3 py-1.5 text-sm text-indigo-600 transition-colors hover:bg-indigo-50"
-            >
-              End Debrief
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            {!sessionComplete && !showEndChoice && (
+              <button
+                onClick={() => { setShowEndChoice(true); setShowExitConfirm(false); }}
+                className="rounded-md border border-indigo-200 px-3 py-1.5 text-sm text-indigo-600 transition-colors hover:bg-indigo-50"
+              >
+                End Debrief
+              </button>
+            )}
+            <UserMenu stage="debrief" />
+          </div>
         </header>
 
         {/* Split body */}

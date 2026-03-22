@@ -3,11 +3,11 @@ import type { Transcript } from "@/lib/transcript";
 
 const COLLECTION = "transcripts";
 
-export async function saveTranscript(transcript: Transcript): Promise<void> {
+export async function saveTranscript(transcript: Transcript, userId?: string | null): Promise<void> {
   const db = await getDb();
   await db.collection(COLLECTION).replaceOne(
     { run_id: transcript.run_id },
-    transcript,
+    { ...transcript, ...(userId ? { user_id: userId } : {}) },
     { upsert: true }
   );
 }

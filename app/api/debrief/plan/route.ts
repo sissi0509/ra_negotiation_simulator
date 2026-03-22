@@ -4,8 +4,11 @@ import { saveDebriefSession } from "@/lib/debriefSessionStore";
 import { Transcript } from "@/lib/transcript";
 import { callClaude, FALLBACK_MODEL } from "@/lib/callClaude";
 import { getDb } from "@/lib/mongodb";
+import { auth } from "@/auth";
 
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  const user_id = session?.user?.email ?? null;
   const body = await req.json();
 
   // Accept the transcript either flat (top-level fields) or wrapped in { transcript }
@@ -75,13 +78,11 @@ export async function POST(req: NextRequest) {
         $set: {
           debrief_id,
           run_id,
-          scenario_name: transcript.scenario_name,
-          personality_name: transcript.personality_name,
-          transcript,
           plan,
           messages: [],
           started_at: transcript.started_at,
           plan_generated_at: new Date(),
+          ...(user_id ? { user_id } : {}),
         },
       },
       { upsert: true }

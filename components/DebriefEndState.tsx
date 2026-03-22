@@ -8,8 +8,10 @@ interface Props {
   assessmentFailed?: boolean;
   assessmentRetryUsed?: boolean;
   endedByUser?: boolean;
+  summaryRegenerating?: boolean;
   onRevealAssessment: () => void;
   onRetryAssessment?: () => void;
+  onRegenerateSummary?: () => void;
   onDownload: () => void;
   onBack: () => void;
 }
@@ -22,27 +24,46 @@ export default function DebriefEndState({
   assessmentFailed = false,
   assessmentRetryUsed = false,
   endedByUser = false,
+  summaryRegenerating = false,
   onRevealAssessment,
   onRetryAssessment,
+  onRegenerateSummary,
   onDownload,
   onBack,
 }: Props) {
   return (
     <div className="flex flex-col gap-6 px-8 py-8">
       {/* Session Themes Summary Card — shown immediately when available */}
-      {sessionSummary && (
+      {(sessionSummary || summaryRegenerating) && (
         <div className="rounded-xl border border-indigo-100 bg-indigo-50 px-6 py-5">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-indigo-400">
-            {endedByUser ? "Partial Debrief Summary" : "Debrief Summary"}
-          </p>
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-wide text-indigo-400">
+              {endedByUser ? "Partial Debrief Summary" : "Debrief Summary"}
+            </p>
+            {onRegenerateSummary && (
+              <button
+                onClick={onRegenerateSummary}
+                disabled={summaryRegenerating}
+                className="text-xs text-indigo-400 transition-colors hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {summaryRegenerating ? "Regenerating…" : "Regenerate"}
+              </button>
+            )}
+          </div>
           {endedByUser && (
             <p className="mb-3 text-xs text-amber-600 font-medium">
               You ended this session early — the following reflects what was covered before it was complete.
             </p>
           )}
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
-            {sessionSummary}
-          </p>
+          {summaryRegenerating ? (
+            <p className="text-sm text-indigo-300">Generating new summary…</p>
+          ) : (
+            <ul className="flex flex-col gap-2">
+              {sessionSummary!.split("\n").filter((l) => l.trim()).map((line, i) => (
+                <li key={i} className="text-sm leading-relaxed text-gray-800">{line}</li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 

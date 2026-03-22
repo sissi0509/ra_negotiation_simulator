@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveTranscript, getAllTranscripts } from "@/lib/transcriptStore";
 import type { Transcript } from "@/lib/transcript";
+import { auth } from "@/auth";
 
 // POST /api/transcripts  — called automatically when a conversation ends
 export async function POST(req: NextRequest) {
@@ -10,7 +11,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid transcript payload" }, { status: 400 });
   }
 
-  await saveTranscript(transcript);
+  const session = await auth();
+  await saveTranscript(transcript, session?.user?.email);
   return NextResponse.json({ ok: true });
 }
 
