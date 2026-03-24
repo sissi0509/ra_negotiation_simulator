@@ -8,8 +8,8 @@ import { auth } from "@/auth";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  const user_id = session?.user?.email ?? null;
   const body = await req.json();
+  const user_id = session?.user?.email ?? body.user_id ?? null;
 
   // Accept the transcript either flat (top-level fields) or wrapped in { transcript }
   const transcript: Transcript = body.messages ? body : body.transcript;

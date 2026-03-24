@@ -18,10 +18,16 @@ interface Message {
   timestamp: string;
 }
 
+interface DebriefMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 interface Debrief {
   debrief_summary: string;
   assessment?: string;
   ended_by: string;
+  messages?: DebriefMessage[];
 }
 
 interface DetailData {
@@ -38,6 +44,7 @@ function DetailView({ meta, detail, detailLoading, onBack, formatDate }: {
 }) {
   const [leftPct, setLeftPct] = useState(30);
   const [topPct, setTopPct] = useState(50);
+  const [showDebriefConvo, setShowDebriefConvo] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
 
@@ -140,10 +147,18 @@ function DetailView({ meta, detail, detailLoading, onBack, formatDate }: {
               <>
                 {/* Upper — debrief summary */}
                 <div className="flex flex-col overflow-hidden" style={{ height: `${topPct}%` }}>
-                  <div className="sticky top-0 z-10 border-b border-gray-100 bg-indigo-50 px-5 py-3">
+                  <div className="sticky top-0 z-10 border-b border-gray-100 bg-indigo-50 px-5 py-3 flex items-center justify-between">
                     <p className="text-xs font-semibold uppercase tracking-wide text-indigo-400">Debrief Summary</p>
+                    {detail.debrief.messages?.length ? (
+                      <button
+                        onClick={() => setShowDebriefConvo((v) => !v)}
+                        className="text-xs text-indigo-500 hover:text-indigo-700 transition-colors"
+                      >
+                        {showDebriefConvo ? "Hide conversation" : "Show conversation"}
+                      </button>
+                    ) : null}
                   </div>
-                  <div className="overflow-y-auto px-5 py-4">
+                  <div className="overflow-y-auto px-5 py-4 flex flex-col gap-4">
                     {detail.debrief.debrief_summary ? (
                       <ul className="flex flex-col gap-2">
                         {detail.debrief.debrief_summary.split("\n").filter((l) => l.trim()).map((line, i) => (
@@ -153,6 +168,20 @@ function DetailView({ meta, detail, detailLoading, onBack, formatDate }: {
                     ) : (
                       <p className="text-sm text-gray-400">No summary available.</p>
                     )}
+                    {showDebriefConvo && detail.debrief.messages?.length ? (
+                      <div className="flex flex-col gap-3 border-t border-indigo-100 pt-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-indigo-300">Debrief Conversation</p>
+                        {detail.debrief.messages.map((m, i) => (
+                          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                            <div className={`max-w-[85%] rounded-xl px-4 py-2.5 text-sm leading-relaxed ${
+                              m.role === "user" ? "bg-indigo-600 text-white" : "bg-indigo-50 text-gray-800"
+                            }`}>
+                              {m.content.replace(/\[BREAK\]/g, "").trim()}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 
@@ -193,6 +222,8 @@ export default function HistoryPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detail, setDetail] = useState<DetailData | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetch("/api/history")
@@ -217,6 +248,17 @@ export default function HistoryPage() {
   function handleBack() {
     setSelectedId(null);
     setDetail(null);
+  }
+
+  async function handleDelete(run_id: string) {
+    setDeleting(true);
+    try {
+      await fetch(`/api/history/${run_id}`, { method: "DELETE" });
+      setList((prev) => prev.filter((t) => t.run_id !== run_id));
+    } finally {
+      setDeleting(false);
+      setConfirmDeleteId(null);
+    }
   }
 
   function formatDate(iso: string) {
@@ -258,29 +300,72 @@ export default function HistoryPage() {
         ) : list.length === 0 ? (
           <p className="text-center text-sm text-gray-400">No sessions yet. Go negotiate something!</p>
         ) : (
+          <>
           <div className="flex flex-col gap-3">
             {list.map((t) => (
-              <button
+              <div
                 key={t.run_id}
-                onClick={() => handleSelect(t.run_id)}
-                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-6 py-4 text-left transition-colors hover:border-gray-300 hover:bg-gray-50"
+                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-6 py-4 transition-colors hover:border-gray-300 hover:bg-gray-50"
               >
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">{t.scenario_name}</p>
-                  <p className="text-xs text-gray-400">{t.personality_name} · {formatDate(t.started_at)}</p>
-                </div>
-                {t.has_debrief ? (
-                  <span className="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-600">
-                    Debriefed
-                  </span>
-                ) : (
-                  <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-400">
-                    Not debriefed
-                  </span>
-                )}
-              </button>
+                <button
+                  onClick={() => handleSelect(t.run_id)}
+                  className="flex flex-1 items-center justify-between text-left gap-4"
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">{t.scenario_name || t.scenario_id?.replace(/_/g, " ")}</p>
+                    <p className="text-xs text-gray-400">{t.personality_name || t.personality_id} · {formatDate(t.started_at)}</p>
+                  </div>
+                  {t.has_debrief ? (
+                    <span className="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-600">
+                      Debriefed
+                    </span>
+                  ) : (
+                    <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-400">
+                      Not debriefed
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(t.run_id); }}
+                  className="ml-4 shrink-0 text-gray-300 transition-colors hover:text-red-400"
+                  title="Delete"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
             ))}
           </div>
+
+          {/* Confirmation dialog */}
+          {confirmDeleteId && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+              <div className="flex w-full max-w-sm flex-col gap-4 rounded-xl bg-white px-8 py-6 shadow-lg">
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">Delete this session?</p>
+                  <p className="mt-1 text-xs text-gray-400">This will permanently delete the negotiation transcript and all debrief data. This cannot be undone.</p>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setConfirmDeleteId(null)}
+                    disabled={deleting}
+                    className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleDelete(confirmDeleteId)}
+                    disabled={deleting}
+                    className="flex-1 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-500 disabled:opacity-50"
+                  >
+                    {deleting ? "Deleting…" : "Delete"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          </>
         )}
       </div>
     </div>

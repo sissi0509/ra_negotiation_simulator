@@ -443,6 +443,7 @@ export default function Home() {
           scenario={scenario}
           personality={personality}
           onBegin={handleBegin}
+          onBack={() => setShowModal(false)}
         />
       )}
     </div>

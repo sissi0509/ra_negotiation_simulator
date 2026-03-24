@@ -42,3 +42,8 @@ next-env.d.ts
 
 # local data store — migrate to real DB when ready
 /db
+
+# test script — personal config and generated output
+/test_script/config.json
+/test_script/output/
+/test_script/exchange/

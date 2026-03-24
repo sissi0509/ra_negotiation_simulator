@@ -1,0 +1,8 @@
+{
+  "name": "negotiation-simulator-script-tests",
+  "version": "1.0.0",
+  "description": "Headless API-based test runner — no browser required",
+  "scripts": {
+    "test": "node run_test.js"
+  }
+}

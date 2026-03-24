@@ -19,8 +19,8 @@ function loadPrompt(filename: string): string {
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  const user_id = session?.user?.email ?? null;
-  const { scenario_id, personality_id, messages, session_id } = await req.json();
+  const { scenario_id, personality_id, messages, session_id, user_id: body_user_id } = await req.json();
+  const user_id = session?.user?.email ?? body_user_id ?? null;
 
   const scenario = scenarios.find((s) => s.id === scenario_id);
   const personality = personalities.find((p) => p.id === personality_id);

@@ -11,6 +11,11 @@ export default auth((_req) => {
     return NextResponse.redirect(new URL("/", _req.url));
   }
   if (!isAuthenticated) {
+    // Allow requests that carry the test API key (used by test_script)
+    const testKey = process.env.TEST_API_KEY;
+    if (testKey && _req.headers.get("x-test-api-key") === testKey) {
+      return NextResponse.next();
+    }
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

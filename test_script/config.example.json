@@ -1,0 +1,10 @@
+{
+  "mode": "full",
+  "test_user_id": "your-email@example.com",
+  "scenario_id": "salary_negotiation",
+  "personality_id": "evasive",
+  "base_url": "http://localhost:3000",
+  "sim_model": "claude-sonnet-4-6",
+  "user_style": "Describe the simulated user's negotiation style and behavior here.",
+  "test_focus": "Describe what you want to evaluate in this test run."
+}

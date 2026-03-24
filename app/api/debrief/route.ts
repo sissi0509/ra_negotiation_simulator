@@ -101,6 +101,19 @@ export async function POST(req: NextRequest) {
         .slice(markerMatch.index + markerMatch[0].length)
         .trim();
       const splitReply = splitSentences(chatPart) + "\n" + markerMatch[0] + "\n" + sessionSummary;
+
+      // Persist the session summary so it appears in History
+      if (debrief_id) {
+        getDb()
+          .then((db) =>
+            db.collection("debriefs").updateOne(
+              { debrief_id },
+              { $set: { debrief_summary: sessionSummary } }
+            )
+          )
+          .catch((err) => console.error("Failed to save debrief summary:", err));
+      }
+
       return NextResponse.json({ reply: splitReply, sessionSummary });
     }
 

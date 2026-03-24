@@ -3,7 +3,8 @@
     "id": "salary_negotiation",
     "name": "Salary Negotiation",
     "description": "You're meeting with a hiring manager at a mid-sized tech company. They've extended an offer and you're here to negotiate your starting salary.",
-    "counterpart_role": "Hiring Manager"
+    "counterpart_role": "Hiring Manager",
+    "backstory": "You're a software engineer with 3 years of experience. You've done your research — the market rate for this role is $90k–$95k. You currently earn $83k and are hoping to get a meaningful raise."
   },
   {
     "id": "vendor_contract",
@@ -15,6 +16,7 @@
     "id": "apartment_rent",
     "name": "Apartment Rent Negotiation",
     "description": "It's lease renewal time. Your landlord wants to raise the rent. You're here to negotiate to keep it flat or get something in return.",
-    "counterpart_role": "Landlord"
+    "counterpart_role": "Landlord",
+    "backstory": "You've been a reliable tenant for 2 years, currently paying $2,000/month. Your landlord wants to raise it to $2,400 — a $400 jump. You've done your research — comparable units in the area go for $2,100–$2,200. You'd prefer to stay but are willing to look elsewhere if the increase is unreasonable."
   }
 ]
