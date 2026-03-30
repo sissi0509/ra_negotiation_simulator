@@ -7,7 +7,7 @@ const { auth } = NextAuth(authConfig);
 export default auth((_req) => {
   const { pathname } = _req.nextUrl;
   const isAuthenticated = !!_req.auth;
-  if (isAuthenticated && pathname === "/login") {
+  if (isAuthenticated && (pathname === "/login" || pathname === "/register")) {
     return NextResponse.redirect(new URL("/", _req.url));
   }
   if (!isAuthenticated) {
@@ -24,6 +24,6 @@ export default auth((_req) => {
 });
 
 export const config = {
-  // Excludes: / (public landing), /login, /api/auth/*, Next.js internals, favicon
-  matcher: ["/((?!$|login|api/auth|_next/static|_next/image|favicon.ico).*)"],
+  // Excludes: / (public landing), /login, /register, /api/auth/*, Next.js internals, favicon
+  matcher: ["/((?!$|login|register|api/auth|_next/static|_next/image|favicon.ico).*)"],
 };

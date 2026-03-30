@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import UserMenu from "@/components/UserMenu";
 import ScenarioSelector from "@/components/ScenarioSelector";
 import PersonalitySelector from "@/components/PersonalitySelector";
@@ -16,8 +17,98 @@ import personalities from "@/content/personalities.json";
 import { isUserSigningOff } from "@/lib/endDetection";
 import { buildTranscript } from "@/lib/transcript";
 import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY as DEBRIEF_SESSION_KEY_CONST } from "@/app/debrief/page";
+import { isExperiment, currentRoundAssignment, nextSurveyDue } from "@/lib/appMode";
+import type { ExperimentUser, ExperimentCondition } from "@/lib/appMode";
 
 const SESSION_KEY = "negotiation_session_id";
+
+// ── Condition-specific step lists ─────────────────────────────────────────────
+const CONDITION_STEPS: Record<ExperimentCondition, { label: string; detail: string }[]> = {
+  ai_debrief: [
+    { label: "Complete a short survey", detail: "A few quick questions about your negotiation background." },
+    { label: "Negotiate (Round 1)", detail: "A text conversation with an AI counterpart in an assigned scenario." },
+    { label: "Reflect with an AI coach", detail: "Sage, an AI coach, will guide you through key moments from your negotiation." },
+    { label: "Receive your assessment", detail: "A structured report on your strengths and areas to improve." },
+    { label: "Negotiate (Round 2)", detail: "A second scenario to apply what you learned." },
+    { label: "Complete a final survey", detail: "A few closing questions before you finish." },
+  ],
+  static_reflection: [
+    { label: "Complete a short survey", detail: "A few quick questions about your negotiation background." },
+    { label: "Negotiate (Round 1)", detail: "A text conversation with an AI counterpart in an assigned scenario." },
+    { label: "Review and reflect", detail: "Read your transcript and write a short reflection on your approach." },
+    { label: "Negotiate (Round 2)", detail: "A second scenario." },
+    { label: "Complete a final survey", detail: "A few closing questions before you finish." },
+  ],
+  control: [
+    { label: "Complete a short survey", detail: "A few quick questions about your negotiation background." },
+    { label: "Negotiate (Round 1)", detail: "A text conversation with an AI counterpart in an assigned scenario." },
+    { label: "Negotiate (Round 2)", detail: "A second scenario." },
+    { label: "Complete a final survey", detail: "A few closing questions before you finish." },
+  ],
+};
+
+function ExperimentIntroScreen({
+  experimentState,
+  onBegin,
+}: {
+  experimentState: ExperimentUser;
+  onBegin: () => void;
+}) {
+  const [consented, setConsented] = useState(false);
+  const steps = CONDITION_STEPS[experimentState.condition];
+  // If they already consented in a previous session, skip the checkbox.
+  const alreadyConsented = experimentState.consent_given;
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
+      <div className="flex w-full max-w-lg flex-col gap-8 rounded-xl border border-gray-200 bg-white px-8 py-10 shadow-sm">
+        <div className="flex flex-col gap-1">
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Research Study</p>
+          <h1 className="text-xl font-semibold text-gray-900">Welcome, {experimentState.name?.split(" ")[0] ?? "Participant"}</h1>
+          <p className="text-sm text-gray-500">
+            Here&apos;s what you&apos;ll do. Please read carefully before continuing.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {steps.map((step, i) => (
+            <div key={i} className="flex gap-4 rounded-lg border border-gray-100 bg-gray-50 px-5 py-4">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-900 text-xs font-semibold text-white">
+                {i + 1}
+              </span>
+              <div>
+                <p className="text-sm font-medium text-gray-900">{step.label}</p>
+                <p className="mt-0.5 text-sm text-gray-500">{step.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {!alreadyConsented && (
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={consented}
+              onChange={(e) => setConsented(e.target.checked)}
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            <span className="text-sm text-gray-600">
+              I understand the study procedure and agree to participate. I know I can stop at any time by contacting the researcher.
+            </span>
+          </label>
+        )}
+
+        <button
+          onClick={onBegin}
+          disabled={!alreadyConsented && !consented}
+          className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          I understand — let&apos;s begin
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const [selectedScenario, setSelectedScenario] = useState("");
@@ -38,6 +129,10 @@ export default function Home() {
   // Show intro on first visit only. Tracked via localStorage for now;
   // will be replaced with MongoDB users.onboarded flag once login is wired up.
   const [showIntro, setShowIntro] = useState(false);
+  // Experiment mode: user's assigned scenario/personality and progress flags.
+  const [experimentState, setExperimentState] = useState<ExperimentUser | null>(null);
+  // Experiment mode: show group-specific instructions after login, before setup.
+  const [showExperimentIntro, setShowExperimentIntro] = useState(isExperiment);
 
   const { status: authStatus } = useSession();
 
@@ -50,6 +145,23 @@ export default function Home() {
     // Show intro on first visit — skip if already onboarded
     if (!localStorage.getItem("intro_seen")) {
       setShowIntro(true);
+    }
+
+    // In experiment mode, fetch the participant's state and use the current round's assignment.
+    if (isExperiment) {
+      fetch("/api/experiment/state")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data: ExperimentUser | null) => {
+          if (data) {
+            setExperimentState(data);
+            const assignment = currentRoundAssignment(data);
+            if (assignment) {
+              setSelectedScenario(assignment.scenario);
+              setSelectedPersonality(assignment.personality);
+            }
+          }
+        })
+        .catch(() => {});
     }
 
     const storedId = localStorage.getItem(SESSION_KEY);
@@ -116,6 +228,28 @@ export default function Home() {
 
   // ── Welcome Screen (unauthenticated or first visit) ───────────────────────
   if (authStatus === "unauthenticated" || showIntro) {
+    // Experiment mode: minimal sign-in screen — no process steps shown to unauthenticated users.
+    if (isExperiment) {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="flex w-full max-w-sm flex-col gap-6 rounded-xl border border-gray-200 bg-white px-8 py-10 shadow-sm text-center">
+            <div className="flex flex-col gap-1">
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Research Study</p>
+              <h1 className="text-xl font-semibold text-gray-900">Negotiation Study</h1>
+              <p className="text-sm text-gray-500">Use the email and password provided by the researcher to sign in.</p>
+            </div>
+            <Link
+              href="/login"
+              className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+            >
+              Sign in
+            </Link>
+          </div>
+        </div>
+      );
+    }
+
+    // Product mode: full welcome screen with process overview.
     return (
       <div className="flex min-h-screen flex-col bg-gray-50 px-4">
         {authStatus === "authenticated" && (
@@ -170,18 +304,12 @@ export default function Home() {
           </div>
 
           {authStatus === "unauthenticated" ? (
-            <button
-              onClick={() => signIn("google", { callbackUrl: "/" })}
-              className="flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            <Link
+              href="/login"
+              className="flex items-center justify-center rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
             >
-              <svg className="h-4 w-4" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-              </svg>
-              Sign in with Google
-            </button>
+              Sign in
+            </Link>
           ) : (
             <button
               onClick={handleGetStarted}
@@ -199,6 +327,34 @@ export default function Home() {
       )}
       </div>
     );
+  }
+
+  // ── Experiment Intro Screen (authenticated, experiment mode, before setup) ─
+  if (isExperiment && showExperimentIntro) {
+    // Wait until we have the participant's state to show the right instructions.
+    if (!experimentState) {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <p className="text-sm text-gray-400">Loading your study information…</p>
+        </div>
+      );
+    }
+
+    return <ExperimentIntroScreen
+      experimentState={experimentState}
+      onBegin={() => {
+        // Mark started_at and consent_given on first begin.
+        const patch: Record<string, unknown> = { consent_given: true };
+        if (!experimentState.started_at) patch.started_at = new Date().toISOString();
+        fetch("/api/experiment/state", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(patch),
+        }).catch(() => {});
+        setExperimentState((prev) => prev ? { ...prev, consent_given: true } : prev);
+        setShowExperimentIntro(false);
+      }}
+    />;
   }
 
   // sid is passed explicitly because setState is async and the new value
@@ -359,7 +515,7 @@ export default function Home() {
         )}
 
         {conversationEnded ? (
-          <EndStatePrompt onStartNew={handleReset} onExport={handleExport} onDebrief={handleDebrief} userTurns={messages.filter((m) => m.role === "user").length} />
+          <EndStatePrompt onStartNew={handleReset} onExport={handleExport} onDebrief={handleDebrief} userTurns={messages.filter((m) => m.role === "user").length} debriefRequired={isExperiment} />
         ) : (
           <MessageInput onSend={handleSend} disabled={isLoading} />
         )}
@@ -395,48 +551,81 @@ export default function Home() {
           Negotiation Simulator
         </h1>
 
-        <div className="flex flex-col gap-4">
-          <ScenarioSelector
-            value={selectedScenario}
-            onChange={setSelectedScenario}
-          />
-          <PersonalitySelector
-            value={selectedPersonality}
-            onChange={setSelectedPersonality}
-          />
-        </div>
+        {isExperiment ? (
+          // ── Experiment mode: show assigned round info, no picker ──────────
+          experimentState ? (() => {
+            const due = nextSurveyDue(experimentState);
+            const assignment = currentRoundAssignment(experimentState);
+            // Pre-survey must be completed before negotiating.
+            const needsPreSurvey = due === "pre";
+            return (
+              <div className="flex flex-col gap-3">
+                {needsPreSurvey && (
+                  <div className="rounded-md bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+                    <p className="font-medium">Before you start</p>
+                    <p className="mt-0.5">Please complete the pre-study survey first.</p>
+                    <Link href="/survey?type=pre" className="mt-2 block font-medium text-amber-900 underline">
+                      Go to Survey →
+                    </Link>
+                  </div>
+                )}
+                <div className="rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                  <p className="font-medium text-gray-900">Round {experimentState.current_round}</p>
+                  <p className="mt-1">{scenario?.name ?? assignment?.scenario}</p>
+                  <p className="text-gray-500">{personality?.name ?? assignment?.personality} counterpart</p>
+                </div>
+              </div>
+            );
+          })() : (
+            <p className="text-center text-sm text-gray-400">Loading your assignment…</p>
+          )
+        ) : (
+          // ── Product mode: user picks scenario/personality ────────────────
+          <div className="flex flex-col gap-4">
+            <ScenarioSelector
+              value={selectedScenario}
+              onChange={setSelectedScenario}
+            />
+            <PersonalitySelector
+              value={selectedPersonality}
+              onChange={setSelectedPersonality}
+            />
+          </div>
+        )}
 
         <button
           onClick={handleStart}
-          disabled={!canStart}
+          disabled={!canStart || (isExperiment && nextSurveyDue(experimentState!) === "pre")}
           className="rounded-md bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
         >
           Start
         </button>
       </div>
 
-      {/* Upload card */}
-      <div className="flex w-full max-w-sm flex-col gap-3 rounded-xl border border-gray-100 bg-white px-8 py-6 shadow-sm">
-        <p className="text-center text-sm text-gray-500">
-          Already have a transcript?
-        </p>
-        <button
-          onClick={() => uploadRef.current?.click()}
-          className="rounded-md border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
-        >
-          Upload to debrief
-        </button>
-        <input
-          ref={uploadRef}
-          type="file"
-          accept=".json"
-          className="hidden"
-          onChange={handleUploadTranscript}
-        />
-        {uploadError && (
-          <p className="text-center text-xs text-red-500">{uploadError}</p>
-        )}
-      </div>
+      {/* Upload card — product mode only */}
+      {!isExperiment && (
+        <div className="flex w-full max-w-sm flex-col gap-3 rounded-xl border border-gray-100 bg-white px-8 py-6 shadow-sm">
+          <p className="text-center text-sm text-gray-500">
+            Already have a transcript?
+          </p>
+          <button
+            onClick={() => uploadRef.current?.click()}
+            className="rounded-md border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            Upload to debrief
+          </button>
+          <input
+            ref={uploadRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={handleUploadTranscript}
+          />
+          {uploadError && (
+            <p className="text-center text-xs text-red-500">{uploadError}</p>
+          )}
+        </div>
+      )}
 
       {showModal && scenario && personality && (
         <SceneModal

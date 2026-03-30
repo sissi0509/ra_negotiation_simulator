@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
+import { isExperiment } from "@/lib/appMode";
 
 type Stage = "negotiate" | "debrief" | "report";
 
@@ -20,6 +21,10 @@ export default function UserMenu({ stage }: Props) {
   const [open, setOpen] = useState(false);
   const [confirmingSignOut, setConfirmingSignOut] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  // In experiment mode participants have no access to navigation, history, or sign-out.
+  // Hooks are called above so React rules are satisfied.
+  if (isExperiment) return null;
 
   const email = session?.user?.email ?? "";
   const name = session?.user?.name ?? email;
