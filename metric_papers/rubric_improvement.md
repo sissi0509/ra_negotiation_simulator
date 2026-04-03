@@ -25,10 +25,10 @@ Different scenarios naturally produce different base rates for certain codes:
 
 | Code | Higher in Salary | Higher in Rent | Why |
 |---|---|---|---|
-| SUBS / FACT | ✓ | | Salary candidates naturally cite Glassdoor, market surveys |
-| PPRI | | ✓ | Tenant emotional ties — neighborhood, schools, history |
-| PCOM (BATNA positive) | ✓ | | Competing offer is a built-in scenario prop |
-| PREL | | ✓ | Rental tenure history is a natural relational resource |
+| SUBS (Substantiation) / FACT (Factual Information) | ✓ | | Salary candidates naturally cite Glassdoor, market surveys |
+| PPRI (Providing Priority Information) | | ✓ | Tenant emotional ties — neighborhood, schools, history |
+| PCOM (Positional Commitment — BATNA positive) | ✓ | | Invoking a competing offer is a culturally well-known salary negotiation tactic — participants are more likely to think of it spontaneously without any prompt. The equivalent move in rent (mentioning other apartments) is less commonly known. |
+| PREL (Positive Relationship Remark) | | ✓ | Rental tenure history is a natural relational resource |
 
 If everyone does salary → rent, a drop in D4 (Objective Criteria) in Round 2 might reflect the scenario, not skill regression.
 
@@ -57,24 +57,7 @@ This is a **2 (scenario order) × 3 (debrief condition)** design.
 
 ---
 
-## Issue 2 — REJO Removed from D2 Negatives ✅ Done
-
-### What Changed
-`REJO (Rejecting Offer)` was previously a negative indicator for D2 (Interests Not Positions).
-
-**Problem:** Rejecting an offer is a normal, necessary part of every negotiation. A participant who explores interests thoroughly but also rejects several offers was being penalized — their D2 ratio was artificially deflated.
-
-**Fix applied (v1.2):**
-- `coding_instruction.md`: REJO changed from `Interests Not Positions | Negative` → `N/A | Neutral`
-- `scoring_rubric.md` Section 4.2: REJO marked as Neutral with rationale note
-
-**Effect on D2 thresholds:** The ratio denominator shrinks slightly (fewer negatives), so the existing ratio thresholds may now be slightly easier to meet. Monitor in pilot calibration — adjust thresholds if needed.
-
-**Still negative for D2:** PPOS, APOS, ROM, AVOI (these are genuinely anti-interest behaviors — stating positions, asking for positions, demanding moves, and deflecting).
-
----
-
-## Issue 3 — AI Coder Reliability Validation 🔴 Must resolve
+## Issue 2 — AI Coder Reliability Validation 🔴 Must resolve
 
 ### The Problem
 The scoring system uses Claude Sonnet as the coder. Any peer reviewer or professor will ask: *"How do you know the AI applies codes consistently and correctly?"* Without a reliability check, the behavioral scores are not defensible as a research measure.
@@ -100,7 +83,7 @@ For each thought unit in the sampled transcripts, compare the human code vs. the
   Standard Kappa formula. Target: **κ ≥ .70**
 
 **Step 4 — Resolve disagreements and document**
-For any unit where human and AI disagreed, note the code conflict. If a pattern emerges (e.g., AI consistently confuses APRI and EXTQ), add a clarification rule to `coding_instruction.md` and re-run.
+For any unit where human and AI disagreed, note the code conflict. If a pattern emerges (e.g., AI consistently confuses APRI (Asking for Priority Information) and EXTQ (Exploratory/Expansive Question)), add a clarification rule to `coding_instruction.md` and re-run.
 
 **Step 5 — Report in methods section**
 Write something like:
@@ -115,11 +98,40 @@ A reliability validation section — already added as Section 9 in `coding_instr
 
 ---
 
+## Issue 3 — Threshold Values Have No Empirical Basis 🟢 Defer
+
+### Professor Note (2026-03-30)
+Professor confirmed this is **not urgent**. The raw frequency and ratio values are already informative measurement signals on their own — the delta between Round 1 and Round 2 can be computed directly from frequency/ratio without needing the zone-to-score conversion to be perfectly calibrated. The 1–5 zone scores are a useful summary layer but not required for the core analysis.
+
+**Implication:** Report frequency/ratio deltas as the primary continuous measure. The zone scores are supplementary interpretation aids. Threshold calibration can happen after data collection as a refinement step.
+
+### Original Problem (for reference)
+Every dimension scoring table has specific cutoff values for frequency and ratio zones (e.g., frequency ≥ 0.25 = High for D1; ratio ≥ 0.75 = Mid-High for D2). These numbers were calibrated on a single worked example transcript. No published paper defines these thresholds.
+
+**What is cited:**
+- The use of frequency and ratio as the two signals → Weingart et al. (2004), NegotiAct (Jäckel et al., 2024)
+
+**What is not cited:**
+- The specific cutoff values → project-specific calibration, no empirical basis yet
+
+### Deferred Fix: Two-Step Calibration (post-experiment)
+
+**Step 1 — AI-generated synthetic transcripts**
+Prompt the AI simulator to play users at three distinct skill levels — poor, mid-level, skilled — across both scenarios. Code and examine where frequency/ratio values land to set initial zone cutoffs.
+
+**Step 2 — Real pilot validation**
+Run 3–5 real participants, check whether participants are spread across zones or clustered, adjust thresholds if needed.
+
+### Possible Reference Benchmarks
+NegotiAct (Jäckel et al., 2024) Table 6 reports frequency proportions for socio-emotional codes (D1 only — no data for D2–D5). Weingart et al. (2004) reports no frequency data. No published benchmarks exist for D2, D3, D4, D5 threshold values.
+
+---
+
 ## Issue 4 — ACCO Dependency on AI Turn Coding 🟡 Should discuss
 
 ### The Problem
-The rule states: *"ACCO is only counted as a D3 positive indicator when the accepted offer is a MIA."*
-But to know whether the AI's offer was a MIA (multi-issue), the coder must read and classify AI turns — yet the instructions say AI turns are "coded for context only."
+The rule states: *"ACCO (Accepting Offer) is only counted as a D3 positive indicator when the accepted offer is a MIA (Multi-Issue Offer)."*
+But to know whether the AI's offer was a MIA, the coder must read and classify AI turns — yet the instructions say AI turns are "coded for context only."
 A coder who reads AI turns carelessly may miscategorize ACCO.
 
 ### Proposed Fix
@@ -131,60 +143,7 @@ This makes the AI turn dependency explicit rather than implicit.
 
 ---
 
-## Issue 5 — SHRT Proportion Has No Scoring Consequence 🟢 Nice to have
-
-### The Problem
-When SHRT units exceed 30% of total user units, it is flagged — but this flag has no effect on any dimension score. A participant who mostly says "okay", "right", "I see" throughout is scored identically to one who doesn't, just with a note.
-
-Passive style is counter to both D1 (you can't separate people from problem without engagement) and D2 (you can't explore interests with short responses).
-
-### Proposed Fix
-Add to Section 2 (Zero Evidence / Annotation rules):
-> *"If SHRT units exceed 30% of total user units: apply −1 adjustment to D1 (Separate People) and −1 adjustment to D2 (Interests) unless those dimensions already scored 1. This reflects that passive throughput responses indicate disengagement from both relationship management and interest exploration."*
-
-### Open question for professor
-Is this too mechanical? An alternative is to leave it as a flag and let the qualitative note carry the interpretation rather than affecting the numeric score.
-
----
-
-## Issue 6 — BQS and Outcome Score Not Integrated ✅ Done (readable docs)
-
-### The Problem
-The experiment has **two independent DVs**:
-1. **BQS (Behavioral Quality Score)** — the composite dimension score from this rubric, measuring *how* someone negotiated
-2. **ZOPA Outcome Score** — the final deal value relative to the hidden AI range, measuring *what* they achieved
-
-These are currently treated as separate measures with no framework for when they agree vs. disagree.
-
-### Proposed Integration Framework
-
-Add a Section 8.6 to `scoring_rubric.md` with this 2×2 interpretation table:
-
-| BQS Delta | ZOPA Delta | Interpretation |
-|---|---|---|
-| Positive | Positive | **Clear improvement** — process and outcome both better. Strongest evidence for debrief effect. |
-| Positive | Neutral/Negative | **Learning without execution** — behavioral quality improved but didn't convert to a better deal. May reflect scenario difficulty or transfer lag. Don't dismiss. |
-| Neutral/Negative | Positive | **Lucky outcome** — better deal without process change. Could be scenario variation, AI behavior, or luck. Do not attribute to debrief. |
-| Negative | Negative | **Regression** — flag for transcript review. Check if scenario difficulty explains it. |
-
-### How the ZOPA Score Works (reminder)
-- AI counterpart is given a hidden target range in its system prompt (e.g., salary ceiling $105k, floor $90k)
-- User is given a standardized starting context (e.g., current salary $72k, competing offer mentioned)
-- Final agreed value → compute position within the ZOPA: `(deal − floor) / (ceiling − floor)`
-- Score of 1.0 = user captured maximum available value; score of 0 = deal at AI's floor
-- If no agreement was reached, record as 0 or flag separately
-
-### Key design requirement
-**Both scenarios must have their ZOPA ranges documented and stored** before the experiment starts. The AI prompt must include exact floor and ceiling values, and these must be recorded in the experiment schema so the outcome score can be computed post-hoc.
-
-### Open question for professor
-- Should BQS and ZOPA score be combined into a single composite outcome, or always reported separately?
-- How do we handle the case where a participant reaches no agreement? Score as 0 on ZOPA, or exclude from outcome analysis?
-- If ZOPA outcome is the primary DV for the paper, BQS becomes a process mediator — does this change how we frame the study?
-
----
-
-## Issue 7 — Five Dimension Improvement Likelihood 🟡 Should discuss
+## Issue 5 — Five Dimension Improvement Likelihood 🟡 Should discuss
 
 ### The Research Question
 Are all five GTY dimensions equally likely to improve within a **single training cycle** (one debrief session between Round 1 and Round 2)?
@@ -198,7 +157,7 @@ Based on VR negotiation training research and general skill acquisition theory:
 | D2 — Interests Not Positions | **High** | Sage explicitly teaches "ask why"; this is the core of the debrief intervention |
 | D3 — Invent Options | **Low** | Requires deliberate multi-issue structuring; cognitively demanding; unlikely to shift in one round |
 | D4 — Objective Criteria | **Medium** | Depends on participant doing pre-negotiation research; Sage can prompt but can't supply the data |
-| D5 — BATNA | **Medium** | Scenario gives a built-in BATNA (competing offer / other apartments); Sage can teach framing but the prop is already there |
+| D5 — BATNA | **Medium** | Sage can teach framing but the participant must think to invoke their BATNA spontaneously |
 
 ### Implication for Scoring
 If D3 is unlikely to move in one round, a participant who improves meaningfully on D1+D2+D4+D5 may still show a modest composite delta because D3 anchors the bottom.
@@ -210,7 +169,7 @@ If D3 is unlikely to move in one round, a participant who improves meaningfully 
 
 ---
 
-## Issue 8 — PCOM Decision Rule Has No Direct Citation 🟡 Should discuss
+## Issue 6 — PCOM Decision Rule Has No Direct Citation 🟡 Should discuss
 
 ### The Problem
 PCOM (Positional Commitment) is the only code whose GTY dimension and valence are **context-dependent** — every other code maps directly in one pass. To assign PCOM's valence, the coder must:
@@ -230,9 +189,9 @@ The sequencing rule — *"interest exploration must precede PCOM for it to count
 - The specific sequencing threshold (interest exploration must come first) is our operationalization, not from a paper
 
 ### Options to Discuss with Professor
-1. **Keep as-is** — flag in methods section as a theoretically-grounded but project-specific rule. Validate it empirically during spot-check: does human and AI coder agree on PCOM valence at κ ≥ .70?
+1. **Keep as-is** — flag in methods section as a theoretically-grounded but project-specific rule. Validate it empirically during spot-check: does human and AI coder agree on PCOM (Positional Commitment) valence at κ ≥ .70?
 2. **Split PCOM into two codes:** PCOM-BATNA (explicit outside alternative, after interest exploration) vs. PCOM-POS (hard positional commitment, no alternative cited). Note: this doesn't eliminate the context-dependency — it just moves it from "determine valence" to "choose which code to assign." The problem is the same.
-3. **Simplify the rule:** Treat all PCOM as Interests Not Positions — Negative unless an explicit outside alternative is stated verbatim ("I have another offer", "three other units"). This is easier to apply and avoids the sequencing judgment.
+3. **Simplify the rule:** Treat all PCOM (Positional Commitment) as Interests Not Positions — Negative unless an explicit outside alternative is stated verbatim ("I have another offer", "three other units"). This is easier to apply and avoids the sequencing judgment.
 
 ### Open question for professor
 - Is Option 3 (simplify to explicit-alternative-only positive) too conservative? It would miss cases where PCOM is strategically timed but not explicitly backed by a named alternative.
@@ -240,38 +199,29 @@ The sequencing rule — *"interest exploration must precede PCOM for it to count
 
 ---
 
-## Issue 9 — Threshold Values Have No Empirical Basis 🔴 Must resolve
+## Issue 7 — D4 Ratio Cutoffs Theoretically Set 🟡 Should discuss
 
 ### The Problem
-Every dimension scoring table has specific cutoff values for frequency and ratio zones (e.g., frequency ≥ 0.25 = High for D1; ratio ≥ 0.75 = Mid-High for D2). These numbers were calibrated on a single worked example transcript. No published paper defines these thresholds. If a reviewer asks "why 0.15 and not 0.12?" there is currently no strong answer.
-
-**What is cited:**
-- The use of frequency and ratio as the two signals → Weingart et al. (2004), NegotiAct (Jäckel et al., 2024)
-
-**What is not cited:**
-- The specific cutoff values (0.10, 0.15, 0.25, 0.50, 0.75, 0.85, etc.) → project-specific calibration, no empirical basis yet
-
-### Why This Matters
-If the thresholds are poorly calibrated:
-- Everyone scores 1–2 (thresholds too strict) → no variance, cannot detect improvement
-- Everyone scores 4–5 (thresholds too lenient) → ceiling effect, cannot detect improvement
-- Either way, the BQS delta becomes uninformative as a research outcome
-
-### Required Fix: Pilot Calibration
-Before running the full experiment, run a small pilot (3–5 participants) and score their transcripts. Check the distribution:
-- Are participants spread across zones, or clustered?
-- Does the composite score range reflect the 5–25 scale meaningfully?
-- Are any dimensions showing no variance at all?
-
-Adjust thresholds based on pilot data. Document any changes and the reasoning in a version note.
-
-### Possible Reference Benchmarks
-Weingart et al. (2004) and NegotiAct (Jäckel et al., 2024) both report descriptive statistics of code frequencies across their samples. These could serve as rough anchors for what "normal" frequency looks like in negotiation transcripts — worth checking before pilot calibration.
+CRIT (Criticism) was added as a D4 negative code, making a ratio calculation possible for D4. The ratio thresholds were set theoretically (Mid ≥ 0.50, Mid-High/High ≥ 0.75) following the same logic as other dimensions, but without empirical validation. CRIT may be rare enough in practice that it rarely affects the ratio at all.
 
 ### Open question for professor
-- Is a pilot calibration step feasible given the study timeline?
-- Should threshold adjustment after pilot be pre-registered, or treated as exploratory?
-- Is there a published negotiation coding study whose frequency distributions we could use as a benchmark?
+- Should we keep the ratio column for D4, or simplify back to frequency-only and handle CRIT purely through qualitative adjustment?
+- Does pilot data show CRIT appearing frequently enough to matter?
+
+---
+
+## Issue 8 — SHRT Proportion Has No Scoring Consequence 🟢 Nice to have
+
+### The Problem
+When SHRT (Short Response) units exceed 30% of total user units, it is flagged — but this flag has no effect on any dimension score. A participant who mostly says "okay", "right", "I see" throughout is scored identically to one who doesn't, just with a note.
+
+Passive style is counter to both D1 (you can't separate people from problem without engagement) and D2 (you can't explore interests with short responses).
+
+### Proposed Fix
+> *"If SHRT (Short Response) units exceed 30% of total user units: apply −1 adjustment to D1 (Separate People) and −1 adjustment to D2 (Interests) unless those dimensions already scored 1. This reflects that passive throughput responses indicate disengagement from both relationship management and interest exploration."*
+
+### Open question for professor
+Is this too mechanical? An alternative is to leave it as a flag and let the qualitative note carry the interpretation rather than affecting the numeric score.
 
 ---
 
@@ -280,16 +230,14 @@ Weingart et al. (2004) and NegotiAct (Jäckel et al., 2024) both report descript
 | Item | Status | Action Needed |
 |---|---|---|
 | Counterbalanced scenario design | 🔴 Must resolve | Confirm and update participant assignment logic |
-| REJO removed from D2 | ✅ Done | No action needed |
-| Reliability validation protocol | 🔴 Must resolve | Write Section 6 in coding_instruction.md; confirm who will be human validator |
-| ACCO rule clarification | 🟡 Discuss | Small edit — confirm before finalizing |
-| SHRT scoring consequence | 🟢 Defer | Low priority; confirm with prof whether numeric penalty or flag-only |
-| BQS + ZOPA integration table | ✅ Done | Added as Section 11 in scoring_rubric_readable.md; ZOPA ranges still TBD before experiment |
+| Reliability validation protocol | 🔴 Must resolve | Transfer Section 9 to `coding_instruction.md`; confirm who will be human validator |
+| Threshold values — no empirical basis | 🟢 Defer | Prof confirmed: raw frequency/ratio delta is sufficient as primary measure; zone scores are supplementary. Calibrate after data collection. |
+| ACCO (Accepting Offer) rule clarification | 🟡 Discuss | Small edit — confirm before finalizing |
 | Five dimension improvement rates | 🟡 Discuss | Decide: equal weight composite, or per-dimension focus? |
-| PCOM decision rule — citation gap | 🟡 Discuss | Confirm sequencing rule or simplify to explicit-alternative-only |
-| Threshold values — no empirical basis | 🔴 Must resolve | Run pilot calibration before full experiment; check frequency distributions against Weingart/NegotiAct |
-| D4 ratio cutoffs — theoretically set | 🟡 Discuss | Ratio added for CRIT (Mid ≥ 0.50, Mid-High/High ≥ 0.75); validate in pilot — CRIT may be too rare to affect ratio meaningfully |
+| PCOM (Positional Commitment) decision rule — citation gap | 🟡 Discuss | Confirm sequencing rule or simplify to explicit-alternative-only |
+| D4 ratio cutoffs — theoretically set | 🟡 Discuss | Validate in pilot — CRIT (Criticism) may be too rare to affect ratio meaningfully |
+| SHRT (Short Response) scoring consequence | 🟢 Defer | Low priority; confirm with prof whether numeric penalty or flag-only |
 
 ---
 
-*Last updated: 2026-03-29*
+*Last updated: 2026-03-30*
