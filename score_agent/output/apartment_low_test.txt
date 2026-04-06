@@ -1,0 +1,123 @@
+CODING OUTPUT
+
+Transcript ID:          0d1e7aab-d72f-4ce5-9500-21c7aab0a11a
+Scenario:               apartment_rent
+Personality:            aggressive
+Total user units:       23
+SHRT units:             4
+Scoreable units:        19
+D3 supplementary units: 0
+
+--- SEQUENTIAL CODE LIST ---
+
+Unit | Code | Dimension | Direction
+-----|------|-----------|----------
+1    | NEGA | D1        | Negative
+2    | FACT | D4        | Positive
+3    | ASUB | D4        | Positive
+4    | SHRT | Neutral   | —
+5    | ACLS | D1        | Positive
+6    | PREL | D1        | Positive
+7    | ROM  | D2        | Negative
+8    | SIA  | D3        | Negative
+9    | SHRT | Neutral   | —
+10   | ACLS | D1        | Positive
+11   | PPRI | D2        | Positive
+12   | MIA  | D3        | Positive
+13   | NEGA | D1        | Negative
+14   | PPRI | D2        | Positive
+15   | MIA  | D3        | Positive
+16   | NEGA | D1        | Negative
+17   | PPRI | D2        | Positive
+18   | SHRT | Neutral   | —
+19   | PPRI | D2        | Positive
+20   | MIA  | D3        | Positive
+21   | SHRT | Neutral   | —
+22   | ACLS | D1        | Positive
+23   | ACCO | D3        | Positive
+
+--- SEGMENTATION NOTES ---
+
+Turn 1 (user): "*shifts uncomfortably* Wow, $2,400? That's... that's a lot more than the $1,800 I'm paying now. I mean, I knew rents were going up, but a $600 increase feels pretty steep. Can you walk me through what you're basing that number on exactly?"
+  U1 — "*shifts uncomfortably* Wow, $2,400?" → NEGA (nonverbal discomfort and verbal surprise absorbed into single expression of negative reaction to the price)
+  U2 — "That's... that's a lot more than the $1,800 I'm paying now. I mean, I knew rents were going up, but a $600 increase feels pretty steep." → FACT (establishes factual context: current rent $1,800, $600 increase; evaluative phrase absorbed as completing the fact)
+  U3 — "Can you walk me through what you're basing that number on exactly?" → ASUB
+
+Turn 2 (user): "*nods nervously* Okay, I hear you on the market... but I've been a great tenant, right? Like, I've never been late on rent, no complaints, kept the place in good condition. Doesn't that count for something? What if we met somewhere in the middle — maybe around $2,100 or $2,150?"
+  U4 — "*nods nervously* Okay," → SHRT (rule 4: "Okay" always its own unit; nonverbal absorbed)
+  U5 — "I hear you on the market..." → ACLS (reflects back AI's market-shift argument)
+  U6 — "but I've been a great tenant, right? Like, I've never been late on rent, no complaints, kept the place in good condition." → PREL (positive relationship remark: established tenancy record)
+  U7 — "Doesn't that count for something?" → ROM (asking counterpart to improve their offer in light of tenancy record, without naming a counter-price → D2 Negative)
+  U8 — "What if we met somewhere in the middle — maybe around $2,100 or $2,150?" → SIA (counter-offer at $2,100-2,150 → D3 Negative)
+
+Turn 3 (user): "*wrings hands* Yeah, yeah, I get that... I mean, I understand you have expenses. It's just — two grand is what I could maybe stretch to, but $2,400 is really hard. What if I signed a longer lease? Like two years instead of one? Would that help you out and maybe get us to a better number?"
+  U9 — "*wrings hands* Yeah, yeah, I get that..." → SHRT (rule 4: "Yeah" x2 is short acknowledgment; nonverbal absorbed)
+  U10 — "I mean, I understand you have expenses." → ACLS (reflects back AI's cost/expense argument)
+  U11 — "It's just — two grand is what I could maybe stretch to, but $2,400 is really hard." → PPRI (discloses underlying financial limit: $2,000 is ceiling; "really hard" signals the need behind the position)
+  U12 — "What if I signed a longer lease? Like two years instead of one? Would that help you out and maybe get us to a better number?" → MIA (bundles two issues: rent reduction + 2-year lease commitment offered proactively → D3 Positive)
+
+Turn 4 (user): "*sighs, looking defeated* I mean... I don't want to move, this place is convenient and I like the neighborhood. What if we did $2,250 for the first year and then it goes to market rate in year two? That way you're not locked in at a low rate forever, but I'm not getting priced out either?"
+  U13 — "*sighs, looking defeated*" → NEGA (nonverbal expression of defeat/negative emotion as distinct communicative act; dominance rule: primary purpose is expressing negative emotion)
+  U14 — "I mean... I don't want to move, this place is convenient and I like the neighborhood." → PPRI (states underlying priority: wants to stay for convenience and neighborhood)
+  U15 — "What if we did $2,250 for the first year and then it goes to market rate in year two? That way you're not locked in at a low rate forever, but I'm not getting priced out either?" → MIA (bundles two issues: year-1 rent $2,250 + year-2 market-rate adjustment; justification absorbed → D3 Positive)
+
+Turn 5 (user): "*pauses, feeling the pressure* $2,300... I mean, that's still a pretty big jump from where I am now. Can I think about it for a couple days? I need to actually crunch my own numbers and see if I can make that work with my budget."
+  U16 — "*pauses, feeling the pressure* $2,300... I mean, that's still a pretty big jump from where I am now." → NEGA (nonverbal pressure response and verbal expression of negative reaction to $2,300; absorbed as single act of expressing negative emotion)
+  U17 — "Can I think about it for a couple days? I need to actually crunch my own numbers and see if I can make that work with my budget." → PPRI (states underlying need: must evaluate personal budget before committing; time request completes the same interest-disclosure act)
+
+Turn 6 (user): "*feels stomach drop, speaking quickly* Oh man, okay... I mean, I really don't want to lose the place. Yeah, $2,300 is tight, but I think I can make it work if I trim some things. Can we just do one more thing though — what if you covered the first month or knocked off a month's rent to help me through the transition? That would really help."
+  U18 — "*feels stomach drop, speaking quickly* Oh man, okay..." → SHRT (rule 4: "okay" is always its own unit; nonverbal and "Oh man" absorbed)
+  U19 — "I mean, I really don't want to lose the place." → PPRI (states priority: keeping the apartment)
+  U20 — "Yeah, $2,300 is tight, but I think I can make it work if I trim some things. Can we just do one more thing though — what if you covered the first month or knocked off a month's rent to help me through the transition? That would really help." → MIA (bundles two issues: conditional acceptance of $2,300 + request for first-month discount/free; the overall communicative act is a package counter-proposal → D3 Positive)
+
+Turn 7 (user): "*takes a deep breath, feeling cornered* Yeah, okay... I mean, you're right, I don't want to end up homeless looking for a new place. Let's do it — $2,300 a month starting when?"
+  U21 — "*takes a deep breath, feeling cornered* Yeah, okay..." → SHRT (rule 4: "okay" always own unit; nonverbal absorbed)
+  U22 — "I mean, you're right, I don't want to end up homeless looking for a new place." → ACLS (reflects back and concedes to AI's implicit point that no better option exists; "you're right" is the dominant act)
+  U23 — "Let's do it — $2,300 a month starting when?" → ACCO; AI's offer of "$2,300 flat for a one-year lease" bundles price + lease term = MIA → ACCO accepting MIA → D3 Positive; "starting when?" (CLAR) absorbed
+
+--- DEAL OUTCOME ---
+
+Agreement reached:  Yes
+Final deal value:   $2,300/month
+
+--- RAW FREQUENCY AND RATIO ---
+
+Scoreable units (denominator): 19
+
+D1 — Separate People from Problem
+  Positive units: 4   Frequency: 0.21
+  Negative units: 3
+  Ratio: 0.57
+
+D2 — Interests Not Positions
+  Positive units: 4   Frequency: 0.21
+  Negative units: 1
+  Ratio: 0.80
+
+D3 — Invent Options for Mutual Gain
+  Positive units (MIA + qualifying ACCO): 4   Frequency: 0.21
+  Negative units (SIA): 1
+  Ratio: 0.80
+  D3 supplementary units: 0
+
+D4 — Objective Criteria
+  Positive units (SUBS-ext + FACT + ASUB): 2   Frequency: 0.11
+  Negative units (CRIT): 0
+  Ratio: 1.00
+  SUBS excluded (D4-excl): 0
+
+D5 — BATNA Awareness
+  Positive units (PCOM with explicit alternative): 0   Frequency: 0.00
+  Negative units (PCOM without alternative): 0
+  Ratio: N/A
+
+--- FLAGS ---
+
+SHRT proportion: 0.17
+
+--- OUTCOME SCORE ---
+
+Formula applied: apartment
+Final deal:      $2,300/month
+Outcome Score:   0.33
+Interpretation:  Participant captured 33% of available value ($2,300 vs. ceiling $2,400 / floor $2,100)

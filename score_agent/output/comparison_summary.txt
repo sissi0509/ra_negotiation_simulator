@@ -1,0 +1,237 @@
+COMPARISON SUMMARY — ALL TRANSCRIPTS
+Generated from: score_agent/output/
+Scenarios: salary_negotiation (Low / Mid / High), apartment_rent (Low / Mid / High)
+Personality: aggressive (all)
+
+===============================================================================
+SECTION 1 — TRANSCRIPT OVERVIEW
+===============================================================================
+
+                        Salary-Low    Salary-Mid    Salary-High
+                        ----------    ----------    -----------
+Transcript ID           590c8c71      4053a6a4      2cd38f0a
+Total user units        19            16            15
+SHRT units              4             1             0
+Scoreable units         15            15            15
+SHRT proportion         0.21          0.06          0.00
+D3 supplementary units  0             0             1 (Unit 9)
+
+                        Apt-Low       Apt-Mid       Apt-High
+                        -------       -------       --------
+Transcript ID           0d1e7aab      3ef6de19      474d573a
+Total user units        23            23            30
+SHRT units              4             1             1
+Scoreable units         19            22            29
+SHRT proportion         0.17          0.04          0.03
+D3 supplementary units  0             0             0
+
+===============================================================================
+SECTION 2 — RAW FREQUENCY (proportion of scoreable units)
+===============================================================================
+
+── Salary Negotiation ──────────────────────────────────────────────────────
+
+                        Low           Mid           High
+                        ---           ---           ----
+D1 Positive freq        0.53          0.40          0.33
+D1 Negative freq        0.07          0.00          0.00
+
+D2 Positive freq        0.00          0.07          0.20
+D2 Negative freq        0.07          0.00          0.00
+
+D3 Positive freq        0.00          0.07          0.07
+D3 Negative freq        0.07          0.13          0.07
+
+D4 Positive freq        0.20          0.20          0.33
+D4 Negative freq        0.00          0.00          0.00
+D4-excl (SUBS-personal) 0             2             0
+
+D5 Positive freq        0.00          0.00          0.00
+D5 Negative freq        0.00          0.00          0.00
+
+── Apartment Rent ──────────────────────────────────────────────────────────
+
+                        Low           Mid           High
+                        ---           ---           ----
+D1 Positive freq        0.21          0.23          0.31
+D1 Negative freq        0.16          0.09          0.00
+
+D2 Positive freq        0.21          0.09          0.14
+D2 Negative freq        0.05          0.14          0.00
+
+D3 Positive freq        0.21          0.00          0.07
+D3 Negative freq        0.05          0.14          0.07
+
+D4 Positive freq        0.11          0.32          0.24
+D4 Negative freq        0.00          0.00          0.10
+D4-excl (SUBS-personal) 0             0             2
+
+D5 Positive freq        0.00          0.00          0.00
+D5 Negative freq        0.00          0.14          0.00
+
+===============================================================================
+SECTION 3 — RATIOS  [pos / (pos + neg); N/A if both = 0]
+===============================================================================
+
+── Salary Negotiation ──────────────────────────────────────────────────────
+
+                        Low           Mid           High
+                        ---           ---           ----
+D1 ratio                0.89          1.00          1.00
+D2 ratio                0.00          1.00          1.00
+D3 ratio                0.00          0.33          0.50
+D4 ratio                1.00          1.00          1.00
+D5 ratio                N/A           N/A           N/A
+
+── Apartment Rent ──────────────────────────────────────────────────────────
+
+                        Low           Mid           High
+                        ---           ---           ----
+D1 ratio                0.57          0.71          1.00
+D2 ratio                0.80          0.40          1.00
+D3 ratio                0.80          0.00          0.50
+D4 ratio                1.00          1.00          0.70
+D5 ratio                N/A           0.00          N/A
+
+===============================================================================
+SECTION 4 — UNIT COUNTS (raw numbers behind the frequencies)
+===============================================================================
+
+── Salary Negotiation ──────────────────────────────────────────────────────
+
+                        Low           Mid           High
+Scoreable N             15            15            15
+                        ---           ---           ----
+D1 Positive             8             6             5
+D1 Negative             1             0             0
+
+D2 Positive             0             1             3
+D2 Negative             1             0             0
+
+D3 Positive             0             1             1
+D3 Negative (SIA)       1             2             1
+
+D4 Positive             3             3             5
+D4 Negative (CRIT)      0             0             0
+D4-excl                 0             2             0
+
+D5 Positive             0             0             0
+D5 Negative             0             0             0
+
+── Apartment Rent ──────────────────────────────────────────────────────────
+
+                        Low           Mid           High
+Scoreable N             19            22            29
+                        ---           ---           ----
+D1 Positive             4             5             9
+D1 Negative             3             2             0
+
+D2 Positive             4             2             4
+D2 Negative             1             3             0
+
+D3 Positive             4             0             2
+D3 Negative (SIA)       1             3             2
+
+D4 Positive             2             7             7
+D4 Negative (CRIT)      0             0             3
+D4-excl                 0             0             2
+
+D5 Positive             0             0             0
+D5 Negative (PCOM)      0             3             0
+
+===============================================================================
+SECTION 5 — DEAL OUTCOME AND OUTCOME SCORE
+===============================================================================
+
+── Salary Negotiation ──────────────────────────────────────────────────────
+
+                        Low           Mid           High
+Agreement               Yes           Yes           Yes
+Final deal              $88,000       $89,000       $92,000
+Outcome Score           0.30          0.40          0.70
+Value captured          30%           40%           70%
+
+ZOPA reference: floor $85,000 · ceiling $95,000 · range $10,000
+
+── Apartment Rent ──────────────────────────────────────────────────────────
+
+                        Low           Mid           High
+Agreement               Yes           No            Yes
+Final deal              $2,300/mo     N/A           $2,300/mo (2-yr)
+Outcome Score           0.33          0.00          0.33
+Value captured          33%           0%            33%
+
+ZOPA reference: worst $2,400 · best $2,100 · range $300
+
+===============================================================================
+SECTION 6 — FLAGS
+===============================================================================
+
+Salary-Low:   ⚠️ NO INTEREST EXPLORATION (D2 positive = 0)
+Salary-Mid:   none
+Salary-High:  none
+
+Apt-Low:      none
+Apt-Mid:      none  [SIA count = 3; "NO OFFERS" flag did not apply — coder noted correction]
+Apt-High:     none
+
+===============================================================================
+SECTION 7 — OBSERVATIONS
+===============================================================================
+
+1. OUTCOME SCORE INCREASES WITH SKILL (salary, as expected)
+   Salary: Low 0.30 → Mid 0.40 → High 0.70
+   Clear monotonic increase. High-skill participant captured more than double
+   the ZOPA value of Low-skill, consistent with design intent.
+
+2. APARTMENT OUTCOME DOES NOT DIFFERENTIATE BY SKILL
+   Low and High both settled at $2,300 (outcome score 0.33). Mid reached no
+   agreement (0.00). This is a rubric validity concern: the High participant
+   used notably more sophisticated behaviors but ended at the same price.
+   Possible explanations: (a) the aggressive AI counterpart's floor was $2,300
+   regardless of behavior; (b) Mid walked away rather than settling — arguably
+   principled, but coded as 0.00 under the current formula.
+
+3. D2 (INTERESTS) IS THE CLEAREST BEHAVIORAL DIFFERENTIATOR — SALARY
+   Low: 0 positive D2 units, flagged NO INTEREST EXPLORATION.
+   Mid: 1 positive unit (PPRI), ratio 1.00.
+   High: 3 positive units (PPRI ×2 + EXTQ), ratio 1.00, plus D3 supplementary.
+   D2 frequency rises monotonically (0.00 → 0.07 → 0.20).
+
+4. D1 FREQUENCY IS INVERSELY RELATED TO SKILL (SALARY)
+   Low: 0.53 · Mid: 0.40 · High: 0.33
+   Low-skill participant spent more units on relational warmth/appeasement
+   (POSA, ENCO) while missing task-level behaviors (D2, D3).
+   High-skill participant was more efficient: fewer D1 units, more D2/D4.
+
+5. D3 RATIO INCREASES WITH SKILL — SALARY
+   Low: 0.00 (no MIA) · Mid: 0.33 (1 MIA, 2 SIA) · High: 0.50 (1 MIA + 1 ACCO, 1 SIA)
+   Only Mid and High produced MIA offers. Low never attempted a package deal.
+
+6. D4 POSITIVE FREQUENCY INCREASES WITH SKILL — SALARY
+   Low: 0.20 · Mid: 0.20 · High: 0.33
+   High made more external-reference SUBS and ASUB moves; Low/Mid equal at 0.20
+   but Mid had 2 D4-excl (personal-only SUBS) not captured in frequency.
+
+7. APARTMENT HIGH INTRODUCES D4 NEGATIVE (CRIT) — UNIQUE TO HIGH SKILL
+   High: 3 CRIT units (ratio drops to 0.70). No CRIT appears in any other
+   transcript. High-skill apartment participant directly challenged the AI's
+   logical consistency, which is a qualitatively different strategy but reduces
+   D4 ratio. Consider whether CRIT with counter-logic should be treated
+   differently from CRIT without it — open design question.
+
+8. MID APARTMENT: NO AGREEMENT — BEHAVIOR vs. OUTCOME DISCONNECT
+   Mid had the highest D4 positive frequency (0.32) and produced PCOM units
+   (D5 Negative) signaling principled walk-away. But outcome score is 0.00.
+   This highlights the known tension between process quality and outcome value:
+   a principled refusal looks like failure under a pure outcome measure.
+   Per-dimension deltas (pre/post debrief) will better capture process learning
+   than outcome score alone for the apartment mid condition.
+
+9. D5 APPEARS ONLY IN APARTMENT MID (NEGATIVE)
+   Three PCOM units, no explicit alternative named → all D5 Negative.
+   No participant across all 6 transcripts cited a concrete outside alternative.
+   D5 Positive = 0 across the board. May reflect brief design (low brief did
+   not include a competing option; high brief included competing offer only
+   implicitly as a strategic move late in conversation). Worth checking whether
+   D5 can realistically be activated under these scenario constraints.

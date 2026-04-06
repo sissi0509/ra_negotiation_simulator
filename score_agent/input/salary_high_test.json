@@ -1,0 +1,69 @@
+{
+  "_id": {
+    "$oid": "69d30943ab3866a47625e175"
+  },
+  "run_id": "2cd38f0a-c998-496e-b56d-39098c6f12d5",
+  "messages": [
+    {
+      "role": "assistant",
+      "text": "Thanks for meeting with me today. We're excited about you joining the team, and we'd like to extend an offer of 85,000 dollars for this role. How does that sound?",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "user",
+      "text": "Thanks for having me — I'm genuinely excited about the role too. I appreciate the offer, but I was expecting something closer to 95,000 based on the market data I've researched for this position and level. Can you walk me through how you arrived at 85?",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Look, I appreciate you doing your research, but 95 is just not realistic for where we are right now. We've got solid market data showing that 85 to 90 is the right band for this role in our market, and frankly, we're already at the higher end of what we typically pay for someone coming in at this level.",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "user",
+      "text": "I hear you on budget constraints — that's real. But I want to understand the gap here. When you say 85 to 90 is your market band, are you looking at comparable roles in this specific metro area, or broader regional data? And what specific factors are driving the \"coming in at this level\" assessment — is that about my experience, or more about the role itself?",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "assistant",
+      "text": "That's fair questioning, but I don't want to get too deep in the weeds on our methodology right now — the reality is we've done our homework and 85 is a solid starting point for you. What I'm more interested in is whether you're willing to have a real conversation about a number between here and 90, or if 95 is your hard line that's going to stop us from moving forward.",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "user",
+      "text": "I appreciate you being direct. Look, 95 isn't a hard line — I'm genuinely open to landing in that 90 to 95 range based on what makes sense. But I need to understand what gets us there. Is it about proving myself over time, or are there specific performance metrics or deliverables where we could tie an adjustment? I want to find something that works for both of us.",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "assistant",
+      "text": "I like that approach — that's more collaborative. Here's the thing though, we don't typically do contingent offers tied to future performance, it creates too much administrative headache. What I can tell you is that if you come in at 88, we can get this closed today and you'll have a solid raise conversation after your first review in six months. Does 88 feel like something you can work with?",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "user",
+      "text": "I appreciate the path to a raise conversation, and I do want to move forward. But 88 still feels like a bigger gap than I'm comfortable with — that's a 7k drop from what I came in at. What if we split the difference and looked at 92? That gives you some relief from your initial offer, shows good faith on my end, and I think it's more defensible against the market data we're both looking at.",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "assistant",
+      "text": "You know what, I hear you on splitting the difference — that's reasonable thinking. Let me be straight with you though, 92 is tight for us, but if we're going to get this done today and you're ready to commit, I think we can make that work. Can you commit to starting in the next two weeks?",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "user",
+      "text": "I'm ready to commit — that works for me. Just to confirm before we shake hands: we're talking 92k as the base salary, standard benefits package as discussed, and that first review conversation at six months. Does that all line up on your end?",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Perfect, that's exactly right — 92k base, standard benefits, and we'll touch base at six months. I'm glad we found a number that works for both of us. I'll get the offer letter drafted and sent to you by end of day tomorrow. Welcome to the team.",
+      "timestamp": "2026-04-06T01:16:04.194Z"
+    }
+  ],
+  "personality_id": "aggressive",
+  "scenario_id": "salary_negotiation",
+  "updated_at": {
+    "$date": "2026-04-06T01:16:04.194Z"
+  },
+  "user_id": "11@test.com"
+}

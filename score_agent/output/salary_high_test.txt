@@ -1,0 +1,103 @@
+CODING OUTPUT
+
+Transcript ID:          2cd38f0a-c998-496e-b56d-39098c6f12d5
+Scenario:               salary_negotiation
+Personality:            aggressive
+Total user units:       15
+SHRT units:             0
+Scoreable units:        15
+D3 supplementary units: 1 — Unit 9
+
+--- SEQUENTIAL CODE LIST ---
+
+Unit | Code | Dimension | Direction
+-----|------|-----------|----------
+1    | POSA | D1        | Positive
+2    | SUBS | D4        | Positive
+3    | ASUB | D4        | Positive
+4    | ACLS | D1        | Positive
+5    | ASUB | D4        | Positive
+6    | ASUB | D4        | Positive
+7    | ENCO | D1        | Positive
+8    | PPRI | D2        | Positive
+9    | EXTQ | D2        | Positive
+10   | ENCO | D1        | Positive
+11   | PPRI | D2        | Positive
+12   | SIA  | D3        | Negative
+13   | SUBS | D4        | Positive
+14   | ACCO | D3        | Positive
+15   | CLAR | D1        | Positive
+
+--- SEGMENTATION NOTES ---
+
+Turn 1 (user): "Thanks for having me — I'm genuinely excited about the role too. I appreciate the offer, but I was expecting something closer to 95,000 based on the market data I've researched for this position and level. Can you walk me through how you arrived at 85?"
+  U1 — "Thanks for having me — I'm genuinely excited about the role too. I appreciate the offer," → POSA
+  U2 — "but I was expecting something closer to 95,000 based on the market data I've researched for this position and level." → SUBS (external ref: market data researched for this role/level → D4 Positive)
+  U3 — "Can you walk me through how you arrived at 85?" → ASUB
+
+Turn 2 (user): "I hear you on budget constraints — that's real. But I want to understand the gap here. When you say 85 to 90 is your market band, are you looking at comparable roles in this specific metro area, or broader regional data? And what specific factors are driving the 'coming in at this level' assessment — is that about my experience, or more about the role itself?"
+  U4 — "I hear you on budget constraints — that's real." → ACLS (reflects back the AI's budget constraint argument)
+  U5 — "When you say 85 to 90 is your market band, are you looking at comparable roles in this specific metro area, or broader regional data?" → ASUB (asking counterpart to justify their market band methodology)
+  U6 — "And what specific factors are driving the 'coming in at this level' assessment — is that about my experience, or more about the role itself?" → ASUB (separate question about a different aspect of the AI's position; segmentation rule 3: same act, new thought)
+
+Turn 3 (user): "I appreciate you being direct. Look, 95 isn't a hard line — I'm genuinely open to landing in that 90 to 95 range based on what makes sense. But I need to understand what gets us there. Is it about proving myself over time, or are there specific performance metrics or deliverables where we could tie an adjustment? I want to find something that works for both of us."
+  U7 — "I appreciate you being direct." → ENCO
+  U8 — "Look, 95 isn't a hard line — I'm genuinely open to landing in that 90 to 95 range based on what makes sense." → PPRI (disclosing their actual range and flexibility — underlying interests, not a positional demand)
+  U9 — "But I need to understand what gets us there. Is it about proving myself over time, or are there specific performance metrics or deliverables where we could tie an adjustment? I want to find something that works for both of us." → EXTQ (invites counterpart to expand the issue space to include performance milestones; qualifies as D3 supplementary: question specifically invites a multi-issue solution beyond just the base number)
+
+Turn 4 (user): "I appreciate the path to a raise conversation, and I do want to move forward. But 88 still feels like a bigger gap than I'm comfortable with — that's a 7k drop from what I came in at. What if we split the difference and looked at 92? That gives you some relief from your initial offer, shows good faith on my end, and I think it's more defensible against the market data we're both looking at."
+  U10 — "I appreciate the path to a raise conversation, and I do want to move forward." → ENCO (positive reinforcement of AI's raise conversation idea)
+  U11 — "But 88 still feels like a bigger gap than I'm comfortable with — that's a 7k drop from what I came in at." → PPRI (stating their underlying constraint: $88k is too far below their target)
+  U12 — "What if we split the difference and looked at 92?" → SIA (counter-offer at $92k)
+  U13 — "That gives you some relief from your initial offer, shows good faith on my end, and I think it's more defensible against the market data we're both looking at." → SUBS (external ref: "market data we're both looking at"; justifies the $92k offer with external market reference → D4 Positive)
+
+Turn 5 (user): "I'm ready to commit — that works for me. Just to confirm before we shake hands: we're talking 92k as the base salary, standard benefits package as discussed, and that first review conversation at six months. Does that all line up on your end?"
+  U14 — "I'm ready to commit — that works for me." → ACCO; AI's $92k offer came with a condition (start within 2 weeks) making it a MIA → ACCO accepting MIA → D3 Positive
+  U15 — "Just to confirm before we shake hands: we're talking 92k as the base salary, standard benefits package as discussed, and that first review conversation at six months. Does that all line up on your end?" → CLAR (checking understanding of all agreed deal terms)
+
+--- DEAL OUTCOME ---
+
+Agreement reached:  Yes
+Final deal value:   $92,000
+
+--- RAW FREQUENCY AND RATIO ---
+
+Scoreable units (denominator): 15
+
+D1 — Separate People from Problem
+  Positive units: 5   Frequency: 0.33
+  Negative units: 0
+  Ratio: 1.00
+
+D2 — Interests Not Positions
+  Positive units: 3   Frequency: 0.20
+  Negative units: 0
+  Ratio: 1.00
+
+D3 — Invent Options for Mutual Gain
+  Positive units (MIA + qualifying ACCO): 1   Frequency: 0.07
+  Negative units (SIA): 1
+  Ratio: 0.50
+  D3 supplementary units: 1 (Unit 9)
+
+D4 — Objective Criteria
+  Positive units (SUBS-ext + FACT + ASUB): 5   Frequency: 0.33
+  Negative units (CRIT): 0
+  Ratio: 1.00
+  SUBS excluded (D4-excl): 0
+
+D5 — BATNA Awareness
+  Positive units (PCOM with explicit alternative): 0   Frequency: 0.00
+  Negative units (PCOM without alternative): 0
+  Ratio: N/A
+
+--- FLAGS ---
+
+SHRT proportion: 0.00
+
+--- OUTCOME SCORE ---
+
+Formula applied: salary
+Final deal:      $92,000
+Outcome Score:   0.70
+Interpretation:  Participant captured 70% of available value ($92k vs. floor $85k / ceiling $95k)

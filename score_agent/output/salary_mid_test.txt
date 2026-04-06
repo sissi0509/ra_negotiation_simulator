@@ -1,0 +1,107 @@
+CODING OUTPUT
+
+Transcript ID:          4053a6a4-279b-4b40-b5a4-d203fee90d36
+Scenario:               salary_negotiation
+Personality:            aggressive
+Total user units:       16
+SHRT units:             1
+Scoreable units:        15
+D3 supplementary units: 0
+
+--- SEQUENTIAL CODE LIST ---
+
+Unit | Code | Dimension | Direction
+-----|------|-----------|----------
+1    | POSA | D1        | Positive
+2    | SUBS | D4        | Positive
+3    | ASUB | D4        | Positive
+4    | SUBS | D4        | Positive
+5    | SIA  | D3        | Negative
+6    | ENCO | D1        | Positive
+7    | PPRI | D2        | Positive
+8    | SIA  | D3        | Negative
+9    | SUBS | D4-excl   | —
+10   | ENCO | D1        | Positive
+11   | SUBS | D4-excl   | —
+12   | ENCO | D1        | Positive
+13   | MIA  | D3        | Positive
+14   | SHRT | Neutral   | —
+15   | ACLS | D1        | Positive
+16   | CLAR | D1        | Positive
+
+--- SEGMENTATION NOTES ---
+
+Turn 1 (user): "Thanks, I'm excited too. Honestly, I was expecting something closer to 95 to 100 based on what I've researched for this role and my background. Can you tell me what went into that number?"
+  U1 — "Thanks, I'm excited too." → POSA
+  U2 — "Honestly, I was expecting something closer to 95 to 100 based on what I've researched for this role and my background." → SUBS (external ref: market research for this role present alongside personal background; external reference qualifies → D4 Positive)
+  U3 — "Can you tell me what went into that number?" → ASUB
+
+Turn 2 (user): "I hear you, but I've got to be honest—I think there's a gap between what you're seeing in the market and what I'm worth. I've got solid experience in this area, and I know other companies are paying in that range. Would you be open to 92?"
+  U4 — "I hear you, but I've got to be honest—I think there's a gap between what you're seeing in the market and what I'm worth. I've got solid experience in this area, and I know other companies are paying in that range." → SUBS (external ref: "other companies are paying in that range" → D4 Positive; "I hear you" absorbed as transitional opener)
+  U5 — "Would you be open to 92?" → SIA (counter-offer at $92k)
+
+Turn 3 (user): "I appreciate you being direct. Look, I'm genuinely interested in this role, but there's a real difference between 87 and what I need. What if we landed at 90? That feels like a reasonable middle ground, and I think it's fair given what I'm bringing to the table."
+  U6 — "I appreciate you being direct." → ENCO
+  U7 — "I'm genuinely interested in this role, but there's a real difference between 87 and what I need." → PPRI (stating underlying constraint: meaningful gap between $87 and their requirement)
+  U8 — "What if we landed at 90?" → SIA (counter-offer at $90k)
+  U9 — "That feels like a reasonable middle ground, and I think it's fair given what I'm bringing to the table." → SUBS (personal reasoning only — "what I'm bringing to the table" = personal credentials, no external reference → D4-excl)
+
+Turn 4 (user): "Fair question. I've got five years in this exact domain, I've led two major projects that directly increased efficiency by 30%, and I've managed teams. That's not entry-level work. I'm not asking for senior pay, but I think 90 reflects that middle ground between your 85 and what I'd ideally want."
+  U10 — "Fair question." → ENCO (positive reinforcement of AI's question)
+  U11 — "I've got five years in this exact domain, I've led two major projects that directly increased efficiency by 30%, and I've managed teams. That's not entry-level work. I'm not asking for senior pay, but I think 90 reflects that middle ground between your 85 and what I'd ideally want." → SUBS (personal credentials and experience — no external market reference → D4-excl)
+
+Turn 5 (user): "I appreciate you pushing on this. Look, 89 is closer, and I can tell you're being genuine about the constraints. Can we do 89 with a review bump built in at six months if I'm performing well? That way there's a clear path forward."
+  U12 — "I appreciate you pushing on this. Look, 89 is closer, and I can tell you're being genuine about the constraints." → ENCO (positive reinforcement of counterpart's movement and sincerity about constraints)
+  U13 — "Can we do 89 with a review bump built in at six months if I'm performing well? That way there's a clear path forward." → MIA (bundling two issues: $89k base salary + performance review bump at 6 months → D3 Positive)
+
+Turn 6 (user): "Yeah, that's fair. I get that you can't guarantee anything outside your normal process. So it's 89 flat, standard review in the fall, and I come in as a full team member from day one?"
+  U14 — "Yeah, that's fair." → SHRT (rule 4: "Fair enough" equivalent)
+  U15 — "I get that you can't guarantee anything outside your normal process." → ACLS (reflects back and accepts AI's explanation about the review cycle)
+  U16 — "So it's 89 flat, standard review in the fall, and I come in as a full team member from day one?" → CLAR (checking understanding of all agreed terms; implicit acceptance embedded in confirmation)
+
+--- DEAL OUTCOME ---
+
+Agreement reached:  Yes
+Final deal value:   $89,000
+
+--- RAW FREQUENCY AND RATIO ---
+
+Scoreable units (denominator): 15
+
+D1 — Separate People from Problem
+  Positive units: 6   Frequency: 0.40
+  Negative units: 0
+  Ratio: 1.00
+
+D2 — Interests Not Positions
+  Positive units: 1   Frequency: 0.07
+  Negative units: 0
+  Ratio: 1.00
+
+D3 — Invent Options for Mutual Gain
+  Positive units (MIA + qualifying ACCO): 1   Frequency: 0.07
+  Negative units (SIA): 2
+  Ratio: 0.33
+  D3 supplementary units: 0
+
+D4 — Objective Criteria
+  Positive units (SUBS-ext + FACT + ASUB): 3   Frequency: 0.20
+  Negative units (CRIT): 0
+  Ratio: 1.00
+  SUBS excluded (D4-excl): 2
+
+D5 — BATNA Awareness
+  Positive units (PCOM with explicit alternative): 0   Frequency: 0.00
+  Negative units (PCOM without alternative): 0
+  Ratio: N/A
+
+--- FLAGS ---
+
+SHRT proportion: 0.06
+
+--- OUTCOME SCORE ---
+
+Formula applied: salary
+Final deal:      $89,000
+Outcome Score:   0.40
+Interpretation:  Participant captured 40% of available value ($89k vs. floor $85k / ceiling $95k)

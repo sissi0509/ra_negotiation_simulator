@@ -1,0 +1,73 @@
+{
+  "run_id": "590c8c71-6d75-4f84-b1a7-2ed6c11697e4",
+  "scenario_id": "salary_negotiation",
+  "personality_id": "aggressive",
+  "skill_level": "low",
+  "messages": [
+    {
+      "role": "assistant",
+      "text": "Hey, thanks for getting to this stage with us—we're genuinely excited about you. We'd like to move forward with an offer of 85,000 for this role, and we think that's a solid number for someone with your background.",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "user",
+      "text": "Thanks, I'm really excited about the opportunity too! I appreciate the offer, but I was actually hoping for something closer to 95,000 based on my experience and what I've seen for similar roles in the market. Is there any room to move on that?",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "assistant",
+      "text": "I hear you, but 95 is way too high for where we're at right now. We've got budget constraints across the team, and honestly, that number is just out of range for us on this one.",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "user",
+      "text": "Yeah, I understand budget constraints are real... I mean, 95 might be on the high end, I guess. Would you be able to go to 90 maybe? That feels like it could work for both of us?",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Look, 90 is still pretty aggressive given where we started. I can see some movement, but I need to understand what's driving that number—are you looking at other offers right now, or is this based on market research?",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "user",
+      "text": "Oh, um, well it's mostly based on what I've been seeing online for similar positions in this area—like Glassdoor and a few other salary databases. I did have one other conversation going but... honestly it's not as far along as this one is. I really do want to work here.",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "assistant",
+      "text": "That's good to hear that you want to be here, because that matters to us too. Here's the thing though—online databases can be all over the place, and they don't always reflect what we can actually do. What if I moved us to 88—that's a real step up from 85 and shows we're taking your feedback seriously.",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "user",
+      "text": "*sighs* Yeah, okay... I mean, 88 is better than 85, and you're right that you guys are being responsive. I guess that's a fair move. Can we do that?",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "assistant",
+      "text": "I appreciate you being flexible here. Before we lock that in, let me just check with finance to make sure I can get that approved—I'll be honest, it's tight, but I think we can make 88 work for you.",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "user",
+      "text": "Okay, yeah, that sounds good. Thanks for checking on that—I really appreciate you advocating for me on this. Just let me know what they say?",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Absolutely, I'll loop back with you by end of day tomorrow with confirmation. In the meantime, is there anything else about the role or the team you want to know about before we finalize?",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "user",
+      "text": "Um, no I think I'm good actually. I'm just really glad we could work this out—88 feels right to me. Thanks again for being willing to move on the number. I'm looking forward to hearing back from you tomorrow!",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Great, I'm glad we landed in a good place too. I'll reach out tomorrow with the official confirmation from finance, and then we can get you all the paperwork and onboarding details squared away. Looking forward to having you on the team.",
+      "timestamp": "2026-04-05T23:58:28.093Z"
+    }
+  ]
+}

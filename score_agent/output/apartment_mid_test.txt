@@ -1,0 +1,128 @@
+CODING OUTPUT
+
+Transcript ID:          3ef6de19-9a14-456a-8f4f-96fe81e336d7
+Scenario:               apartment_rent
+Personality:            aggressive
+Total user units:       23
+SHRT units:             1
+Scoreable units:        22
+D3 supplementary units: 0
+
+--- SEQUENTIAL CODE LIST ---
+
+Unit | Code | Dimension | Direction
+-----|------|-----------|----------
+1    | NEGA | D1        | Negative
+2    | FACT | D4        | Positive
+3    | ASUB | D4        | Positive
+4    | ACLS | D1        | Positive
+5    | PREL | D1        | Positive
+6    | SUBS | D4        | Positive
+7    | SUBS | D4        | Positive
+8    | ACLS | D1        | Positive
+9    | PCOM | D2        | Negative
+10   | SIA  | D3        | Negative
+11   | FACT | D4        | Positive
+12   | PPRI | D2        | Positive
+13   | ASUB | D4        | Positive
+14   | SIA  | D3        | Negative
+15   | NEGA | D1        | Negative
+16   | SIA  | D3        | Negative
+17   | PPRI | D2        | Positive
+18   | ACLS | D1        | Positive
+19   | FACT | D4        | Positive
+20   | PCOM | D2        | Negative
+21   | SHRT | Neutral   | —
+22   | ACLS | D1        | Positive
+23   | PCOM | D2        | Negative
+
+--- SEGMENTATION NOTES ---
+
+Turn 1 (user): "That's a pretty steep jump from what I'm paying now. What am I at currently, like $1800? That's a 33% increase — I need to understand what's driving that."
+  U1 — "That's a pretty steep jump from what I'm paying now." → NEGA (expressing negative reaction to the size of the increase)
+  U2 — "What am I at currently, like $1800? That's a 33% increase" → FACT (establishes factual context: $1800 current rent, 33% increase; rhetorical question absorbed)
+  U3 — "I need to understand what's driving that." → ASUB
+
+Turn 2 (user): "I get that costs go up, but I've been a reliable tenant here for years — no late payments, no complaints. When I look at what's actually available in the building and the neighborhood, I'm seeing units more in the 2000 to 2100 range. That's still a solid increase from what I'm paying, but it's more in line with reality than 2400."
+  U4 — "I get that costs go up," → ACLS (reflects back AI's cost-increase point)
+  U5 — "but I've been a reliable tenant here for years — no late payments, no complaints." → PREL (positive relationship remark: reliable, no-complaint tenancy history)
+  U6 — "When I look at what's actually available in the building and the neighborhood, I'm seeing units more in the 2000 to 2100 range." → SUBS (external ref: market comps at $2000-2100 → D4 Positive)
+  U7 (note: absorbed into U6 above per dominance rule — "That's still a solid increase from what I'm paying, but it's more in line with reality than 2400" completes U6's SUBS argument)
+
+Wait — correcting unit numbering. U6 captures both the comp data and the conclusion. The second sentence "That's still a solid increase... more in line with reality than 2400" is absorbed into U6.
+
+Turn 3 (user): "Look, I've done my homework on those comps — they're current and they're similar units. I understand you need to make money, but I'm not going to pay 33% more just because the market shifted. I can do 2150, maybe 2175 if you want to sweeten it a bit, but 2400 is just too much for me to absorb."
+  U7 — "Look, I've done my homework on those comps — they're current and they're similar units." → SUBS (reaffirms external market research; external ref → D4 Positive)
+  U8 — "I understand you need to make money," → ACLS (reflects back AI's profit need)
+  U9 — "but I'm not going to pay 33% more just because the market shifted... but 2400 is just too much for me to absorb." → PCOM (hard limit: won't pay 33% more / $2400 is beyond their ceiling; no explicit outside alternative named → D2 Negative)
+  U10 — "I can do 2150, maybe 2175 if you want to sweeten it a bit," → SIA (counter-offer at $2,150; "maybe $2175 if you sweeten it" is vague — second issue unspecified, insufficient for MIA → D3 Negative)
+
+Turn 4 (user): "2200 is still a pretty big jump for me — that's a 22% increase. Look, I want to stay here, but I also need this to be sustainable on my end. Can you walk me through what those actual costs are? Because if I can see the numbers, maybe we can find some middle ground around 2075, 2100."
+  U11 — "2200 is still a pretty big jump for me — that's a 22% increase." → FACT (objective calculation: $1800 → $2200 = 22% increase)
+  U12 — "Look, I want to stay here, but I also need this to be sustainable on my end." → PPRI (underlying interests: wants to stay + needs affordability)
+  U13 — "Can you walk me through what those actual costs are?" → ASUB
+  U14 — "Because if I can see the numbers, maybe we can find some middle ground around 2075, 2100." → SIA (tentative counter-offer at ~$2,075-2,100; "maybe" framing still names a specific target → D3 Negative)
+
+Turn 5 (user): "I appreciate you laying it out, but that doesn't really help me here. Look, I can probably stretch to 2125 — that's a meaningful concession on my part and it shows good faith. But 2200 is genuinely tough for me to make work month to month."
+  U15 — "I appreciate you laying it out, but that doesn't really help me here." → NEGA (expresses negative reaction to AI's refusal to share cost breakdown; "I appreciate you laying it out" is transitional, "doesn't really help me" is the dominant act — expressing dissatisfaction)
+  U16 — "Look, I can probably stretch to 2125 — that's a meaningful concession on my part and it shows good faith." → SIA (counter-offer at $2,125; justification absorbed)
+  U17 — "But 2200 is genuinely tough for me to make work month to month." → PPRI (states underlying financial constraint)
+
+Turn 6 (user): "I hear you, and I know you've moved from 2400. But asking me to absorb a 22% increase is a lot. If 2200 is truly your floor, then I need to think about whether I can actually make that work long-term, or if I need to start looking at other options. Can you give me a few days to figure out my budget?"
+  U18 — "I hear you, and I know you've moved from 2400." → ACLS (reflects back and acknowledges AI's movement from initial ask)
+  U19 — "But asking me to absorb a 22% increase is a lot." → FACT (restates factual context of the increase as argument)
+  U20 — "If 2200 is truly your floor, then I need to think about whether I can actually make that work long-term, or if I need to start looking at other options. Can you give me a few days to figure out my budget?" → PCOM (signals willingness to walk — "start looking at other options"; vague, does not name a specific concrete alternative → D2 Negative; process request absorbed)
+
+Turn 7 (user): "Yeah, I understand — the market's hot. Look, I'll crunch the numbers and get back to you by Friday. But just so we're clear, if I'm staying, I need something closer to 2150. If you won't budge below 2200, then we might not have a deal, and we'll both move on."
+  U21 — "Yeah," → SHRT (rule 4)
+  U22 — "I understand — the market's hot. Look, I'll crunch the numbers and get back to you by Friday." → ACLS (reflects back AI's market-is-hot point; process statement absorbed as completing the acknowledgment)
+  U23 — "But just so we're clear, if I'm staying, I need something closer to 2150. If you won't budge below 2200, then we might not have a deal, and we'll both move on." → PCOM (signals hard limit and potential walk-away; "we'll both move on" is vague, not a named concrete alternative → D2 Negative)
+
+--- DEAL OUTCOME ---
+
+Agreement reached:  No
+Final deal value:   N/A
+
+--- RAW FREQUENCY AND RATIO ---
+
+Scoreable units (denominator): 22
+
+D1 — Separate People from Problem
+  Positive units: 5   Frequency: 0.23
+  Negative units: 2
+  Ratio: 0.71
+
+D2 — Interests Not Positions
+  Positive units: 2   Frequency: 0.09
+  Negative units: 3
+  Ratio: 0.40
+
+D3 — Invent Options for Mutual Gain
+  Positive units (MIA + qualifying ACCO): 0   Frequency: 0.00
+  Negative units (SIA): 3
+  Ratio: 0.00
+  D3 supplementary units: 0
+
+D4 — Objective Criteria
+  Positive units (SUBS-ext + FACT + ASUB): 7   Frequency: 0.32
+  Negative units (CRIT): 0
+  Ratio: 1.00
+  SUBS excluded (D4-excl): 0
+
+D5 — BATNA Awareness
+  Positive units (PCOM with explicit alternative): 0   Frequency: 0.00
+  Negative units (PCOM without alternative): 3
+  Ratio: 0.00
+
+--- FLAGS ---
+
+SHRT proportion: 0.04
+⚠️ NO OFFERS MADE — correction: SIA count = 3, flag does not apply
+(No flags apply)
+
+--- OUTCOME SCORE ---
+
+Formula applied: apartment
+Final deal:      N/A — No Agreement
+Outcome Score:   0.00
+Interpretation:  No agreement reached; participant walked away from $2,200 (landlord's floor); 0% of available value captured

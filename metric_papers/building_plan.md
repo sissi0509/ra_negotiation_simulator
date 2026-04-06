@@ -1,9 +1,9 @@
 # Scoring System Overview
 ## AI Negotiation Simulator — Behavioral Quality Assessment
 
-**Version:** 1.1
-**Last updated:** 2026-03-28
-**Documents:** `coding_instruction.md` (v1.2) + `scoring_rubric.md` (v1.2)
+**Version:** 1.3
+**Last updated:** 2026-04-05
+**Measurement instruments:** `coding_instruction_readable.md` · `scoring_rubric_readable.md` · `outcome_score.md` · `survey_instrument.md`
 
 ---
 
@@ -11,7 +11,15 @@
 
 The scoring system measures whether participants' negotiation behavior improves between Round 1 and Round 2 of the experiment. It takes a raw conversation transcript from MongoDB and produces a structured **Behavioral Quality Score (BQS)** — five dimension scores (1–5 each) plus a composite score (5–25).
 
-This score is one of two primary outcome measures in the experiment. The other is the **ZOPA-based outcome score** (the final deal value relative to the AI's hidden target range). BQS captures *how* someone negotiated; ZOPA score captures *what* they achieved.
+The experiment uses three independent measurement instruments:
+
+| Instrument | What it measures | Document |
+|---|---|---|
+| **Behavioral coding + BQS** | *How* the participant negotiated — 27 behavioral codes → 5 dimension scores | `coding_instruction_readable.md` + `scoring_rubric_readable.md` |
+| **Outcome Score** | *What* the participant achieved — final deal relative to ZOPA | `outcome_score.md` |
+| **Self-report survey** | *What the participant perceived* — confidence, self-awareness, system experience | `survey_instrument.md` |
+
+These are three distinct DVs measured independently and reported separately.
 
 ---
 
@@ -151,7 +159,8 @@ See `rubric_improvement.md` for the full tracker. Key items:
 | REJO reclassified as neutral | ✅ Done in v1.2 |
 | Reliability validation protocol | Protocol defined; validator to be confirmed with professor |
 | ACCO dependency on AI turn coding | Needs one clarifying rule added |
-| BQS + ZOPA outcome score integration | 2×2 interpretation table defined in `experiment_Design.md` |
+| BQS and Outcome Score separated into two standalone documents | ✅ Done — `scoring_rubric_readable.md` (BQS only) + `outcome_score.md` |
+| One code per unit — dominance rule | ✅ Done — added to `coding_instruction_readable.md` Section 3 |
 | Five dimension differential sensitivity | Open question for professor |
 
 ---
@@ -160,11 +169,17 @@ See `rubric_improvement.md` for the full tracker. Key items:
 
 | File | What it is |
 |---|---|
-| `coding_instruction.md` (v1.2) | Document 1 — transcript input format, segmentation rules, 26-code scheme, GTY mapping, worked example |
-| `scoring_rubric.md` (v1.2) | Document 2 — scoring architecture, five dimension rubrics, composite score, worked example |
+| `coding_instruction.md` (v1.2) | AI coder version — Document 1 (pending professor sign-off on readable version) |
+| `scoring_rubric.md` (v1.2) | AI coder version — BQS Document 2 (pending professor sign-off on readable version) |
+| `coding_instruction_readable.md` | **Professor-presentable** coding manual — 27 codes, GTY mapping, segmentation rules, dominance rule |
+| `scoring_rubric_readable.md` | **Professor-presentable** BQS rubric — 5 dimensions, frequency/ratio thresholds, composite score, worked example |
+| `outcome_score.md` | **Professor-presentable** Outcome Score document — ZOPA formula, delta table, BQS × Outcome interpretation matrix |
+| `survey_instrument.md` | **Professor-presentable** Self-report survey — all 6 survey points, Likert items, self-efficacy delta table |
+| `coder_prompt.md` | **AI system prompt** — instructs Claude to segment, code, and compute raw frequency/ratio from a transcript |
+| `test_transcript_generator.md` | **AI system prompt** — generates Low/Mid/High skill transcripts for both scenarios to validate the coding system |
 | `rubric_improvement.md` | Tracker of all pending design decisions and open questions for professor meeting |
 | `building_plan.md` | This document — system overview |
-| `NegotiAct.pdf` | Source of the 26-code behavioral taxonomy and segmentation rules (Jäckel et al., 2024) |
+| `NegotiAct.pdf` | Source of the 27-code behavioral taxonomy and segmentation rules (Jäckel et al., 2024) |
 | `quantitative_coding_of_negotiation_behaviour.pdf` | Methodology: frequency/ratio signals, thought unit approach, reliability standards (Weingart et al., 2004) |
 | `a_nego_competencey_model.pdf` | Source of the behavioral level description format — Low/Mid/High with observable traits |
 | `nego_as_an_interpersonal_skills.pdf` | Validates text-based chat coding; 14-category cross-reference |

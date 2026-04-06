@@ -1,0 +1,141 @@
+CODING OUTPUT
+
+Transcript ID:          474d573a-d9c5-4aac-814c-77604fb0e074
+Scenario:               apartment_rent
+Personality:            aggressive
+Total user units:       30
+SHRT units:             1
+Scoreable units:        29
+D3 supplementary units: 0
+
+--- SEQUENTIAL CODE LIST ---
+
+Unit | Code | Dimension | Direction
+-----|------|-----------|----------
+1    | FACT | D4        | Positive
+2    | ASUB | D4        | Positive
+3    | ENCO | D1        | Positive
+4    | ACLS | D1        | Positive
+5    | SUBS | D4        | Positive
+6    | ASUB | D4        | Positive
+7    | ACLS | D1        | Positive
+8    | CRIT | D4        | Negative
+9    | PPRI | D2        | Positive
+10   | ASUB | D4        | Positive
+11   | ACLS | D1        | Positive
+12   | CRIT | D4        | Negative
+13   | PPRI | D2        | Positive
+14   | SIA  | D3        | Negative
+15   | ENCO | D1        | Positive
+16   | PPRI | D2        | Positive
+17   | ASUB | D4        | Positive
+18   | SHRT | Neutral   | —
+19   | ACLS | D1        | Positive
+20   | MIA  | D3        | Positive
+21   | ACLS | D1        | Positive
+22   | CRIT | D4        | Negative
+23   | SIA  | D3        | Negative
+24   | SUBS | D4-excl   | —
+25   | PREL | D1        | Positive
+26   | FACT | D4        | Positive
+27   | EXTQ | D2        | Positive
+28   | ACCO | D3        | Positive
+29   | SUBS | D4-excl   | —
+30   | CLAR | D1        | Positive
+
+--- SEGMENTATION NOTES ---
+
+Turn 1 (user): "I appreciate you sharing that, but I need to pump the brakes here—that's a jump from eighteen hundred, right? That's a third increase in one year. Before we talk numbers, can you walk me through what's actually driving this? Are you saying the market really shifted that much, or are there specific costs on your end that went up?"
+  U1 — "I appreciate you sharing that, but I need to pump the brakes here—that's a jump from eighteen hundred, right? That's a third increase in one year." → FACT ("I appreciate you sharing that" absorbed as transitional opener; primary act is establishing factual context of the increase: $1800 → $2400 = 33% jump)
+  U2 — "Before we talk numbers, can you walk me through what's actually driving this? Are you saying the market really shifted that much, or are there specific costs on your end that went up?" → ASUB ("Are you saying...or are there specific costs" absorbed as continuing the same substantiation request)
+
+Turn 2 (user): "Okay, that's helpful context. I get that your costs went up—that's real. But here's the thing: I've also looked at comps in the area, and I'm seeing twenty-one to twenty-two for units like mine, not twenty-five. And those higher ones are newer or have amenities I don't have. Can you show me which listings you're looking at? Because if we're basing this on actual market data, we should be working from the same numbers."
+  U3 — "Okay, that's helpful context." → ENCO (positive reinforcement of AI's disclosure)
+  U4 — "I get that your costs went up—that's real." → ACLS (reflects back AI's cost-increase argument)
+  U5 — "But here's the thing: I've also looked at comps in the area, and I'm seeing twenty-one to twenty-two for units like mine, not twenty-five. And those higher ones are newer or have amenities I don't have." → SUBS (external ref: market comps at $2100-2200 for comparable units → D4 Positive)
+  U6 — "Can you show me which listings you're looking at? Because if we're basing this on actual market data, we should be working from the same numbers." → ASUB (asking counterpart to substantiate their market data; rationale absorbed)
+
+Turn 3 (user): "I hear you, and I value that you want to keep me around. But here's what doesn't add up: if there are people lined up to sign at twenty-four hundred, why are we negotiating? That tells me there's some real interest in keeping this continuity too. Look, I'm not trying to lowball you—I just need numbers that work for both of us. What are your actual cost increases year-over-year? Property tax, insurance, maintenance?"
+  U7 — "I hear you, and I value that you want to keep me around." → ACLS (acknowledges and reflects back AI's stated desire to retain them)
+  U8 — "But here's what doesn't add up: if there are people lined up to sign at twenty-four hundred, why are we negotiating? That tells me there's some real interest in keeping this continuity too." → CRIT (points out logical inconsistency in AI's leverage argument — using the AI's own claim against itself, without providing counter-evidence)
+  U9 — "Look, I'm not trying to lowball you—I just need numbers that work for both of us." → PPRI (states underlying interest: mutual workability, not lowballing)
+  U10 — "What are your actual cost increases year-over-year? Property tax, insurance, maintenance?" → ASUB
+
+Turn 4 (user): "I understand you've got real costs, and I'm not asking you to take a loss. But you can't have it both ways—you can't say the market rate is twenty-four hundred and also say you'd rather keep me than deal with turnover. Those two things are in tension. Here's what I'm proposing: let's find a number that acknowledges your legitimate cost increases without pricing me out of my own apartment. What if we split the difference and looked at twenty-two hundred, with a clearer picture of what those actual increases were?"
+  U11 — "I understand you've got real costs, and I'm not asking you to take a loss." → ACLS (reflects back AI's cost-coverage need)
+  U12 — "But you can't have it both ways—you can't say the market rate is twenty-four hundred and also say you'd rather keep me than deal with turnover. Those two things are in tension." → CRIT (exposes internal contradiction in AI's argument)
+  U13 — "Here's what I'm proposing: let's find a number that acknowledges your legitimate cost increases without pricing me out of my own apartment." → PPRI (states underlying interest: number that acknowledges costs without pricing them out)
+  U14 — "What if we split the difference and looked at twenty-two hundred, with a clearer picture of what those actual increases were?" → SIA (counter-offer at $2,200; "with a clearer picture" is context request absorbed, not a distinct second issue)
+
+Turn 5 (user): "Twenty-three fifty for two years—okay, that's movement, and I appreciate that. But I need to be straight with you: locking in for two years when we're already talking about a nineteen percent jump puts all the risk on me if things change. What's driving the two-year ask? Is it just to lock in the higher rate, or is there actual cost certainty on your end that makes two years valuable to you?"
+  U15 — "Twenty-three fifty for two years—okay, that's movement, and I appreciate that." → ENCO (positive reinforcement of AI's concession/movement)
+  U16 — "But I need to be straight with you: locking in for two years when we're already talking about a nineteen percent jump puts all the risk on me if things change." → PPRI (states underlying concern: 2-year lock-in creates asymmetric risk)
+  U17 — "What's driving the two-year ask? Is it just to lock in the higher rate, or is there actual cost certainty on your end that makes two years valuable to you?" → ASUB (asks counterpart to justify the 2-year condition; alternatives absorbed)
+
+Turn 6 (user): "Okay, I hear that. Two-year stability makes sense for you. But here's what I'd want in return for that commitment: twenty-three fifty for year one, then a smaller bump—say three percent—for year two. That way you've got your planning certainty, I'm not taking all the risk, and we're both anchored to something objective instead of whatever the market might do. Does that framework work for you?"
+  U18 — "Okay," → SHRT (rule 4)
+  U19 — "I hear that. Two-year stability makes sense for you." → ACLS (reflects back and validates AI's stability interest)
+  U20 — "But here's what I'd want in return for that commitment: twenty-three fifty for year one, then a smaller bump—say three percent—for year two. That way you've got your planning certainty, I'm not taking all the risk, and we're both anchored to something objective instead of whatever the market might do. Does that framework work for you?" → MIA (bundles two issues: year-1 rent at $2,350 + year-2 rent capped at 3% increase; justification and closing question absorbed)
+
+Turn 7 (user): "I hear you, and I'm genuinely trying to find middle ground here. But flat twenty-three fifty for two years means zero adjustment for your costs in year two, which you just said you need planning certainty for—those don't match up. Here's my counter: twenty-two seventy-five flat for two years. It's closer to covering your increases than where we started, you get your locked-in income, and it's actually reasonable on both sides. What do you think?"
+  U21 — "I hear you, and I'm genuinely trying to find middle ground here." → ACLS (acknowledges AI's position while stating collaborative intent; absorbed as single reflective act)
+  U22 — "But flat twenty-three fifty for two years means zero adjustment for your costs in year two, which you just said you need planning certainty for—those don't match up." → CRIT (uses AI's own stated reasoning against their offer — no additional counter-evidence provided)
+  U23 — "Here's my counter: twenty-two seventy-five flat for two years." → SIA (counter-offer at $2,275; 2-year duration already established as the frame, not a new issue)
+  U24 — "It's closer to covering your increases than where we started, you get your locked-in income, and it's actually reasonable on both sides. What do you think?" → SUBS (personal reasoning justifying $2,275; no external market reference → D4-excl)
+
+Turn 8 (user): "I do want to stay—I like this place and I've been a reliable tenant. But I also can't ignore that twenty-three fifty is still a fifteen percent increase on an eighteen-month timeline, and you're asking me to lock that in for two years with no flexibility. Let me ask directly: is there any number between twenty-three fifty and twenty-three that would actually work for you, or are we genuinely at an impasse here?"
+  U25 — "I do want to stay—I like this place and I've been a reliable tenant." → PREL (positive relationship remark: established tenant, reliable)
+  U26 — "But I also can't ignore that twenty-three fifty is still a fifteen percent increase on an eighteen-month timeline, and you're asking me to lock that in for two years with no flexibility." → FACT (factual context: 15% increase over 18 months, 2-year lock-in = objective parameters of the ask)
+  U27 — "Let me ask directly: is there any number between twenty-three fifty and twenty-three that would actually work for you, or are we genuinely at an impasse here?" → EXTQ (open-ended question probing counterpart's flexibility range; "or are we at an impasse" absorbed)
+
+Turn 9 (user): "Twenty-three hundred for two years—I can work with that. That's a thirteen percent increase overall, which is steep but at least it's spread across two years and it gives us both some certainty. Before I commit, I just want to confirm: that's twenty-three hundred flat both years, no additional increases, and we're locked in through the end of year two, right?"
+  U28 — "Twenty-three hundred for two years—I can work with that." → ACCO; AI's $2,300 for 2 years bundles price + lease length = MIA → ACCO accepting MIA → D3 Positive
+  U29 — "That's a thirteen percent increase overall, which is steep but at least it's spread across two years and it gives us both some certainty." → SUBS (personal rationalization of acceptance; no external market reference → D4-excl)
+  U30 — "Before I commit, I just want to confirm: that's twenty-three hundred flat both years, no additional increases, and we're locked in through the end of year two, right?" → CLAR
+
+--- DEAL OUTCOME ---
+
+Agreement reached:  Yes
+Final deal value:   $2,300/month (2-year lease)
+
+--- RAW FREQUENCY AND RATIO ---
+
+Scoreable units (denominator): 29
+
+D1 — Separate People from Problem
+  Positive units: 9   Frequency: 0.31
+  Negative units: 0
+  Ratio: 1.00
+
+D2 — Interests Not Positions
+  Positive units: 4   Frequency: 0.14
+  Negative units: 0
+  Ratio: 1.00
+
+D3 — Invent Options for Mutual Gain
+  Positive units (MIA + qualifying ACCO): 2   Frequency: 0.07
+  Negative units (SIA): 2
+  Ratio: 0.50
+  D3 supplementary units: 0
+
+D4 — Objective Criteria
+  Positive units (SUBS-ext + FACT + ASUB): 7   Frequency: 0.24
+  Negative units (CRIT): 3
+  Ratio: 0.70
+  SUBS excluded (D4-excl): 2
+
+D5 — BATNA Awareness
+  Positive units (PCOM with explicit alternative): 0   Frequency: 0.00
+  Negative units (PCOM without alternative): 0
+  Ratio: N/A
+
+--- FLAGS ---
+
+SHRT proportion: 0.03
+
+--- OUTCOME SCORE ---
+
+Formula applied: apartment
+Final deal:      $2,300/month
+Outcome Score:   0.33
+Interpretation:  Participant captured 33% of available value ($2,300 vs. ceiling $2,400 / floor $2,100)

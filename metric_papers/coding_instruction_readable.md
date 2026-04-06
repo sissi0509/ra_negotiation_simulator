@@ -60,6 +60,22 @@ This one turn contains two thought units:
 
 ---
 
+### One Code Per Unit — The Dominance Rule
+
+Each thought unit receives **exactly one behavioral code**. This follows NegotiAct's requirement that all 47 codes are "mutually exclusive" and that "exactly one code can be assigned to every observed behavior" (Jäckel et al., 2024). When a unit appears to express multiple behaviors, the first step is always to **re-examine segmentation** — a unit that seems multi-behavioral can often be split further. If a unit genuinely cannot be split (it is a single communicative act that happens to carry multiple elements), assign the code that best captures the unit's primary communicative purpose using the following priority order:
+
+1. **Task behavior over relational behavior.** If a unit simultaneously makes an offer and expresses positive affect, code it as the offer (SIA, MIA, etc.), not the affect (POSA, ENCO). Relational behavior is coded only when it is the primary purpose of the unit.
+
+2. **More specific code over general.** If a unit provides market data framed as an argument, code as SUBS (not FACT). If a unit asks about interests using an open-ended question, code as APRI (not EXTQ). The more specific code carries more analytical value.
+
+3. **The behavior that dominates the utterance.** When two codes from the same dimension compete, ask: which element takes up more of the unit, or carries the communicative weight? Code accordingly.
+
+4. **If still ambiguous, choose the code the unit most clearly exemplifies.** Ask: which definition in Section 4 is this unit the clearest example of?
+
+This approach follows Weingart et al.'s (2004) dominance scheme recommendation: *"if multiple categories of statements are made during a speaking turn, the researcher must decide which code best represents the behavior within a given unit."*
+
+---
+
 ## 4. Step 2 — The 26-Code Behavioral Taxonomy
 
 The coding scheme uses **27 codes** — 26 selected from NegotiAct (Jäckel et al., 2024) plus one addition (CRIT, see Category C). NegotiAct is a validated taxonomy of 47 codes covering all verbal behavior in negotiations. The retained codes are those most relevant to workplace negotiations (salary and rent). Each thought unit receives exactly one code.
@@ -221,18 +237,18 @@ Once coded, each unit is linked to one of five skill dimensions from *Getting to
 
 ### 6.1 PCOM — The Context-Dependent Code
 
-Positional Commitment (PCOM) is the only code that requires reading the surrounding transcript before assigning it to a dimension. The same statement can be either a sign of positional rigidity *or* healthy BATNA awareness depending on timing and framing.
+Positional Commitment (PCOM) is the only code whose GTY dimension depends on the content of the statement. Classification is determined by one question only: **does the statement reference an explicit outside alternative verbatim?**
 
-**The decision rule — applied in order:**
+**The decision rule:**
 
 | Condition | Classification |
 |---|---|
-| PCOM appears before any interest exploration (APRI, PPRI, APFI, PPFI, EXTQ) | Interests Not Positions — **Negative** |
-| PCOM appears after interest exploration AND references an explicit outside alternative ("another offer," "three other apartments") | BATNA Awareness — **Positive** |
-| PCOM appears after interest exploration but references NO outside alternative | Interests Not Positions — **Negative** (a commitment without an alternative is still positional) |
-| PCOM is phrased as a threat or ultimatum with no prior relationship building | BATNA Awareness — **Negative** |
+| PCOM references an explicit outside alternative verbatim — e.g., *"I have another offer at $92k," "I've found three other apartments at $2,100"* | BATNA Awareness — **Positive** |
+| PCOM states a hard limit or take-it-or-leave-it stance but cites NO explicit outside alternative | Interests Not Positions — **Negative** |
 
-**The intuition:** A skilled negotiator establishes mutual understanding before signaling their walk-away point. The same information ("I have another offer at $92k") lands very differently as an opening gambit vs. as honest transparency after rapport has been built.
+**What counts as explicit:** The participant must name or clearly imply a concrete alternative — another job offer, another apartment, another vendor. A vague threat ("I have options") does not qualify. A direct reference ("I have an offer from Company X") does.
+
+**Why sequencing is not part of the rule:** An earlier version of this rule also required interest exploration to precede the PCOM for it to count as BATNA-positive. That sequencing requirement was removed because it introduced a judgment call — how much interest exploration is "enough"? — that two coders are unlikely to apply identically. The explicit-alternative-only rule is unambiguous and produces better inter-rater reliability (κ ≥ .70 target). The theoretical loss is modest: in practice, participants who state a genuine outside alternative almost always do so after some rapport-building, not as an opening line.
 
 ---
 
@@ -286,7 +302,7 @@ The following is a real participant turn from a salary negotiation transcript. I
 
 ## 8. Coding Output Format
 
-After coding a transcript, the output is a **sequential code list** — one row per thought unit, in order. This single list contains everything the scoring rubric needs: codes, dimension assignments, directions, and positions.
+After coding a transcript, the output is a **sequential code list** — one row per thought unit, in order. Unit numbers serve as position markers — sequence is preserved for any later analysis that requires it (e.g., checking whether D2 exploration recurs mid-transcript, or whether BATNA follows interest exploration).
 
 ```
 CODING OUTPUT
@@ -297,38 +313,40 @@ Personality:      [aggressive / collaborative / evasive]
 Total user units: [number]
 SHRT units:       [number]
 Scoreable units:  [total minus SHRT — denominator for all frequency calculations]
+D3 supplementary units: [number — count of APFI, PPFI, EXTQ units that qualify; list unit numbers]
 
 --- SEQUENTIAL CODE LIST ---
 
-Unit | Code | Dimension      | Direction
------|------|----------------|----------
-1    | POSA | D1             | Positive
-2    | ACLS | D1             | Positive
-3    | APRI | D2             | Positive
-4    | PPOS | D2             | Negative
-5    | SHRT | Neutral        | —
-6    | FACT | D4             | Positive
-7    | ASUB | D4             | Positive
-8    | APFI | D2 / D3-supp   | Positive
-9    | SIA  | D3             | Negative
-10   | PCOM | D5             | Positive
-11   | SUBS | D4             | Positive
-12   | SUBS | D4-excl        | —
-13   | REJO | Neutral        | —
-14   | MIA  | D3             | Positive
-...  | ...  | ...            | ...
+Unit | Code | Dimension | Direction
+-----|------|-----------|----------
+1    | POSA | D1        | Positive
+2    | ACLS | D1        | Positive
+3    | APRI | D2        | Positive
+4    | PPOS | D2        | Negative
+5    | SHRT | Neutral   | —
+6    | FACT | D4        | Positive
+7    | ASUB | D4        | Positive
+8    | APFI | D2        | Positive
+9    | SIA  | D3        | Negative
+10   | PCOM | D5        | Positive
+11   | SUBS | D4        | Positive
+12   | SUBS | D4-excl   | —
+13   | REJO | Neutral   | —
+14   | MIA  | D3        | Positive
+...  | ...  | ...       | ...
 ```
 
-**D2 / D3-supp:** Used when APFI, PPFI, or EXTQ qualifies as a D3 supplementary indicator (see Section 6.2). The unit counts as D2 Positive for scoring and is additionally flagged for the D3 qualitative adjustment.
+**One code, one dimension per unit — always.** APFI, PPFI, and EXTQ are coded as D2 Positive in the list. When any of these qualify as a D3 supplementary indicator (see Section 6.2), that is recorded in the header (`D3 supplementary units`) — not in the dimension column. The unit's dimension assignment remains D2.
 
-**D4-excl:** Used for SUBS units that are self-referential and do not qualify as D4 Positive. The unit is tracked so the scorer can confirm the D4 frequency denominator is correct.
+**D4-excl:** Used for SUBS units justified purely by personal need (no external reference). Tracked so the D4 frequency denominator is correct; does not count toward D4 positive.
 
+```
 --- DEAL OUTCOME ---
 
 Agreement reached:  [Yes / No]
 Final deal value:   [number with unit, e.g. "$96,500" or "$2,150/month" — or "N/A" if no agreement]
 
-Note: The coder extracts the final agreed value from the last ACCO unit or the closing exchange. The ZOPA floor and ceiling are defined per scenario in the scoring rubric (Section 11) — the scorer applies the formula post-hoc.
+Note: The coder extracts the final agreed value from the last ACCO unit or the closing exchange. The ZOPA floor and ceiling are defined per scenario in outcome_score.md — the scorer applies the formula post-hoc.
 ```
 
 ---

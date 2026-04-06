@@ -53,7 +53,9 @@ This is a **2 (scenario order) × 3 (debrief condition)** design.
 - Record `scenario_round1` and `scenario_round2` fields in the participant data schema (already partially done in ExperimentUser rounds array)
 - When reporting composite score deltas, control for scenario order in the analysis (e.g., include it as a covariate, or report deltas separately for each order group)
 
-**Open question for professor:** Should we treat scenario order as a between-subjects factor in the statistical model, or simply use it as a control covariate?
+**Proposed analysis approach:** Treat scenario order as a **covariate** (not a separate factor) in an ANCOVA model. With n=30, a full 2×3 factorial (scenario order × debrief condition) would have only ~5 participants per cell — not enough statistical power. Including scenario order as a covariate corrects for its influence on dimension scores while keeping the full sample together for the main debrief effect analysis.
+
+This does not change participant assignment — counterbalancing (half salary-first, half rent-first) is still required to create the variation the covariate needs. This is a proposal for the analysis plan only; needs professor confirmation before finalizing.
 
 ---
 
@@ -93,17 +95,20 @@ Write something like:
 A reliability validation section — already added as Section 9 in `coding_instruction_readable.md`. Needs to be transferred to `coding_instruction.md` after professor review.
 
 ### Open question for professor
-- Can you (the student) be the human validator, or does it need to be a blind second coder?
-- Is a RA available to do independent coding, or will you use a classmate?
+- **Recommended:** Use a blind second coder — someone who reads only the coding manual, not the design history. A person unfamiliar with the system who can still apply the codes consistently at κ ≥ .70 demonstrates that the manual is clear enough for general use, not just for the designer. This strengthens the reliability claim significantly.
+- Is a RA available, or can a classmate serve as the blind validator?
+- If no one else is available, can you (the designer) be the validator — and if so, how should that limitation be noted in the methods section?
 
 ---
 
 ## Issue 3 — Threshold Values Have No Empirical Basis 🟢 Defer
 
-### Professor Note (2026-03-30)
-Professor confirmed this is **not urgent**. The raw frequency and ratio values are already informative measurement signals on their own — the delta between Round 1 and Round 2 can be computed directly from frequency/ratio without needing the zone-to-score conversion to be perfectly calibrated. The 1–5 zone scores are a useful summary layer but not required for the core analysis.
+### Decision
+**Primary analysis uses raw frequency/ratio values per dimension — not zone scores.** Zone scores (1–5) are deferred to post-experiment as a presentation/interpretation layer only.
 
-**Implication:** Report frequency/ratio deltas as the primary continuous measure. The zone scores are supplementary interpretation aids. Threshold calibration can happen after data collection as a refinement step.
+After data collection, calibrate zone cutoffs empirically using the collected distribution if needed for reporting. Pre-experiment synthetic pilot transcripts are still useful as a coding sanity check (do the codes produce plausible frequency patterns?), but threshold calibration is not a blocking pre-experiment step.
+
+**Updated in:** `scoring_rubric_readable.md` Section 10 — per-dimension frequency/ratio deltas are now explicitly the primary statistical measure; composite BQS delta is secondary.
 
 ### Original Problem (for reference)
 Every dimension scoring table has specific cutoff values for frequency and ratio zones (e.g., frequency ≥ 0.25 = High for D1; ratio ≥ 0.75 = Mid-High for D2). These numbers were calibrated on a single worked example transcript. No published paper defines these thresholds.
@@ -143,7 +148,7 @@ This makes the AI turn dependency explicit rather than implicit.
 
 ---
 
-## Issue 5 — Five Dimension Improvement Likelihood 🟡 Should discuss
+## Issue 5 — Five Dimension Improvement Likelihood ✅ Done
 
 ### The Research Question
 Are all five GTY dimensions equally likely to improve within a **single training cycle** (one debrief session between Round 1 and Round 2)?
@@ -162,14 +167,11 @@ Based on VR negotiation training research and general skill acquisition theory:
 ### Implication for Scoring
 If D3 is unlikely to move in one round, a participant who improves meaningfully on D1+D2+D4+D5 may still show a modest composite delta because D3 anchors the bottom.
 
-**Options to discuss with professor:**
-1. Report per-dimension deltas as primary results, not just composite delta — this shows where improvement actually happened
-2. Consider a **weighted composite** where D1 and D2 receive higher weight for this specific study (since Sage directly targets them), and D3 receives lower weight
-3. Leave equal weighting but add a discussion section note explaining the differential sensitivity prediction
+**Decision (2026-04-05):** Keep equal weighting (1:1:1:1:1). Differential weighting is unnecessary because per-dimension frequency/ratio deltas are the primary reported result — the differential sensitivity across dimensions will be visible directly in the data. The composite BQS remains equally weighted as a secondary summary only.
 
 ---
 
-## Issue 6 — PCOM Decision Rule Has No Direct Citation 🟡 Should discuss
+## Issue 6 — PCOM Decision Rule ✅ Done
 
 ### The Problem
 PCOM (Positional Commitment) is the only code whose GTY dimension and valence are **context-dependent** — every other code maps directly in one pass. To assign PCOM's valence, the coder must:
@@ -188,14 +190,12 @@ The sequencing rule — *"interest exploration must precede PCOM for it to count
 **What is not cited:**
 - The specific sequencing threshold (interest exploration must come first) is our operationalization, not from a paper
 
-### Options to Discuss with Professor
-1. **Keep as-is** — flag in methods section as a theoretically-grounded but project-specific rule. Validate it empirically during spot-check: does human and AI coder agree on PCOM (Positional Commitment) valence at κ ≥ .70?
-2. **Split PCOM into two codes:** PCOM-BATNA (explicit outside alternative, after interest exploration) vs. PCOM-POS (hard positional commitment, no alternative cited). Note: this doesn't eliminate the context-dependency — it just moves it from "determine valence" to "choose which code to assign." The problem is the same.
-3. **Simplify the rule:** Treat all PCOM (Positional Commitment) as Interests Not Positions — Negative unless an explicit outside alternative is stated verbatim ("I have another offer", "three other units"). This is easier to apply and avoids the sequencing judgment.
+### Decision (2026-04-05)
+**Option 3 applied.** PCOM is BATNA-positive only when an explicit outside alternative is stated verbatim ("I have another offer at $92k," "I've found three other apartments at $2,100"). All other PCOM = Interests Not Positions — Negative.
 
-### Open question for professor
-- Is Option 3 (simplify to explicit-alternative-only positive) too conservative? It would miss cases where PCOM is strategically timed but not explicitly backed by a named alternative.
-- Can we point to any paper that operationalizes BATNA invocation quality using sequencing rules?
+The sequencing requirement (interest exploration must precede PCOM) was removed — it introduced a judgment call that is hard to apply consistently and would reduce inter-rater reliability below the κ ≥ .70 target.
+
+**Updated in:** `coding_instruction_readable.md` Section 6.1 — rule simplified to one question (explicit alternative present or not?); rationale for removing sequencing requirement noted inline.
 
 ---
 
@@ -210,7 +210,7 @@ CRIT (Criticism) was added as a D4 negative code, making a ratio calculation pos
 
 ---
 
-## Issue 8 — SHRT Proportion Has No Scoring Consequence 🟢 Nice to have
+## Issue 8 — SHRT Proportion Has No Scoring Consequence ✅ Done
 
 ### The Problem
 When SHRT (Short Response) units exceed 30% of total user units, it is flagged — but this flag has no effect on any dimension score. A participant who mostly says "okay", "right", "I see" throughout is scored identically to one who doesn't, just with a note.
@@ -220,8 +220,59 @@ Passive style is counter to both D1 (you can't separate people from problem with
 ### Proposed Fix
 > *"If SHRT (Short Response) units exceed 30% of total user units: apply −1 adjustment to D1 (Separate People) and −1 adjustment to D2 (Interests) unless those dimensions already scored 1. This reflects that passive throughput responses indicate disengagement from both relationship management and interest exploration."*
 
+### Decision (2026-04-05)
+Flag only — no numeric penalty. The qualitative note carries the interpretation. With n=30, mechanical adjustments for edge cases add complexity without statistical payoff.
+
+---
+
+## Issue 9 — One Code Per Unit (Dominance Rule) ✅ Done
+
+**Decision (2026-04-05):** Each thought unit receives exactly one code — the code that best represents the primary communicative purpose of that unit (dominance scheme). This matches NegotiAct's design requirement (mutually exclusive codes) and follows the recommendation in Weingart et al. (2004).
+
+**If a unit appears multi-behavioral:** re-examine segmentation first — most apparent multi-code units can be split into two units at a natural boundary. If the unit genuinely cannot be split, apply the 4-level priority rule:
+1. Task behavior over relational behavior
+2. More specific code over general
+3. The behavior that dominates the utterance
+4. If still ambiguous, the code the unit most clearly exemplifies
+
+**Added to:** `coding_instruction_readable.md` Section 3 ("One Code Per Unit — The Dominance Rule")
+**Citations:** Jäckel et al. (2024); Weingart et al. (2004)
+
+---
+
+## Issue 10 — BQS and Outcome Score Separation ✅ Done
+
+**Decision (2026-04-05):** The BQS (process measure) and Outcome Score (result measure) are separated into two standalone documents:
+
+- `scoring_rubric_readable.md` — BQS only (5 dimensions, frequency/ratio thresholds, composite, worked example)
+- `outcome_score.md` — Outcome Score only (ZOPA formula, no-agreement handling, delta table, BQS × Outcome interpretation matrix)
+
+Section 1 of `scoring_rubric_readable.md` updated to note the separation explicitly. `building_plan.md` updated to list both documents. This reflects that BQS and Outcome Score are two independent DVs — BQS measures *how* the participant negotiated; Outcome Score measures *what* they achieved.
+
+⚠️ ZOPA ranges (floor and ceiling for each scenario) are still [TBD] in `outcome_score.md` — must be filled before data collection begins.
+
+---
+
+## Issue 11 — Self-Efficacy Measure (New) 🟡 Should discuss
+
+### The Suggestion
+Add a brief self-efficacy measure (1–7 Likert scale) captured **after each round negotiation but before the debrief**. This creates a Round 1 → Round 2 delta on perceived confidence that can be compared against the behavioral delta (BQS frequency/ratio).
+
+**Why timing matters:** If the self-efficacy questions fire after the debrief, the debrief itself inflates the confidence rating — you can't distinguish "I feel more confident because I debriefed" from "I feel more confident because I improved." Capturing it before the debrief keeps the measure clean.
+
+**Proposed questions (1–7 Likert, asked after each round, before debrief):**
+1. *"How confident do you feel in your ability to negotiate effectively?"* — general self-efficacy
+2. *"How well do you think you performed in this negotiation?"* — perceived performance
+3. *"How prepared did you feel going into this negotiation?"* — preparation confidence
+
+**Why this is useful:** Enables testing the "learning without execution" pattern — the debrief group may show confidence gains even when behavioral frequency doesn't yet move. Self-efficacy change is itself a meaningful outcome, and it's cheap to collect.
+
+### Implementation note (not yet done — do not change program until confirmed)
+The current survey flow is: `pre → [Round 1] → post_r1 (post-debrief) → [Round 2] → post_r2 → final`. The self-efficacy questions need a new survey trigger that fires between Round 1 end and Debrief start — a `post_r1_pre_debrief` survey type, or the existing `post_r1` timing is moved earlier. Needs professor confirmation before implementing.
+
 ### Open question for professor
-Is this too mechanical? An alternative is to leave it as a flag and let the qualitative note carry the interpretation rather than affecting the numeric score.
+- Are 3 questions sufficient, or should we use a validated self-efficacy scale (e.g., GSE — General Self-Efficacy Scale)?
+- Can this be added to the existing `post_r1` survey if we move its trigger to before the debrief, or does it need to be a separate survey type?
 
 ---
 
@@ -231,13 +282,17 @@ Is this too mechanical? An alternative is to leave it as a flag and let the qual
 |---|---|---|
 | Counterbalanced scenario design | 🔴 Must resolve | Confirm and update participant assignment logic |
 | Reliability validation protocol | 🔴 Must resolve | Transfer Section 9 to `coding_instruction.md`; confirm who will be human validator |
-| Threshold values — no empirical basis | 🟢 Defer | Prof confirmed: raw frequency/ratio delta is sufficient as primary measure; zone scores are supplementary. Calibrate after data collection. |
+| ZOPA ranges for Outcome Score | 🔴 Must resolve | Fill floor/ceiling values in `outcome_score.md` before experiment runs |
+| Threshold values — no empirical basis | 🟢 Defer | Primary analysis uses raw frequency/ratio per dimension; zone scores are post-experiment presentation layer only. |
 | ACCO (Accepting Offer) rule clarification | 🟡 Discuss | Small edit — confirm before finalizing |
-| Five dimension improvement rates | 🟡 Discuss | Decide: equal weight composite, or per-dimension focus? |
-| PCOM (Positional Commitment) decision rule — citation gap | 🟡 Discuss | Confirm sequencing rule or simplify to explicit-alternative-only |
+| Five dimension weighting | ✅ Done | Equal weighting kept; per-dimension reporting makes differential weights unnecessary |
+| PCOM decision rule | ✅ Done | Option 3: explicit outside alternative verbatim = BATNA-positive; all other PCOM = Interests-negative |
 | D4 ratio cutoffs — theoretically set | 🟡 Discuss | Validate in pilot — CRIT (Criticism) may be too rare to affect ratio meaningfully |
-| SHRT (Short Response) scoring consequence | 🟢 Defer | Low priority; confirm with prof whether numeric penalty or flag-only |
+| SHRT scoring consequence | ✅ Done | Flag only — no numeric penalty |
+| Self-efficacy measure (pre-debrief) | 🟡 Discuss | Add 3-question 1–7 Likert after each round, before debrief; needs new survey trigger — confirm with professor before implementing |
+| One code per unit — dominance rule | ✅ Done | Added to `coding_instruction_readable.md` Section 3 |
+| BQS and Outcome Score separated | ✅ Done | `scoring_rubric_readable.md` (BQS) + `outcome_score.md` (Outcome Score) |
 
 ---
 
-*Last updated: 2026-03-30*
+*Last updated: 2026-04-05*

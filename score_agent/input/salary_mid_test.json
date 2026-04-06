@@ -1,0 +1,79 @@
+{
+  "_id": {
+    "$oid": "69d30a14ab3866a47625e1b0"
+  },
+  "run_id": "4053a6a4-279b-4b40-b5a4-d203fee90d36",
+  "messages": [
+    {
+      "role": "assistant",
+      "text": "Great to have you here. We're excited about bringing you on board, and we've put together an offer of 85,000 to start. How does that sound?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "user",
+      "text": "Thanks, I'm excited too. Honestly, I was expecting something closer to 95 to 100 based on what I've researched for this role and my background. Can you tell me what went into that number?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Look, I appreciate the research, but 95 to 100 is well outside what we're working with here. That 85k reflects what we budget for this position based on market data and your experience level.",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "user",
+      "text": "I hear you, but I've got to be honest—I think there's a gap between what you're seeing in the market and what I'm worth. I've got solid experience in this area, and I know other companies are paying in that range. Would you be open to 92?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "assistant",
+      "text": "I understand you've done your homework, but we're not in the 92 range right now. The reality is we have other strong candidates we're also looking at, and I need to stay disciplined on budget. What would it take to get you comfortable with something closer to 87 or 88?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "user",
+      "text": "I appreciate you being direct. Look, I'm genuinely interested in this role, but there's a real difference between 87 and what I need. What if we landed at 90? That feels like a reasonable middle ground, and I think it's fair given what I'm bringing to the table.",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "assistant",
+      "text": "90 is pushing it, honestly. We'd be stretching our budget there and I'd need to justify it to leadership. What specific experience or skill are you pointing to that puts you above where we typically see candidates at this level?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "user",
+      "text": "Fair question. I've got five years in this exact domain, I've led two major projects that directly increased efficiency by 30%, and I've managed teams. That's not entry-level work. I'm not asking for senior pay, but I think 90 reflects that middle ground between your 85 and what I'd ideally want.",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Those are solid accomplishments, I'll give you that. Here's where I'm at though — we can go to 89, but that's really the ceiling for me without going back to my leadership team, and honestly that conversation's not going to go well. Can you work with 89?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "user",
+      "text": "I appreciate you pushing on this. Look, 89 is closer, and I can tell you're being genuine about the constraints. Can we do 89 with a review bump built in at six months if I'm performing well? That way there's a clear path forward.",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "assistant",
+      "text": "I like that you're thinking creatively, but I can't promise a guaranteed bump at six months — that's not how our review cycle works and it sets unrealistic expectations. What I can do is lock in 89 right now, and you'll go through our standard review process in the fall like everyone else.",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "user",
+      "text": "Yeah, that's fair. I get that you can't guarantee anything outside your normal process. So it's 89 flat, standard review in the fall, and I come in as a full team member from day one?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    },
+    {
+      "role": "assistant",
+      "text": "Exactly, that's it. You come in at 89, benefits start immediately, and you're part of the team right away. Are we good to move forward with this?",
+      "timestamp": "2026-04-06T01:19:33.334Z"
+    }
+  ],
+  "personality_id": "aggressive",
+  "scenario_id": "salary_negotiation",
+  "updated_at": {
+    "$date": "2026-04-06T01:19:33.335Z"
+  },
+  "user_id": "11@test.com"
+}

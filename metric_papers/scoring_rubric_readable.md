@@ -1,5 +1,5 @@
-# Scoring Rubric
-## AI Negotiation Simulator — Behavioral Quality Assessment
+# Scoring Rubric — Behavioral Quality Score (BQS)
+## AI Negotiation Simulator — Process Measure
 
 **Theoretical basis:** Getting to Yes (Fisher, Ury & Patton, 1981) · Smolinski & Xiong (2020) Negotiation Competency Model
 **Input:** Coded transcript from `coding_instruction_readable.md`
@@ -14,7 +14,9 @@ This document converts a coded negotiation transcript into a **Behavioral Qualit
 
 The BQS is a **research measurement tool only.** It is applied post-experiment by an AI analyst (Claude Sonnet) to all participant transcripts. Participants never see their BQS during the study. The debrief intervention (Group A) runs on a separate pipeline — the `negotiation_diagnostic_matrix.md` and `pre_assessment_protocol.md` — which is independent of this rubric.
 
-**What the BQS measures:** How skillfully a participant negotiated, scored across five dimensions from *Getting to Yes*. Each dimension scores 1–5; the composite ranges from 5–25.
+**What the BQS measures:** How skillfully a participant negotiated, scored across five dimensions from *Getting to Yes*. Each dimension scores 1–5; the composite ranges from 5–25. The BQS captures *process quality* — how the participant negotiated.
+
+**Separate measure:** The *Outcome Score* (what the participant achieved — the final deal value relative to the ZOPA) is documented in `outcome_score.md`. BQS and Outcome Score are two independent dependent variables in the experiment. This document covers BQS only.
 
 **How it is used:** Round 1 BQS and Round 2 BQS are compared. The delta (Round 2 − Round 1) is the key outcome variable — it measures whether negotiation behavior improved across the two rounds, and whether that improvement differs across the three experimental groups (AI debrief, static reflection, control).
 
@@ -412,21 +414,26 @@ Range: 5 (minimum) to 25 (maximum)
 
 ### Improvement delta
 
-The primary research measure is the **delta** between Round 1 and Round 2:
+**Primary analysis — raw frequency/ratio per dimension:**
+
+The primary statistical analysis uses raw frequency and ratio values directly, not the 1–5 zone scores. For each dimension, compute:
 
 ```
-Overall Delta = Round 2 Composite − Round 1 Composite
-Per-Dimension Delta = Round 2 Dimension Score − Round 1 Dimension Score
+Frequency Delta (Dₙ) = Round 2 frequency − Round 1 frequency
+Ratio Delta (Dₙ)     = Round 2 ratio − Round 1 ratio
 ```
 
-| Delta | Interpretation |
-|---|---|
-| +4 or more | Strong improvement |
-| +2 to +3 | Moderate improvement |
-| +1 | Marginal improvement |
-| 0 | No change |
-| −1 | Marginal regression |
-| −2 or less | Regression — flag for transcript review |
+Report per-dimension deltas as the main result. This preserves continuous data, avoids discretization artifacts from the zone cutoffs, and lets findings be specific — e.g., "the debrief improved interest exploration (D2 frequency +0.08) but did not change options generation (D3), consistent with predictions."
+
+**Secondary summary — zone score delta:**
+
+The 1–5 zone scores and the composite BQS are a presentation and interpretation layer — useful for communicating the overall picture but not the primary statistical input.
+
+```
+Composite Delta = Round 2 Composite − Round 1 Composite
+```
+
+Zone scores will be calibrated post-experiment if needed, using the collected data as the empirical basis for cutoffs.
 
 **On regression:** A negative delta is not definitive evidence that no learning occurred. Scenario difficulty, AI counterpart behavior, and transcript length all affect scores. Flag regressions and examine the transcript before drawing conclusions.
 
@@ -436,51 +443,7 @@ All five dimensions are weighted 1:1:1:1:1. This reflects the Getting to Yes fra
 
 ---
 
-## 11. Outcome Score
-
-### What it measures
-
-The Outcome Score captures *what* the participant achieved — the final deal value relative to the range of possible agreements. It is a separate measure from the BQS, which captures *how* they negotiated. Both scores are needed: BQS measures process quality, Outcome Score measures result quality.
-
-### Formula
-
-```
-Outcome Score = (final deal − scenario floor) / (scenario ceiling − scenario floor)
-
-Range: 0.0 (deal at the AI's floor — minimum for participant) to 1.0 (deal at the AI's ceiling — maximum for participant)
-```
-
-### ZOPA ranges (to be filled before experiment runs)
-
-The AI counterpart is given a hidden reservation range in its system prompt. These values must be recorded before data collection begins.
-
-| Scenario | Floor | Ceiling | Notes |
-|---|---|---|---|
-| Salary negotiation | [TBD] | [TBD] | AI will not accept below floor; ceiling is maximum AI can offer |
-| Apartment rent | [TBD] | [TBD] | AI will not accept above ceiling; floor is minimum AI will accept |
-
-⚠️ *ZOPA ranges are a must-resolve before the experiment runs — without them the outcome score cannot be computed post-hoc.*
-
-### No agreement reached
-
-If the negotiation ends without a deal, record as:
-- Outcome Score = 0.0, flagged as "No Agreement"
-- Treat separately in analysis — do not average with completed deals without discussion
-
-### Interpreting BQS and Outcome Score together
-
-The two scores can agree or disagree. Use this 2×2 table to interpret the combination:
-
-| BQS Delta | Outcome Delta | Interpretation |
-|---|---|---|
-| Positive | Positive | **Clear improvement** — process and outcome both better. Strongest evidence for debrief effect. |
-| Positive | Neutral / Negative | **Learning without execution** — behavioral quality improved but did not convert to a better deal. May reflect scenario difficulty or transfer lag. |
-| Neutral / Negative | Positive | **Lucky outcome** — better deal without process change. Could be scenario variation or AI behavior. Do not attribute to debrief. |
-| Negative | Negative | **Regression** — flag for transcript review. |
-
----
-
-## 12. Worked Scoring Example
+## 11. Worked Scoring Example
 
 The following applies the rubric to a sample transcript from `coding_instruction_readable.md` Section 7. The transcript is a rent negotiation; scoreable user units = 15.
 
