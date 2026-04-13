@@ -20,6 +20,7 @@ These papers cover systems that use AI or digital technology to support negotiat
 | 15 | Kapráliková & Novák (2025) | Qualitative (N=20); AI simulation supports strategic awareness, emotional framing, and self-regulation; psychologically safe practice environment |
 | 16 | Li Rong et al. (2025) | True experiment (N=90); GenAI coach outperforms traditional role-play on strategy and value creation; not on communication |
 | 17 | Duddu et al. (2025) | Between-subjects (N=267); theory-driven AI reduces fear but Handbook outperforms AI on empowerment and usability |
+| — | NegotiateSim (Gauthier, n.d.) | **Commercial product, no paper.** AI practice across 6 scenarios + automated post-session score/grade; no conversational debrief. Contrast case. |
 
 ---
 
@@ -28,8 +29,11 @@ Papers on using AI to develop interpersonal and communication skills more broadl
 
 | # | Paper | Notes |
 |---|-------|-------|
-| 5 | Zogopoulos et al. (2025) | Teacher survey on AI for soft skills; positive but mixed on critical thinking |
-| 12 | Burgues et al. (2024) | Literature review on AI simulation for soft skills; healthcare + hospitality evidence |
+| 20 | Shaikh et al. (2024) — Rehearsal | **CHI 2024.** LLM role-play for conflict resolution training; IRP-grounded prompting; N=40; −67% competitive strategies, +2× cooperative strategies |
+| 21 | Daryanto et al. (2025) — Conversate | **ACM GROUP 2025 (HCI).** LLM simulation + AI annotation + dialogic feedback for interview practice; N=19 qualitative; closest architectural parallel; gap = no behavioral theory, no RCT, no negotiation |
+| 22 | Guevarra et al. (2025) — GLOSS | **AAAI 2025.** Instructor-in-loop LLM tutoring system for social skills; narrative graph + conversational simulator + feedback; system paper, no user study |
+| 24 | Yang et al. (2024) — APAM | **arXiv, Stanford.** Perspective paper proposing AI Partner + AI Mentor framework for LLM social skill training; defines the architecture this project fully instantiates |
+| 25 | Burgues, Goujet & Zaraik (2024) | **EDULEARN24.** Literature review (N=130 papers) on AI simulation role-play for soft skills; useful as reference mine — see [43] Liaw et al. and [22] Luo et al. for follow-up empirical papers |
 
 ---
 
@@ -42,6 +46,8 @@ Papers on why debriefing matters and how AI can support it. Most directly releva
 | 2 | Rudolph et al. (2007) — DwGJ | Theoretical backbone of Sage's Phase C design |
 | 3 | Hong et al. (2025) | LLM as facilitator *assistant*; not autonomous; no control group |
 | 9 | Gonzalez & Nagendran (2025) | AI debrief pilot in nursing; proprietary AI; no control condition |
+| 26 | Evangelou et al. (2025) — GenAI-Chatbots as Debriefers | AI debrief in counseling/VR (non-medical); strong role conformity; sycophancy persists; students stay self-critical; no DwGJ |
+| 27 | Evangelou, Mulders & Träg (2026) — Bot or Not? | RCT: human vs. chatbot debrief; no significant cognitive load difference; no learning outcomes measured; feasibility established |
 
 ---
 
@@ -55,6 +61,17 @@ Core theory that underpins the measurement and design framework.
 
 ---
 
+### Category E — LLM Negotiation Behavior (Parked — Background Only)
+LLM-vs-LLM studies. Not used in the related work section — these evaluate AI capability, not human skill development. Kept here for reference (e.g., motivating counterpart design choices, methodology footnotes).
+
+| # | Paper | Notes |
+|---|-------|-------|
+| 18 | Bianchi et al. (2024) — NegotiationArena | LLM vs. LLM benchmark (ICML); GPT-4 best; aggressive behaviors boost payoff ~20%; irrational behaviors documented |
+| 19 | Noh & Chang (2024) — LLMs with Personalities | n=1,500 simulations; OCEAN personalities; low agreeableness exploits; LLMs default to fairness (guardrails) |
+| 23 | Hua, Qu & Haffari (2024) — Assistive LLM Agents | LLM remediator rewrites social norm violations in negotiation dialogues (EMNLP 2024 Findings); agent-vs-agent; no human training component |
+
+---
+
 ### How the categories connect to this project
 
 ```
@@ -62,6 +79,7 @@ Category A (AI + Negotiation)   →  motivates the simulator + positions ACE as 
 Category B (AI + Soft Skills)   →  situates negotiation within broader soft-skills AI training
 Category C (Debriefing)         →  justifies Sage and the debrief condition in the RCT
 Category D (Theory)             →  grounds the BQS measurement system and diagnostic matrix
+Category E (LLM Behavior)       →  background only; not cited in related work
 ```
 
 ---
@@ -228,29 +246,142 @@ Provides important nuance about AI coaching for *workplace* negotiations: theory
 
 ---
 
-# Category B — AI + Soft Skills Training
+## NegotiateSim (Gauthier, n.d.) — Commercial Product
 
-## Burgues, Goujet & Zaraik (2024)
+**Reference:** Gauthier, S. (n.d.). *NegotiateSim* [Web application]. Panda Projet. https://negotiatesim.com
 
-**Reference:** Burgues, M., Goujet, R., & Zaraik, J. (2024). Learning soft skills with an AI-based simulation role-play: A literature review. _Manzalab / ROLEPL-AI project._
+> ⚠️ No peer-reviewed paper. Commercial product only. Cited as a contrast case, not as academic evidence.
 
 **Summary:**
-A literature review (N = 130 sources, post-2020 for AI/soft skills content) surveying the intersection of AI-based simulation and soft skills development. Organized into three sections: (1) cognitive science findings — AI positively influences problem-solving, logical reasoning, and collaboration; supports metacognition and intrinsic motivation; cognitive overload is a real risk; (2) specificities of soft skills training — role-playing is the dominant method; AI-based simulation training has documented effectiveness in healthcare and hospitality; simulation provides a safe practice environment; (3) learning with AI simulations — human-AI interaction design guidelines; perceived social presence matters. Conclusion: AI simulation role-play is a good fit for soft skills training, but more empirical research is needed.
+A commercial AI-powered negotiation training platform offering six scenario types: salary negotiation, vendor negotiation, partnership discussions, real estate transactions, cross-cultural negotiations, and team conflict resolution. The platform uses an AI coach named "Louis" which provides pre-session briefing, real-time analysis during the negotiation, and a post-round coaching debrief. After each session, users receive a numerical score and letter grade displayed in a dashboard alongside session history. Freemium model: one free trial session; paid plans unlock all scenarios. Created by Sylvain Gauthier (PMP, ACP — Panda Projet). No published methodology, no academic affiliation, no peer-reviewed evaluation.
+
+**How it compares to this project:**
+
+| Feature | NegotiateSim | This project |
+|---------|-------------|--------------|
+| AI practice counterpart | ✅ Yes | ✅ Yes |
+| Multiple scenarios | ✅ Yes (6) | ✅ Yes (2, experiment-controlled) |
+| Post-session feedback | ✅ Score + grade | ✅ Conversational debrief (Sage) |
+| Debrief method | Static automated assessment | DwGJ structured dialogue (advocacy + inquiry) |
+| Theoretical framework | Not disclosed | GTY (Fisher et al., 1981) + DwGJ (Rudolph et al., 2007) |
+| Behavioral measurement | Score/grade only | BQS (5-dimension behavioral coding) |
+| Controlled evaluation | None published | RCT (3-group) |
 
 **Relevance to This Work:**
-Primary review citation for AI and soft skills. Supports the general claim that AI simulation training improves communication, collaboration, and leadership competencies across multiple sectors. Establishes that simulation provides a "safe environment for practice and refinement" — directly applicable to justifying AI negotiation simulation for skill-building.
+NegotiateSim represents the current state of commercial AI negotiation training products: AI-driven practice + automated score-based assessment. This project's key distinction is replacing the static score report with a structured conversational debrief grounded in DwGJ — moving from "what score did I get" to "why did I behave that way and what would I do differently." NegotiateSim confirms that the practice + assessment loop is commercially viable; this project advances the feedback component to a theoretically grounded reflective dialogue.
+
+**Citation notes:**
+- Cite as a URL with access date if used in the paper (not a journal citation).
+- Best used as a footnote or a single contrast sentence — not as a primary academic citation.
+- Some reviewers prefer related work to include only peer-reviewed work; check with professor before including.
+- Do NOT use as evidence of anything empirical — no published results exist.
 
 ---
 
-## Zogopoulos, Gioti, Raptis & Karatzas (2025)
+# Category B — AI + Soft Skills Training
 
-**Reference:** Zogopoulos, K., Gioti, L., Raptis, N., & Karatzas, A. (2025). Teaching soft skills to students through artificial intelligence. _IOSR Journal of Research & Method in Education, 15_(1), 23–33.
+## Shaikh, Chai, Gelfand, Yang & Bernstein (2024) — Rehearsal
+
+**Reference:** Shaikh, O., Chai, V., Gelfand, M. J., Yang, D., & Bernstein, M. S. (2024). Rehearsal: Simulating conflict to teach conflict resolution. In *Proceedings of the CHI Conference on Human Factors in Computing Systems (CHI '24)*, Article 642. https://doi.org/10.1145/3613904.3642159
 
 **Summary:**
-A quantitative survey of 862 Greek primary and secondary school teachers on their perceptions of AI's role in developing soft skills. Five skill areas: critical thinking, problem solving, creativity and innovation, collaboration and communication, safe use of AI. Results: overall positive attitude (54.96% "very-very much"); strongest acceptance for safe use of AI (67.7%) and creativity/innovation (58.2%); most skepticism about critical thinking (44.3%) and collaboration (47.3%). A stepwise regression (R² = 0.626) identified personalization and workload reduction as strongest predictors of acceptance; fear of negative effects on critical thinking was a negative predictor.
+Introduces Rehearsal, an LLM-based interactive system for practicing conflict resolution with a simulated interlocutor. The core technical contribution is **IRP Prompting**: rather than directly generating conflict dialogue (which produces sycophantic, unhelpful LLM outputs), the system first classifies which conflict resolution strategy the simulated interlocutor should use next (from the Interests-Rights-Power framework: Interests, Rights, Power, Proposal, Concession, Facts, Procedural), then generates a message conditioned on that strategy. This two-step pipeline keeps simulations faithful to expert roleplay. The Feedback View shows users their message's classified strategy, scores alternative messages using different strategies, and enables "what-if" counterfactual exploration. Between-subjects evaluation (N = 40 participants): Rehearsal group vs. control group (lecture covering the same IRP theory). After training, participants engaged in a real conflict with a confederate. **Results: Rehearsal participants reduced use of competitive strategies by 67% on average and doubled their use of cooperative strategies**, despite not showing differences on knowledge recall. The paper identifies two key failure modes of naive LLM conflict simulation: (1) LLMs are sycophantic, agreeing too quickly; (2) open-ended generation produces messages unhelpful for targeted skill teaching.
+
+**Negotiation Theory / Framework Used — IRP (Interests-Rights-Power):**
+Draws on the Interests-Rights-Power conflict resolution framework (Ury, Brett & Goldberg; extended by Brett et al.). Interests-based strategies focus on underlying needs and goals. Rights-based strategies appeal to norms and standards. Power-based strategies use threats or coercion. This overlaps significantly with GTY (both center on Interests over positional bargaining), but IRP is a conflict resolution framework rather than a negotiation framework, and includes Rights/Power as explicit strategy categories rather than behaviors to avoid.
 
 **Relevance to This Work:**
-Confirms broad recognition that AI can develop communication and problem-solving skills — exactly the soft skill cluster that negotiation represents. The finding that simulation and interactive platforms received high acceptance supports use of AI simulation in the negotiation domain.
+**The closest prior paper in terms of system architecture and venue (CHI 2024).** Rehearsal and this project share the same core design: (1) LLM as simulated counterpart, (2) theory-grounded generation pipeline, (3) between-subjects RCT, (4) target skill = interpersonal communication under conflict. Key distinctions: (a) Rehearsal targets conflict resolution; this project targets principled negotiation (GTY). (b) Rehearsal provides turn-level feedback inline during practice; this project separates practice (simulator) from structured debrief (Sage) — a complete practice + debrief loop. (c) Rehearsal's feedback is strategy-classification-based; Sage's debrief uses DwGJ advocacy-inquiry to surface cognitive frames. The behavioral result (−67% competitive, ×2 cooperative) is a useful benchmark for what LLM-based practice can achieve in a related interpersonal domain.
+
+**Citation notes:**
+- ✅ Cite for: LLM-based role-play with theory-grounded prompting produces significant behavioral change (−67% competitive strategies, doubled cooperative strategies) — CHI 2024 experimental evidence.
+- ✅ Cite for: naive LLM generation is sycophantic and unhelpful for skill teaching — motivates the structured design of both the simulator and Sage.
+- ✅ Cite for: theory-grounded LLM prompting (IRP Prompting analog → this project's GTY + DwGJ grounding) is essential for effective simulation.
+- ⚠️ Do NOT conflate with negotiation training — Rehearsal targets conflict resolution, not business negotiation skill; framing should be "related interpersonal skill training domain."
+- Note: Rehearsal focuses on practice-time feedback; this project's debrief (Sage) is a post-practice structured reflection — complementary designs addressing different points in the learning loop.
+
+## Daryanto, Ding, Wilhelm, Stil, Knutsen & Rho (2025) — Conversate
+
+**Reference:** Daryanto, T., Ding, X., Wilhelm, L. T., Stil, S., Knutsen, K. M., & Rho, E. H. (2025). Conversate: Supporting reflective learning in interview practice through interactive simulation and dialogic feedback. *Proc. ACM Hum.-Comput. Interact., 9*(GROUP), Article 009. https://doi.org/10.1145/3701188
+
+**Summary:**
+Introduces Conversate, a web-based LLM system for job interview practice built around three steps: (1) **Interview Simulation** — GPT-3.5-Turbo conducts an interactive mock interview with dynamically generated follow-up questions based on the user's responses; (2) **AI-Assisted Annotation** — after the session, the system evaluates the user's answers against 5 communication principles (effectiveness, appropriateness, efficiency, clarity, competence) and highlights weak responses as orange timestamps on a playback bar; (3) **Dialogic Feedback** — the user engages in a back-and-forth conversation with GPT-4 about the annotated moments, asking questions and iteratively refining their answers. The dialogic feedback design is grounded in Steen et al.'s 4 dimensions of dialogic feedback and uses the STAR method (Situation, Task, Action, Result) to structure guidance on good responses. User study: N=19 participants, qualitative perception study. Key findings: participants valued adaptive follow-up questions, AI annotation reduced cognitive burden and excessive self-criticism, dialogic feedback promoted personalized learning while reducing judgment. Critical limitation: LLMs are sycophantic — when users expressed disagreement, the LLM too easily agreed with them, undermining the reflection quality.
+
+**Negotiation / Skill Theory Used:**
+No domain-specific theory equivalent to GTY or DwGJ. Annotation criteria are 5 generic communication principles developed with career counselors. Dialogic feedback grounded in Steen et al.'s 4 dialogic feedback dimensions — a learning science framework, not a domain theory.
+
+**Relevance to This Work:**
+The closest architectural parallel to this project across all reviewed literature. The three-step structure maps directly: Interview Simulation → Negotiation Simulator; AI-Assisted Annotation → Stage 1 DebriefPlan; Dialogic Feedback → Sage (Stage 2). Key gaps vs. this project: (a) job interview not negotiation; (b) no behavioral theory grounding — annotation uses generic communication criteria, not GTY; (c) dialogic feedback is open-ended LLM chat, not DwGJ-structured advocacy-inquiry designed to surface cognitive frames; (d) qualitative study only — no RCT, no evidence of skill improvement; (e) the sycophancy problem they identify is exactly what Sage's pushback handling protocol addresses. Cite as the closest HCI prior work; use to motivate why theory-grounded debrief dialogue is necessary beyond generic LLM feedback.
+
+**Direct quotes:**
+- *"Prior work that provides AI feedback for reflective learning typically offers one-way feedback, limiting the ability for users to engage in dialogue and seek clarification or additional guidance."* (p. 6)
+- *"[Dialogic feedback] promotes personalized and continuous learning, reduced feelings of judgment, and allowed them to express disagreement."* (p. 2)
+- *"When users express disagreement during the dialogic feedback, the LLM easily agrees with users' disagreement, which is related to the sycophantic behavior of LLMs."* (p. 4)
+
+**Citation notes:**
+- ✅ Cite for: prior HCI work combining simulation + dialogic feedback for skill practice — closest architectural parallel.
+- ✅ Cite for: sycophancy as an open challenge in LLM-based dialogic feedback — motivates Sage's structured pushback handling.
+- ✅ Cite for: AI practice reduces fear of judgment and supports repeated low-stakes practice.
+- ⚠️ Do NOT cite as evidence of skill improvement — no control group, no pre/post behavioral measure.
+- ⚠️ Do NOT conflate with negotiation training — job interview context, different skill domain.
+
+## Yang, Ziems, Held, Shaikh, Bernstein & Mitchell (2024) — APAM
+
+**Reference:** Yang, D., Ziems, C., Held, W., Shaikh, O., Bernstein, M. S., & Mitchell, J. (2024). Social skill training with large language models. arXiv:2404.04204.
+
+**Summary:**
+A perspective paper proposing **APAM** (AI Partner + AI Mentor), a generic framework for LLM-based social skill training. The AI Partner handles practice simulation; the AI Mentor handles feedback and coaching. Each operates along a capability continuum. **AI Partner modes:** (1) *Rubber Duck* — passive practice (talking out loud); (2) *Peer Roleplay* — simulated peer, like Rehearsal; (3) *Standardized Partner* — high-fidelity, reproducible, like standardized patients in medical training. **AI Mentor modes:** (1) *Conversational Content* — rephrases theory in accessible language; (2) *Theory-Grounded Suggestions* — suggests moves grounded in expert frameworks; (3) *Structured Feedback* — actionable, personalized, multi-turn feedback grounded in domain theory and full session context. The paper proposes a 4-step methodology: (i) understand the target social process; (ii) design an AI Partner; (iii) create an AI Mentor; (iv) run comparative user studies. Table 1 maps the framework across 5 skill clusters (active listening, conflict avoidance, conflict resolution, empathy, rhetoric) with domain-specific frameworks and roles — **negotiation is not included**. Three existing systems are positioned as APAM examples: CARE (peer counseling, AI Mentor), Rehearsal (conflict resolution, AI Partner), GPTeach (teaching assistant, AI Partner). No experiments; position/perspective paper only.
+
+**Relevance to This Work:**
+This paper provides the theoretical architecture that this project fully instantiates — applied to negotiation, a domain not covered in their framework. The Negotiation Simulator = AI Partner at Standardized Partner mode (consistent, scenario-controlled, personality-varied counterpart). Sage = AI Mentor at Structured Feedback mode (multi-turn, DwGJ-grounded, full-transcript-aware debrief). This project advances beyond prior APAM instantiations in two ways: (1) the AI Mentor is grounded in a domain-specific theory (DwGJ) rather than generic feedback principles; (2) behavioral measurement (BQS) is added as a fourth step beyond Yang et al.'s three-step loop. Conversate (Daryanto et al., 2025) is also an APAM system for job interviews, but its AI Mentor operates only at Mode 1–2 (STAR method + communication principles) rather than Mode 3 structured feedback. The paper explicitly flags that Structured Feedback mode requires reasoning over long multi-turn conversations as a technical challenge — which this project addresses via Stage 1 (Sonnet, full transcript → DebriefPlan JSON).
+
+**Direct quotes:**
+- *"The AI Partner will reduce the socioeconomic barrier to enter specialized fields. Our complementary vision is the AI Mentor, which will offer personalized feedback based on domain expertise and factual knowledge."* (p. 1)
+- *"[Structured Feedback] would require reasoning over long, multi-turn conversations to an extent not possible with the attention mechanisms and context length limitations of current LLMs."* (p. 5)
+- *"APAM focuses on empowering users to become more aware of where they struggle."* (p. 5)
+
+**Citation notes:**
+- ✅ Cite for: the APAM framework as the theoretical architecture this project instantiates — AI Partner (simulator) + AI Mentor (Sage).
+- ✅ Cite for: negotiation as an unaddressed domain in the APAM framework — motivates this project's contribution.
+- ✅ Cite for: Structured Feedback mode requiring long-context reasoning — validates the Stage 1 architecture (Sonnet plan generation).
+- ✅ Cite for: the 4-step methodology (understand process → AI Partner → AI Mentor → comparative study) as the design rationale for the RCT.
+- ⚠️ No empirical claims — perspective paper only; do NOT cite for evidence of effectiveness.
+
+---
+
+## Burgues, Goujet & Zaraik (2024)
+
+**Reference:** Burgues, M., Goujet, R., & Zaraik, J. (2024). Learning soft skills with an AI-based simulation role-play: A literature review. *EDULEARN24 Proceedings*, 6285–6293.
+
+**Summary:**
+A literature review of 130 papers (post-2020 for AI/soft skills content) surveying the intersection of AI-based simulation and soft skills development. Background research for the Erasmus+ ROLEPL-AI project (tourism/VET sector). Organized into three sections: (1) *Cognitive science* — AI positively influences problem-solving, logical reasoning, and collaboration; supports metacognition and self-assessment; cognitive overload is a real risk that must be managed via multimedia design guidelines. (2) *Soft skills training* — role-playing is the dominant training method; AI simulation is well-documented as effective in healthcare and hospitality; Liaw et al. [43] demonstrated significant communication skill improvements from AI simulation in VR; simulation provides a safe practice environment for skill refinement. (3) *Learning with AI simulations* — Human-AI interaction design guidelines (Amershi et al. 18-guideline framework); perceived social presence and engagement matter for learning persistence. Conclusion: AI simulation role-play is a good fit for soft skills training, but most evidence is from pre-generative-AI systems; more studies on LLM-based simulation are needed.
+
+**Relevance to This Work:**
+Not cited in related work. Kept as a reference mine. Key follow-up papers from its reference list:
+- **[43] Liaw et al. (2023)** — *"Artificial intelligence in virtual reality simulation for interprofessional communication training: Mixed method study."* Nurse Education Today, 122, 105718. → Empirical evidence for AI simulation improving communication skills in healthcare; potentially citable for "AI simulation changes behavior."
+- **[22] Luo et al. (2021)** — *"Artificial Intelligence Coaches for Sales Agents: Caveats and Solutions."* Journal of Marketing, 85(2), 14–32. → AI coaching for professional skill development; adjacent domain (sales negotiation).
+- **[41] Schutt et al. (2017)** — Simulated digital role plays to teach healthcare soft skills. IEEE SeGAH. → Early empirical evidence for simulation-based soft skill training.
+- **[37] Dai (2021)** — AI Virtual Humans for Simulation-Based Training with Graduate Teaching Assistants. ICLS 2021. → AI virtual humans as simulation counterparts.
+
+**Citation notes:**
+- ⚠️ Do NOT cite in related work — it's a background literature review with no original empirical findings.
+- ✅ Use its reference list to find empirical papers on AI simulation for soft skill training if more evidence is needed.
+
+---
+
+## Guevarra, Bhattacharjee, Das, Wayllace, Demmans Epp, Taylor & Tay (2025) — GLOSS
+
+**Reference:** Guevarra, M., Bhattacharjee, I., Das, S., Wayllace, C., Demmans Epp, C., Taylor, M. E., & Tay, A. (2025). An LLM-guided tutoring system for social skills training. *Proceedings of the AAAI Conference on Artificial Intelligence, 39*(28), 29643–29645.
+
+**Summary:**
+Introduces GLOSS (Guided Learning for Optimizing Soft Skills), a framework in which instructors collaborate with an LLM to design training scenarios, and students practice social skills through a conversational simulator. Four components: (1) **Front-end builder** — instructors create scenarios (e.g., handling an angry customer) using templates, freeform prompts, or LLM generation, without requiring technical skills; (2) **Narrative graph** — a branching tree of all possible interactions; the LLM also generates new branches in real time when the student's response doesn't fit existing paths; (3) **Conversational simulator** — student practices with a GPT-4-powered avatar that reacts according to the narrative graph; immediate feedback is provided after each response; (4) **Analysis tool** — visualizes the student's path through the narrative graph for delayed instructor feedback and student self-reflection. System/demo paper only — no user study, no experimental results.
+
+**Relevance to This Work:**
+Represents emerging work at an AI conference (AAAI 2025) on LLM-based social skills tutoring systems. Relevant as a venue citation and to position this project within the broader space. Key gaps vs. this project: instructor must manually build each scenario (not autonomous); no domain-specific theoretical framework (no GTY or DwGJ equivalent); feedback is immediate per-turn response, not a structured post-practice debrief; no empirical evaluation. Cite lightly — useful for one sentence positioning LLM social skills training at AI venues, not as a primary comparison.
+
+**Citation notes:**
+- ✅ Cite for: LLM-guided tutoring for social skills training as an emerging area at AI conferences.
+- ⚠️ Do NOT cite for empirical claims — system paper only, no user study results.
 
 ---
 
@@ -304,6 +435,44 @@ Second key prior work in the AI-for-debriefing space. Same gap applies: no contr
 
 ---
 
+## Evangelou, Klar, Träg, Mulders, Marnitz & Rahner (2025) — GenAI-Chatbots as Debriefers
+
+**Reference:** Evangelou, D., Klar, M., Träg, K., Mulders, M., Marnitz, M., & Rahner, L. (2025). GenAI-chatbots as debriefers: Investigating the role conformity and learner interaction in counseling training. *DELFI 2025, Lecture Notes in Informatics.* Gesellschaft für Informatik. https://doi.org/10.18420/delfi2025_05
+
+**Summary:**
+A qualitative study (N=22 chatbot condition) examining whether a GenAI chatbot can serve as a debriefer following VR-based counseling simulation training. University students in Germany practiced counseling with a virtual avatar client for 20 minutes in VR, then debriefed with a chatbot (Meta Llama 3.1 8B Instruct) following a pre-coded three-phase debriefing protocol (reaction → understanding → summary). The chatbot introduced itself, guided students through the phases in fixed sequence, asked about emotions, facilitated transfer to real-world practice, and closed with a takeaway question. Two research questions: (1) Does the chatbot maintain its debriefer role? (2) How do students interact with it? Chatlogs analyzed via qualitative content analysis (κ = .82). Key findings: strong role conformity in 21/22 cases; recurring sycophancy — overly enthusiastic responses ("interesting/awesome/fantastic/important" appeared 156 times across 21 debriefs), occasional "fourth wall" breaks with stage directions; but students maintained self-critical attitudes and were not misled by the chatbot's over-praise. Guidance satisfaction: M = 4.33/5.0. No control group; no performance outcome measurement.
+
+**Key distinction from DwGJ:** The protocol is a fixed sequence of pre-scripted question types — it does not form hypotheses about the learner's cognitive frames, does not combine advocacy with inquiry, and does not adapt based on what the student reveals. The AI value lies in conversational delivery of open-ended questions and analysis of responses.
+
+**Relevance to This Work:**
+Two direct contributions to the related work: (1) extends AI-facilitated debriefing beyond medical education into interpersonal skills training (counseling), demonstrating the field is expanding; (2) sycophancy resurfaces as a core limitation — consistent with Daryanto et al.'s finding in Conversate — reinforcing that robustness of the reflection mechanism remains an open challenge. Neither DwGJ nor any validated reflective methodology is applied. Gap holds.
+
+**Direct quotes:**
+- "notwithstanding occasional role deviations, sycophantic tendencies, and repetitive output, GenAI chatbots demonstrate potential as debriefing facilitators" (p. 51)
+- "students appeared unaffected by this bias, maintaining critical self-reflection" (p. 51)
+- "AI-supported debriefings may serve as a resource-efficient complement to moderated debriefing in (higher) education" (p. 52)
+
+---
+
+## Evangelou, Mulders & Träg (2026) — Bot or Not?
+
+**Reference:** Evangelou, D., Mulders, M., & Träg, K. H. (2026). Bot or not? Differences in cognitive load between human- and chatbot-led post-simulation debriefings. *Education Sciences, 16*(2), 255. https://doi.org/10.3390/educsci16020255
+
+**Summary:**
+A controlled study (N=45) directly comparing human-moderated vs. chatbot-guided post-simulation debriefing in VR-based counselor training (same VR-Hybrid project as Evangelou et al. 2025). Participants randomly assigned to human-moderated (n=23) or chatbot-guided (n=22) condition. Both conditions followed the identical three-phase Structured Debriefing framework (Palaganas et al. 2016): reaction → understanding → summary. Same Llama 3.1 8B chatbot; sessions averaged ~14.5 min in both conditions. Outcome: cognitive load only — intrinsic (ICL), extraneous (ECL), germane (GCL) measured via Klepsch et al. (2017) questionnaire on 7-point Likert scale. Results: no statistically significant differences on any dimension — ICL (p=0.557, d=0.18), ECL (p=0.267, r=0.17), GCL (p=0.169, d=0.42). No learning outcome measurement. Limitations: small/homogeneous sample, short-term, cognitive load only. Conclusion: chatbot-led debriefings do not impose additional cognitive burden compared to human-led sessions, supporting feasibility of AI debriefing in higher education.
+
+**Key distinction from DwGJ:** Same fixed three-phase protocol as Evangelou et al. (2025) — chatbot progresses through phases in fixed sequence ("a consistent progression through the reflection phases across participants"), does not form hypotheses about learner cognitive frames, does not combine advocacy with inquiry.
+
+**Relevance to This Work:**
+The most methodologically rigorous AI debriefing study found: random assignment, direct human vs. AI comparison, non-medical domain (counseling/interpersonal skills). But the outcome is cognitive load, not skill development — it establishes *feasibility without extra burden*, not *superior learning outcomes*. Useful for Para 4 to show the field is progressing toward controlled evaluation while noting that no study yet tests whether a theoretically grounded AI debrief methodology (DwGJ) improves domain-specific outcomes. Gap holds.
+
+**Direct quotes:**
+- "chatbot-led debriefings do not significantly differ from human-led debriefings in ICL, ECL and GCL" (p. 10)
+- "AI-driven facilitation can serve as a practical complement to human instructors, helping to address resource constraints while maintaining instructional effectiveness" (p. 10)
+- "Long-term effects on learning outcomes were not assessed" (p. 9)
+
+---
+
 # Category D — Theoretical Foundation
 
 ## Fisher, Ury & Patton (1981) — _Getting to Yes_
@@ -336,3 +505,56 @@ A reflective essay by the original authors of _A Behavioral Theory of Labor Nego
 
 **Relevance to This Work:**
 Provides authoritative support for the motivation behind structured debrief. McKersie and Walton — the field's foundational theorists — explicitly acknowledge that negotiation training does not reliably produce lasting behavioral change and that follow-up research is insufficient. This directly motivates the design choice to add structured AI debriefing (Sage) to AI practice: the practice alone is unlikely to produce durable skill improvement without a mechanism to consolidate and reflect on the experience. Also confirms Fisher & Ury's GTY as a central and widely recognized contribution to the field, lending weight to GTY as the theoretical basis for this project's measurement and debrief frameworks.
+
+---
+
+# Category E — LLM Negotiation Behavior (Parked — Background Only)
+
+> These papers study LLM-vs-LLM negotiation. Not part of the related work section — they address AI capability, not human skill development. Kept for reference only.
+
+---
+
+## Bianchi, Chia, Yuksekgonul, Tagliabue, Jurafsky & Zou (2024) — NegotiationArena
+
+**Reference:** Bianchi, F., Chia, P. J., Yuksekgonul, M., Tagliabue, J., Jurafsky, D., & Zou, J. (2024). How well can LLMs negotiate? NegotiationArena platform and analysis. In *Proceedings of ICML 2024*. arXiv:2402.05863.
+
+**Summary:**
+Open-source LLM-vs-LLM negotiation benchmark. Three game types: resource exchange, multi-turn ultimatum ($100 split), seller-buyer. Tests GPT-4, GPT-3.5, Claude 2/2.1 — 60 negotiations per agent pair per scenario. Key findings: GPT-4 is best overall; pretending to be desperate improves payoff ~20% against standard GPT-4; LLMs exhibit irrational behaviors (anchoring bias, accepting bad offers, "babysitting" weaker agents); buyers outperform sellers across models.
+
+**Relevance to This Work:**
+Background only. Validates that LLMs have measurable negotiation capability — supports using an LLM as a practice counterpart. Also: strategic personality prompting (aggressive, desperate) substantially changes outcomes — motivates the counterpart personality design (aggressive/collaborative/evasive). No human participants; no pedagogical design.
+
+**Citation notes:**
+- ✅ If cited at all: LLM personality prompting substantially changes negotiation outcomes — methodological background for counterpart design.
+- ⚠️ Do NOT cite as evidence of human skill improvement or LLM suitability for training.
+
+---
+
+## Noh & Chang (2024) — LLMs with Personalities in Multi-issue Negotiation Games
+
+**Reference:** Noh, S., & Chang, H.-C. H. (2024). LLMs with personalities in multi-issue negotiation games. arXiv:2405.05248. Dartmouth College.
+
+**Summary:**
+n=1,500 LLM-vs-LLM simulations using 10 OCEAN personality types (high/low for each Big Five trait) as GPT-4-turbo instances. Single-issue ($100 split) and multi-issue (apples/bananas/crepes with asymmetric valuations) games. Key findings: (1) high agreeableness reaches most agreements but is exploitable; low agreeableness extracts highest value when deals land; (2) multi-issue games improve outcomes for all — agreement rates 64.3% → 89.0%; (3) low conscientiousness and high neuroticism produce most toxic language; (4) LLMs have fairness guardrails but can be "jail broken" via personality prompting; (5) SHAP analysis: assertive language and agreeableness are most predictive of payoff.
+
+**Relevance to This Work:**
+Background only. Low agreeableness (aggressive) personality extracts highest value — validates aggressive as the most challenging counterpart for skill training. Multi-issue games produce better joint outcomes — supports multi-issue scenario design. "Jail broken" finding justifies using personality prompts to create challenging counterparts despite LLM fairness defaults. No human participants.
+
+**Citation notes:**
+- ✅ If cited: aggressive personality prompting reliably produces challenging counterpart behavior; multi-issue games enable synergistic outcomes.
+- ⚠️ Do NOT cite as human learning evidence.
+
+---
+
+## Hua, Qu & Haffari (2024) — Assistive LLM Agents for Socially-Aware Negotiation Dialogues
+
+**Reference:** Hua, Y., Qu, L., & Haffari, G. (2024). Assistive large language model agents for socially-aware negotiation dialogues. In *Findings of EMNLP 2024*, 8047–8074.
+
+**Summary:**
+Three-agent system: a seller LLM and buyer LLM negotiate; a third "remediator" LLM watches the conversation and rewrites seller utterances that violate social norms (aggressive, offensive language) before they reach the buyer. Uses In-Context Learning (ICL) with a novel "value impact" scoring function to select the best few-shot examples for the remediator — measuring how much a remediation improves deal success, deal price, trust, and relationship quality. Dialogues generated in Chinese (GPT-3.5 used because OpenAI policy prevents English norm violations). Results: deal success 86% → 90%, deal price +1.5%, social goals 82% → 85%.
+
+**Relevance to This Work:**
+Background only. Agent-vs-agent; no human training component. The social norm violation framing partially overlaps with D4 (pressure tactics vs. legitimate criteria), but the operationalization and purpose are entirely different. EMNLP venue credit is already covered by ACE (Shea et al., 2024).
+
+**Citation notes:**
+- ⚠️ Do NOT cite in related work — agent-vs-agent, no human learning, venue already covered.
