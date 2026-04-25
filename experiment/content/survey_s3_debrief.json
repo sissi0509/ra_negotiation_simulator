@@ -1,0 +1,30 @@
+{
+  "id": "s3_debrief",
+  "survey_key": "s3_debrief",
+  "title": "Reflection Check-In",
+  "subtitle": "Please answer a few questions about the reflection activity you just completed.",
+  "scale": { "min": 1, "max": 7, "minLabel": "Strongly Disagree", "maxLabel": "Strongly Agree" },
+  "questions_all_groups": [
+    { "id": "q1", "text": "I understand my negotiation performance more clearly now." },
+    { "id": "q2", "text": "I understand what I should improve next time." },
+    { "id": "q3", "text": "I can identify key moments that affected the negotiation." },
+    { "id": "q4", "text": "I feel more prepared for a similar negotiation." }
+  ],
+  "groups": {
+    "ai_debrief": {
+      "shown_to": "Group A only",
+      "subtitle_override": "Please answer a few questions about your conversation with Sage.",
+      "extra_questions": []
+    },
+    "static_reflection": {
+      "shown_to": "Group B only",
+      "subtitle_override": "Please answer a few questions about the written reflection you just completed.",
+      "extra_questions": []
+    },
+    "control": {
+      "shown_to": "Group C",
+      "skip": true
+    }
+  },
+  "note": "⚠️ Content pending professor confirmation. Group C skips this survey entirely."
+}

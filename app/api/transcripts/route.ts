@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { saveTranscript, getAllTranscripts } from "@/lib/transcriptStore";
+import { saveTranscript, getAllTranscripts, getTranscriptByRunId } from "@/lib/transcriptStore";
 import type { Transcript } from "@/lib/transcript";
 import { auth } from "@/auth";
 
@@ -16,7 +16,14 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ ok: true });
 }
 
-// GET /api/transcripts  — returns all completed transcripts
-export async function GET() {
+// GET /api/transcripts?run_id=<id>  — returns one transcript by run_id
+// GET /api/transcripts               — returns all completed transcripts
+export async function GET(req: NextRequest) {
+  const runId = req.nextUrl.searchParams.get("run_id");
+  if (runId) {
+    const transcript = await getTranscriptByRunId(runId);
+    if (!transcript) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(transcript);
+  }
   return NextResponse.json(await getAllTranscripts());
 }

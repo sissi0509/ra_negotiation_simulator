@@ -43,11 +43,24 @@ Papers on why debriefing matters and how AI can support it. Most directly releva
 | # | Paper | Notes |
 |---|-------|-------|
 | 6 | Fanning & Gaba (2007) | Debriefing = "heart and soul" of simulation; Kolb's experiential learning |
-| 2 | Rudolph et al. (2007) — DwGJ | Theoretical backbone of Sage's Phase C design |
+| 2 | Rudolph et al. (2007) — DwGJ | Theoretical backbone of Sage's Phase C design — see **Category F** for full summary |
 | 3 | Hong et al. (2025) | LLM as facilitator *assistant*; not autonomous; no control group |
 | 9 | Gonzalez & Nagendran (2025) | AI debrief pilot in nursing; proprietary AI; no control condition |
 | 26 | Evangelou et al. (2025) — GenAI-Chatbots as Debriefers | AI debrief in counseling/VR (non-medical); strong role conformity; sycophancy persists; students stay self-critical; no DwGJ |
 | 27 | Evangelou, Mulders & Träg (2026) — Bot or Not? | RCT: human vs. chatbot debrief; no significant cognitive load difference; no learning outcomes measured; feasibility established |
+
+---
+
+### Category F — Debriefing with Good Judgment (DwGJ) — Core Papers
+Deep reading of DwGJ theory and empirical evidence. Grounds Sage's design at the mechanism level.
+
+| # | Paper | Notes |
+|---|-------|-------|
+| F1 | Rudolph et al. (2006) | Foundational theory — "no such thing as nonjudgmental"; frames → actions → results causal chain; advocacy-inquiry introduced |
+| F2 | Rudolph et al. (2007) | Full method description — 3-phase structure, cognitive detective stance, ~2,000 debriefs |
+| F3 | Kolbe et al. (2013) — TeamGAINS | Empirical study integrating A/I into team debriefing tool; psychological safety significantly increased |
+| F4 | Shao et al. (2025) — Chinese RCT | RCT (N=70); DwGJ+CBL vs. CBL alone; significantly higher theory scores (p=0.02), skill scores (p<0.01), all three clinical reasoning dimensions |
+| F5 | Tscholl et al. (2026) | AI generates observation reports for human DwGJ facilitator — AI has not yet conducted DwGJ debrief autonomously; this work fills that gap |
 
 ---
 
@@ -58,6 +71,15 @@ Core theory that underpins the measurement and design framework.
 |---|-------|-------|
 | 13 | Fisher, Ury & Patton (1981) — GTY | GTY 4 principles form the BQS dimensional structure (D1–D4) |
 | 14 | McKersie & Walton (2015) | Foundational negotiation theorists; "producing lasting behavioral change is a tall order" |
+
+---
+
+### Category G — Reflection-to-Action Systems
+Systems that use structured reflection to drive behavior change, closing the gap between insight and action. Situates this project within a broader HCI movement beyond passive feedback.
+
+| # | Paper | Notes |
+|---|-------|-------|
+| G1 | Kim et al. (2026) — Breaking Negative Cycles | CHI '26; 15-day in-the-wild RCT (N=20); structured Gross-guided reflection → 2× more action plans, larger planning output than free-form; empirically supports Group A > Group B hypothesis |
 
 ---
 
@@ -80,6 +102,8 @@ Category B (AI + Soft Skills)   →  situates negotiation within broader soft-sk
 Category C (Debriefing)         →  justifies Sage and the debrief condition in the RCT
 Category D (Theory)             →  grounds the BQS measurement system and diagnostic matrix
 Category E (LLM Behavior)       →  background only; not cited in related work
+Category F (DwGJ — Core)        →  deep reading of DwGJ theory + empirical evidence; grounds Sage's design
+Category G (Reflection-to-Action) → empirical support that structured > free-form reflection; closes the insight→behavior gap; positions the debrief as a necessary component, not just an add-on
 ```
 
 ---
@@ -505,6 +529,217 @@ A reflective essay by the original authors of _A Behavioral Theory of Labor Nego
 
 **Relevance to This Work:**
 Provides authoritative support for the motivation behind structured debrief. McKersie and Walton — the field's foundational theorists — explicitly acknowledge that negotiation training does not reliably produce lasting behavioral change and that follow-up research is insufficient. This directly motivates the design choice to add structured AI debriefing (Sage) to AI practice: the practice alone is unlikely to produce durable skill improvement without a mechanism to consolidate and reflect on the experience. Also confirms Fisher & Ury's GTY as a central and widely recognized contribution to the field, lending weight to GTY as the theoretical basis for this project's measurement and debrief frameworks.
+
+---
+
+# Category F — Debriefing with Good Judgment (DwGJ) — Core Papers
+
+> These five papers form the theoretical and empirical foundation for Sage's design. Read together, they establish: (1) why DwGJ is theoretically superior to other debriefing approaches, (2) how its core technique works in practice, (3) empirical evidence that it improves outcomes, and (4) where AI fits into the picture. None of these papers is in a negotiation context — this project is the first application of DwGJ outside clinical/counseling simulation.
+
+---
+
+## Rudolph, Simon, Dufresne & Raemer (2006) — "No Such Thing as Nonjudgmental"
+
+**Reference:** Rudolph, J. W., Simon, R., Dufresne, R. L., & Raemer, D. B. (2006). There's no such thing as "nonjudgmental" debriefing: A theory and method for debriefing with good judgment. *Simulation in Healthcare, 1*(1), 49–55.
+
+**Summary:**
+The companion theory paper to Rudolph et al. (2007) — establishes the conceptual argument that DwGJ is built on. The central claim: instructors who claim to be "nonjudgmental" are not actually withholding judgment — they are hiding it. The judgment is always present; the only choice is whether it is disclosed or concealed from the learner. Hidden judgment is harmful: it prevents the learner from understanding what the expert actually observed and thought, while covert critique can come through in tone and body language anyway. The paper introduces the three-element model that became DwGJ's structural backbone: (1) a **conceptual model of frames** — behavior is driven by mental frames (composed of knowledge, assumptions, and feelings) that are largely invisible to the actor; (2) a **stance of curiosity** — the instructor approaches errors as puzzles ("I wonder what they were thinking") rather than failures ("they got it wrong"); (3) the **advocacy-inquiry conversational technique** — the instructor states an explicit observation plus a clinical judgment (advocacy), then asks a genuinely open question to reveal the learner's frame (inquiry). Together these three elements produce honest, expert feedback delivered in a psychologically safe way. The **"frames → actions → results"** causal chain is introduced here: the frame is upstream of the action, and the action is upstream of the result; changing behavior durably requires intervening at the frame level, not just correcting the action.
+
+**Key distinction from other debriefing methods:**
+- *Judgmental*: "You did X wrong. Do Y instead." — honest but damages psychological safety; learner becomes defensive, frame remains unchanged.
+- *Nonjudgmental*: "What did you think about that?" — psychologically safe but expert judgment is hidden; learner receives no diagnostic information; frame remains unchanged.
+- *DwGJ*: "I noticed X. I was thinking Y [advocacy]. What was going through your mind? [inquiry]" — honest AND psychologically safe; learner's frame is surfaced and can be examined.
+
+**Theoretical roots:** Argyris & Schön's reflective practice theory; organizational learning literature on "single-loop" vs. "double-loop" learning. Double-loop learning (changing the underlying assumption, not just the action) is exactly what DwGJ is designed to produce.
+
+**Relevance to This Work:**
+This paper is the theoretical justification for *why* Sage uses advocacy-inquiry rather than open-ended Socratic questioning. Sage's `diagnostic_insight` field ("It appears…") is the advocacy move; Sage's follow-up question is the inquiry move. The frames → actions → results chain is the reason behavioral coding (BQS) at the dimension level is the right measure — if DwGJ works at the frame level, behavioral patterns should shift across rounds, not just outcomes.
+
+**Citation notes:**
+- ✅ Cite for: the advocacy-inquiry technique as the specific mechanism Sage implements.
+- ✅ Cite for: the theoretical argument that nonjudgmental debriefing is a myth — motivates why Sage states a hypothesis rather than asking open questions.
+- ✅ Cite for: frames → actions → results as the causal model behind why behavioral coding (not just outcome score) is the right measure.
+
+---
+
+## Rudolph, Simon, Rivard, Dufresne & Raemer (2007) — DwGJ Foundational
+
+**Reference:** Rudolph, J. W., Simon, R., Rivard, P., Dufresne, R. L., & Raemer, D. B. (2007). Debriefing with Good Judgment: Combining rigorous feedback with genuine inquiry. *Anesthesiology Clinics, 25*(2), 361–376.
+
+> Also summarized in **Category C**. This entry focuses on details most relevant to Sage's design.
+
+**Summary:**
+The primary published description of DwGJ as a complete method, drawing on approximately 2,000 debriefings conducted at the Center for Medical Simulation (Harvard / MGH). Extends the 2006 paper by providing the full three-phase structure and detailed examples of advocacy-inquiry in practice.
+
+**Three-phase structure:**
+1. **Reactions** — open with emotional decompression ("How did that feel?"); allow participants to release tension before analysis begins; instructor listens without judging.
+2. **Analysis** — the core DwGJ phase; instructor acts as a "cognitive detective," identifying which behaviors matter most, forming a hypothesis about the frame driving each behavior, and using advocacy-inquiry to surface and examine those frames with the learner.
+3. **Summary** — learner articulates takeaways; instructor confirms and closes; frames the learning as transferable to future practice.
+
+**The "cognitive detective" stance:**
+The instructor's job is not to dispense verdicts but to form and test hypotheses. The instructor observes a behavior, hypothesizes a frame behind it ("it looks like they were treating this as zero-sum"), and then inquires genuinely — not rhetorically — to test that hypothesis. If the learner's explanation reveals a different frame, the instructor updates. This is fundamentally different from Socratic questioning, which guides toward a predetermined answer. DwGJ inquiry is genuinely open.
+
+**What makes it "good judgment":**
+The paper argues that expert judgment is not the problem — it is essential. The problem is *how* it is delivered. DwGJ makes the judgment explicit and transparent ("I thought X") rather than concealed or coercive, which allows the learner to engage with it intellectually rather than defensively.
+
+**Empirical basis:** 2,000+ debriefs; no controlled experiment in this paper — it is a method description and theoretical paper.
+
+**Relevance to This Work:**
+The three-phase structure maps directly onto Sage's pipeline: Phase A (Reactions) = Sage's opening; Phase B (Analysis) = the key moments discussion using advocacy-inquiry; Phase C (Summary) = the takeaway elicitation. The "cognitive detective" framing is the conceptual basis for Stage 1 (Sonnet generating a DebriefPlan: analyzing the transcript to identify the two most diagnostic moments and forming a hypothesis about the cognitive frame behind each).
+
+---
+
+## Kolbe, Weiss, Grote, Knauth, Dambach, Spahn & Grande (2013) — TeamGAINS
+
+**Reference:** Kolbe, M., Weiss, M., Grote, G., Knauth, A., Dambach, M., Spahn, D. R., & Grande, B. (2013). TeamGAINS: A tool for structured debriefings for simulation-based team trainings. *BMJ Quality & Safety, 22*(7), 541–553. https://doi.org/10.1136/bmjqs-2012-000917
+
+**Summary:**
+Introduces TeamGAINS, a structured debriefing tool designed for interprofessional simulation-based team training. The name encodes its three integrated approaches: **G**uided team self-correction, **A**dvocacy-**I**nquiry (drawn directly from DwGJ), and **S**ystemic-constructivist techniques. The tool operates across six sequential phases and is designed to move between individual-level and team-level reflection, making it richer than a one-on-one debrief. Developed and validated by the research group at ETH Zurich (Kolbe, Grande) — the same group that later produced Tscholl et al. (2026).
+
+**The three integrated approaches:**
+- **Guided team self-correction:** learners identify their own performance gaps before the facilitator intervenes; reduces defensiveness; leverages the team's internal knowledge.
+- **Advocacy-inquiry (from DwGJ):** directly adopts Rudolph et al.'s technique. Facilitator states observation + hypothesis, then asks genuinely. Used when self-correction does not surface the relevant frame, or when the facilitator has a specific clinical concern.
+- **Systemic-constructivist techniques:** zooms out from individual behavior to team dynamics, communication structures, and role relationships; uses circular questions ("How do you think your colleague experienced that moment?") to surface interpersonal frames.
+
+**Why three approaches?** Each approach has limits: self-correction misses blind spots; advocacy-inquiry is facilitator-intensive; systemic questions are time-consuming. The hybrid structure deploys each technique at the right moment.
+
+**Methods and results:**
+- Setting: University Hospital Zurich; anesthesia simulation center
+- Participants: 61 anesthesia staff (senior anesthesiologists, residents, nurses) across 40 debriefing sessions; 235 individual evaluations
+- Outcomes: Debriefing utility rated highly positive; **psychological safety** significantly increased post-training; **leader inclusiveness** significantly increased post-training (both p < .05)
+- Note: No control group; pre-post design; outcome = team climate measures, not clinical skill
+
+**Relevance to This Work:**
+TeamGAINS is the most rigorous empirical study directly testing DwGJ's advocacy-inquiry technique in practice. Its finding that psychological safety and leader inclusiveness increase post-debrief is relevant because psychological safety is a prerequisite for honest self-disclosure — if participants don't feel safe, they won't reveal their real cognitive frames. This supports the design rationale for Sage's "stance of curiosity" opening and its non-judgmental framing of hypotheses ("It appears…" rather than "You should have…"). Also: the integration of advocacy-inquiry with other techniques in TeamGAINS suggests that DwGJ does not need to be applied in isolation — it is a modular technique that can combine with other approaches.
+
+**Citation notes:**
+- ✅ Cite for: empirical evidence that the advocacy-inquiry technique (DwGJ's core move) increases psychological safety and leader inclusiveness in team simulation debriefs.
+- ✅ Cite for: DwGJ as a modular technique that can be integrated into broader structured debriefing tools.
+- ⚠️ No control group — cannot claim "DwGJ outperforms other methods"; cite as "DwGJ-based debriefing produced significant improvements in psychological safety."
+- ⚠️ Full text behind BMJ paywall — verify specific statistical values before citing.
+
+---
+
+## Shao, Cheng, Gu, Yan, Liu, Zhang, Zhang, Yin & Zhang (2025) — Chinese RCT
+
+**Reference:** Shao, W., Cheng, X., Gu, W., Yan, Y., Liu, H., Zhang, J., Zhang, L., Yin, H., & Zhang, M. (2025). A combined approach of simulation-based "debriefing with good judgment" and case-based learning to enhance clinical thinking in Chinese residents. *Frontiers in Public Health.* https://doi.org/10.3389/fpubh.2025.1718961 — PMID: 41716213
+
+**Summary:**
+The most rigorous controlled experiment to date specifically testing DwGJ as a debriefing method. A randomized controlled educational trial (N = 70 residents from six specialties — Internal Medicine, Surgery, OB/GYN, Pediatrics, Emergency Medicine, ICU — at the First Affiliated Hospital of Jinan University, Guangzhou, China, 2023–2024 academic year). Participants were randomly assigned to DwGJ+CBL (n=35) or CBL alone (n=35).
+
+**Intervention design:**
+- **Control group (CBL only):** 40 minutes of supervised hands-on skill practice within clinical case scenarios.
+- **DwGJ group (DwGJ+CBL):** 20 minutes of hands-on practice (same CBL scenarios) followed by a structured DwGJ debriefing session. DwGJ was implemented using the standard three-phase structure: (1) instructor established psychological safety and a "relaxing ambiance"; (2) advocacy-inquiry technique applied to key moments from the simulation; (3) instructor explicitly avoided trying to "fix" learners — genuinely curious inquiry used instead.
+
+**Results:**
+
+| Outcome | CBL Control (n=35) | DwGJ+CBL (n=35) | Significance |
+|---|---|---|---|
+| Theoretical knowledge score | 52.34 ± 18.42 | 64.40 ± 13.22 | p = 0.02 |
+| Practical skill score | 72.32 ± 7.6 | 80.54 ± 7.4 | p < 0.01 |
+| Critical thinking | Lower | Significantly higher | p < .05 |
+| Systematic thinking | Lower | Significantly higher | p < .05 |
+| Evidence-based thinking | Lower | Significantly higher | p < .05 |
+| Course satisfaction | Lower | Significantly higher | p < .05 |
+| Instructor evaluation | No significant difference | — | n.s. |
+
+**Key findings:**
+- DwGJ+CBL produced significantly better performance on both theoretical knowledge (+12 points) and practical skills (+8 points).
+- All three clinical reasoning dimensions (critical, systematic, evidence-based thinking) were significantly higher in the DwGJ group — these are the cognitive competencies DwGJ is designed to develop by surfacing frames.
+- The one non-significant outcome (instructor evaluation) suggests that DwGJ's gains appear in learner performance and reasoning, not in how instructors rate the overall interaction quality.
+
+**Relevance to This Work:**
+The single most important empirical citation for the claim that DwGJ works. Provides RCT-level evidence in a controlled educational setting, with effect sizes large enough to be educationally meaningful. The finding that DwGJ improves all three clinical reasoning dimensions — not just test scores — directly supports the theoretical claim that DwGJ operates at the cognitive frame level: it changes how learners think, not just what they know. The parallel to negotiation is clear: negotiation errors also stem from faulty cognitive frames (zero-sum thinking, positional anchoring, failure to explore interests) — DwGJ is designed to surface and correct exactly these.
+
+**Citation notes:**
+- ✅ Cite for: RCT evidence that DwGJ significantly outperforms standard case-based learning on both knowledge (p=0.02) and practical skill (p<0.01).
+- ✅ Cite for: DwGJ's effect on clinical reasoning dimensions — supports the claim that DwGJ changes cognitive frames, not just surface behavior.
+- ⚠️ Context is clinical residency training, not negotiation — cite with appropriate framing ("DwGJ has demonstrated significant gains in skill-focused simulation training contexts").
+- Full text open access on Frontiers: https://www.frontiersin.org/articles/10.3389/fpubh.2025.1718961/full
+
+---
+
+## Tscholl, Ebensperger, Rahrisch et al. (2026) — Generative AI + TeamGAINS/DwGJ
+
+**Reference:** Tscholl, D. W., Ebensperger, M., Rahrisch, A., Wang, H., Heckel, H., Thomasius, M., Kaserer, A., Grande, B., Seelandt, J. C., & Kolbe, M. (2026). Generative AI in simulation debriefings: An exploratory study using the Team-FIRST framework and qualitative feedback from simulation experts and learners. *Advances in Simulation, 11*, 14. https://doi.org/10.1186/s41077-026-00407-0 — PMC12924402
+
+**Summary:**
+From the same ETH Zurich group that developed TeamGAINS (Kolbe et al., 2013), this is their most recent study exploring how generative AI can support simulation debriefing. 41 anesthesia professionals participated in immersive simulation scenarios at University Hospital Zurich; verbal interactions were transcribed in real time using Isaac AI software, then analyzed by two LLM systems (Isaac + ChatGPT-4o) using the Team-FIRST teamwork framework (10 competencies: leadership, mutual performance monitoring, backup behavior, adaptability, team orientation, shared mental model, mutual trust, closed-loop communication, situation awareness, communication). The AI generated structured teamwork observation reports which were reviewed by 4 simulation experts (26 reports evaluated) and 27 learners were interviewed post-scenario.
+
+**Critical detail — how DwGJ and AI related:**
+The paper explicitly states that all debriefings were conducted "with adherence to the Debriefing with Good Judgment and TeamGAINS approaches" — by **human facilitators**. The AI's role was limited to **transcript analysis and observation report generation**. The AI never conducted the debrief itself. The human facilitator received an AI-generated report and used it as an input to their own DwGJ/TeamGAINS-guided debrief.
+
+**Expert feedback on AI-generated reports:**
+- Valued: broader observation capture (AI caught things humans missed during scenario management); accurate quote selection from transcripts.
+- Flagged: categorization inaccuracies (Team-FIRST codes applied incorrectly); speaker misidentification; lack of nonverbal context (AI only sees speech); reports sometimes felt generic.
+- Both experts and learners emphasized that **human oversight is essential** — AI cannot replace the facilitator's clinical judgment or relational sensitivity.
+
+**Learner feedback:**
+- Optimistic about efficiency and objectivity of AI observation.
+- Raised concerns about transparency (what is the AI doing?), data protection (recording and transcribing everything), and skill erosion (will facilitators lose debriefing skills if they rely on AI reports?).
+
+**Relevance to This Work:**
+This paper represents the current frontier of AI + DwGJ research — and it shows exactly where the gap is. The most sophisticated AI integration in DwGJ debriefing to date still has AI in a supporting role: generating reports for a human facilitator. **Sage takes the next step: AI conducts the debrief directly, using DwGJ's advocacy-inquiry structure autonomously.** This paper also frames the key open question your study addresses: can AI facilitate DwGJ-based reflection without a human facilitator, and if so, does it produce measurable learning gains?
+
+The experts' concern about "categorization inaccuracies" is also relevant: your Stage 1 (Sonnet generating a DebriefPlan) is designed to avoid generic classification by producing a hypothesis-framed `diagnostic_insight` grounded in Getting to Yes principles — a more contextually specific output than a Team-FIRST category code.
+
+**Citation notes:**
+- ✅ Cite for: the most recent AI + DwGJ work — AI-generated observation reports used by human DwGJ facilitators; AI has not yet conducted the debrief itself.
+- ✅ Cite for: experts and learners both noted human oversight as essential — your study tests whether structured DwGJ design (Sage) can substitute for that oversight.
+- ✅ Cite as: establishing that the DwGJ research group (Kolbe et al.) has engaged with AI, but has not yet crossed from AI-assisted to AI-led debriefing.
+- ⚠️ Qualitative/exploratory study — no controlled comparison, no performance outcomes.
+- Full text open access on PMC: https://pmc.ncbi.nlm.nih.gov/articles/PMC12924402/
+
+---
+
+# Category G — Reflection-to-Action Systems
+
+## Kim, Low, Lafond, Shim, Han, Kandil, Zhang, Kitsberg, Boccagno, Liang & Maes (2026) — Breaking Negative Cycles
+
+**Reference:** Kim, M. M., Low, D. M., Lafond, D., Shim, E., Han, M., Kandil, M., Zhang, C., Kitsberg, T., Boccagno, C., Liang, P. P., & Maes, P. (2026). Breaking negative cycles: A reflection-to-action system for adaptive change. In *Proceedings of the 2026 CHI Conference on Human Factors in Computing Systems (CHI '26)*. ACM. https://doi.org/10.1145/3772318.3791615
+
+**Summary:**
+Addresses the gap between reflective awareness and behavior change: most digital well-being tools help people log experiences but not act on them, leaving reflection as rumination rather than growth. The paper designs and evaluates **WhatIf-Planning**, a two-component Reflection-to-Action system grounded in three theoretical frameworks: (1) the **Transtheoretical Model (TTM)**, which targets the *Preparation* stage — the bridge between contemplating change and taking action; (2) **Gross's Emotion Regulation (ER) Process Model** (five regulatory strategies: situation selection, situation modification, attentional deployment, cognitive change, response modulation); and (3) **MCII** (Mental Contrasting + Implementation Intentions), which converts "what-if" reframing into concrete "if-then" action plans.
+
+**System architecture:**
+- **Voice Journaling (mobile):** participants record in-the-moment spoken entries whenever a recurring regret or wish occurs; automatically transcribed and stored
+- **WhatIf-Planning (web):** weekly facilitated sessions in which participants review transcribed entries, generate counterfactual "what-if" alternatives, and convert insights into concrete "if-then" action plans
+
+**Experiment setting:**
+- 15-day in-the-wild study; N = 20 participants (students, staff, and affiliates at Massachusetts institutions); recruited via departmental and dormitory mailing lists; 2-stage screening (general eligibility + pre-survey identifying recurring regrets)
+- 2 conditions: **Free-form** (N=10, single open-ended prompt) vs. **Gross-guided** (N=10, structured prompts aligned to Gross's 5 regulatory strategy families)
+- Both conditions completed identical journaling and WhatIf-Planning tasks — only the prompts differed
+- Timeline: Day 0 onboarding → daily voice journaling (Days 1–15) → weekly WhatIf-Planning sessions via Zoom with trained facilitator (Days 5, 10, 15) → post-study exit interview Day 15
+- Measures: CFS-R (Coping Flexibility Scale–Revised), DERS-SF (Difficulties in Emotion Regulation Scale–Short Form), weekly self-reports, system interaction logs (what-if alternatives and if-then plans generated), semi-structured exit interviews, SUS usability scores
+
+**Key results:**
+1. **Both conditions improved** in overall coping flexibility — significant main Phase effect (*F* = 6.64, *p* = .020, η² = .28); Meta-Coping (metacognitive monitoring and adaptive strategy adjustment) showed the strongest Phase effect (*F* = 7.65, *p* = .013, surviving Holm correction)
+2. **Gross-guided produced substantially more planning output** — generated ~2× more weekly action plans (M = 6.53 vs. 3.33; *g* = 1.62), identified significantly more obstacles (*g* = 1.71), produced more counterfactual what-if alternatives (*g* = 0.99); all *p* < 10⁻⁹ — large effect sizes
+3. **Gross-guided: medium-to-large trends** on Nonacceptance (*g* = 0.73) and Goals (*g* = 0.60) DERS subscales — reduced self-critical responses and goal-disrupting regulatory barriers
+4. **Free-form: medium trend** on Emotional Awareness (*g* = −0.54) — open-ended reflection supports emotional attunement; structured prompts support metacognition and strategy generation
+5. **No significant between-condition differences** on primary outcomes — underpowered pilot (N=20); effect sizes medium-large but CIs overlap; between-condition Holm-corrected *p* > .12 for all CFS-R outcomes
+6. **SUS = 74.8** (above the 68 acceptable benchmark); no usability difference between conditions — structured prompts added no cognitive friction
+7. Qualitative: Gross-guided participants described systematic reasoning and perspective-taking ("It forced me to stop blaming myself and think about other ways I could've handled it"); Free-form participants reported stagnation ("I often repeated myself... I wasn't moving forward")
+
+**Conclusion:** Structured (theory-grounded) reflection shapes *how* people regulate — favoring metacognitive appraisal and strategy generation — while free-form reflection favors emotional attunement and disclosure. Structured guidance increases plan enactment without increasing reflection time or user burden. The paper explicitly calls for an **AI-augmented condition** in future work: *"we are planning a larger-scale study incorporating an AI-augmented condition to examine whether AI support can help users expand alternatives, obstacles, and action plans beyond self-generated input."*
+
+**Relevance to This Work:**
+
+**1. Empirical support for Group A > Group B hypothesis.** Your Group B (static written prompts) maps almost directly to Kim et al.'s Free-form condition — unstructured, self-guided reflection. Your Group A (Sage + DwGJ) maps to the Gross-guided condition and then goes further: the structure is not static prompts but an *adaptive AI conversation* that responds to the participant's reasoning in real time. Kim et al.'s finding that structured guidance produces 2× more action plans and larger behavioral follow-through is direct empirical precedent. Cite in Discussion when interpreting your results.
+
+**2. Positions the debrief as a necessary component, not an optional add-on.** The paper demonstrates that unstructured reflection tends toward rumination rather than change. This supports the design rationale for Sage: the debrief mechanism is what converts practice experience into transferable skill. Cite in Introduction or Motivation.
+
+**3. This project answers the call they leave open.** Kim et al. flag AI augmentation as their explicit next step. Sage is exactly that: an AI that conducts the structured, theory-grounded reflection conversation autonomously — no facilitator required, grounded in DwGJ rather than Gross's ER model, in the negotiation domain rather than personal habit change.
+
+**4. Key domain difference.** Kim et al. target emotion regulation and recurring personal regrets over 15 days of lived experience. This project targets negotiation skill over a single controlled practice session. The mechanisms are analogous (structured reflection → behavior change) but the timescale, domain, and outcome measures are different. Do not directly compare effect sizes — use Kim et al. to motivate the theoretical argument, not as a numerical benchmark.
+
+**Citation notes:**
+- ✅ Cite for: empirical evidence that structured, theory-grounded reflection produces significantly more action planning and behavioral follow-through than free-form reflection — CHI '26 RCT-level evidence
+- ✅ Cite for: the reflection-to-action gap as a central HCI challenge — positions this project within a current CHI research theme
+- ✅ Cite in Discussion: "consistent with Kim et al. (2026), who found that structured reflection substantially increased plan enactment relative to free-form reflection…"
+- ✅ Cite for: the paper's explicit call for AI augmentation — positions this project as a direct response
+- ⚠️ Do NOT use their effect sizes as expected benchmarks for your study — different domain, timescale, and outcome measures
+- ⚠️ N=20 pilot — between-condition differences non-significant on primary outcomes; cite effect sizes with appropriate hedging ("medium-to-large trends favoring structured reflection")
 
 ---
 

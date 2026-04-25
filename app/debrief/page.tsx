@@ -11,6 +11,7 @@ import { DebriefPlan } from "@/lib/debriefPrompt";
 import { buildDebriefText, downloadDebrief } from "@/lib/debriefExport";
 import DebriefUpload from "@/components/DebriefUpload";
 import UserMenu from "@/components/UserMenu";
+import { isExperiment } from "@/lib/appMode";
 
 export const DEBRIEF_PENDING_KEY = "debrief_pending";
 export const DEBRIEF_SESSION_KEY = "debrief_session_id";
@@ -47,6 +48,21 @@ export default function DebriefPage() {
   const [assessmentRetryUsed, setAssessmentRetryUsed] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [summaryRegenerating, setSummaryRegenerating] = useState(false);
+
+  // Experiment mode: redirect away if the debrief step is already completed (back-button guard).
+  useEffect(() => {
+    if (!isExperiment) return;
+    fetch("/api/experiment/state")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        // Shouldn't be here if Round 1 survey not done yet.
+        if (!data.steps_done?.s2_efficacy) { window.location.replace("/"); return; }
+        // Shouldn't be here if debrief is already completed.
+        if (data.steps_done?.debrief_complete) { window.location.replace("/"); }
+      })
+      .catch(() => {});
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // On mount: check for a pending transcript (new debrief) or an active session (page refresh).
   useEffect(() => {
@@ -466,11 +482,24 @@ export default function DebriefPage() {
               assessmentRetryUsed={assessmentRetryUsed}
               endedByUser={endedByUser}
               summaryRegenerating={summaryRegenerating}
+              isExperiment={isExperiment}
               onRevealAssessment={handleRevealAssessment}
               onRetryAssessment={handleRetryAssessment}
               onRegenerateSummary={handleRegenerateSummary}
               onDownload={handleDownload}
               onBack={handleBack}
+              onContinue={async () => {
+                const runId = transcript?.run_id;
+                // Stamp the exact debrief_id so the /assessment page can fetch this
+                // specific report later — avoids ambiguity if multiple sessions exist.
+                if (debriefId) localStorage.setItem("experiment_debrief_id", debriefId);
+                await fetch("/api/experiment/state", {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ steps_done: { debrief_complete: true } }),
+                }).catch(() => {});
+                window.location.replace(`/survey?type=s3_debrief${runId ? `&run_id=${runId}` : ""}`);
+              }}
             />
           </div>
           {/* Right — original transcript */}
@@ -550,15 +579,17 @@ export default function DebriefPage() {
                       <p className="mb-3 text-xs text-red-600">{summaryError}</p>
                     )}
                     <div className="flex flex-wrap gap-3">
+                      {!isExperiment && (
+                        <button
+                          onClick={handleManualEnd}
+                          disabled={isLoading}
+                          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
+                        >
+                          {isLoading ? "Preparing…" : summaryError ? "Try Again" : "View Report"}
+                        </button>
+                      )}
                       <button
-                        onClick={handleManualEnd}
-                        disabled={isLoading}
-                        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
-                      >
-                        {isLoading ? "Preparing…" : summaryError ? "Try Again" : "View Report"}
-                      </button>
-                      <button
-                        onClick={() => setShowExitConfirm(true)}
+                        onClick={() => isExperiment ? handleManualEnd() : setShowExitConfirm(true)}
                         className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
                       >
                         End Session

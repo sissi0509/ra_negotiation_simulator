@@ -18,7 +18,7 @@ const SESSION_COMPLETE_MARKER = "--- Session Complete ---";
  */
 function splitSentences(text: string): string {
   const sentences = text
-    .split(/(?<=[.!?])\s+/)
+    .split(/(?<=[.!?])\s+(?=[A-Z"'])/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
   return sentences.length > 1 ? sentences.join("\n[BREAK]\n") : text;

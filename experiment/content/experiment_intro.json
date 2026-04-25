@@ -1,0 +1,137 @@
+{
+  "id": "experiment_intro",
+  "title": "Welcome to the Study",
+  "subtitle": "Here's what you'll do. Please read carefully before continuing.",
+  "badge": "Research Study",
+  "consent_text": "I understand this is a research study and agree to participate.",
+  "cta": "Begin",
+  "note": "Shown once, after login, before the pre-survey (S1). Consent checkbox required on first visit; skipped if consent_given is already true.",
+  "steps_by_condition": {
+    "ai_debrief": [
+      {
+        "label": "Pre-study survey",
+        "detail": "A few quick questions about your negotiation background and confidence."
+      },
+      {
+        "label": "Read a short negotiation guide",
+        "detail": "A brief introduction to five key principles for effective negotiation."
+      },
+      {
+        "label": "Negotiate (Round 1)",
+        "detail": "A text-based conversation with an AI counterpart in an assigned scenario."
+      },
+      {
+        "label": "Quick check-in survey",
+        "detail": "A quick check-in about how you felt during the negotiation."
+      },
+      {
+        "label": "AI debrief with Sage",
+        "detail": "An AI coach will guide you through key moments from your negotiation."
+      },
+      {
+        "label": "Reflection survey",
+        "detail": "A few questions about how the debrief helped you."
+      },
+      {
+        "label": "Negotiate (Round 2)",
+        "detail": "A second negotiation scenario to apply what you learned."
+      },
+      {
+        "label": "Self-efficacy check",
+        "detail": "A few questions about how you felt during the second negotiation."
+      },
+      {
+        "label": "Learning reflection",
+        "detail": "Questions about what you learned and how your approach changed."
+      },
+      {
+        "label": "Your AI assessment",
+        "detail": "An AI assessment of your Round 1 negotiation is released here."
+      },
+      {
+        "label": "Final experience survey",
+        "detail": "A few questions about your overall experience in this study."
+      }
+    ],
+    "static_reflection": [
+      {
+        "label": "Pre-study survey",
+        "detail": "A few quick questions about your negotiation background and confidence."
+      },
+      {
+        "label": "Read a short negotiation guide",
+        "detail": "A brief introduction to five key principles for effective negotiation."
+      },
+      {
+        "label": "Negotiate (Round 1)",
+        "detail": "A text-based conversation with an AI counterpart in an assigned scenario."
+      },
+      {
+        "label": "Quick check-in survey",
+        "detail": "A quick check-in about how you felt during the negotiation."
+      },
+      {
+        "label": "Written reflection",
+        "detail": "Review your transcript and respond to five short prompts about your approach."
+      },
+      {
+        "label": "Reflection survey",
+        "detail": "A few questions about how the reflection activity helped you."
+      },
+      {
+        "label": "Negotiate (Round 2)",
+        "detail": "A second negotiation scenario to apply what you learned."
+      },
+      {
+        "label": "Self-efficacy check",
+        "detail": "A few questions about how you felt during the second negotiation."
+      },
+      {
+        "label": "Learning reflection",
+        "detail": "Questions about what you learned and how your approach changed."
+      },
+      {
+        "label": "Your AI assessment",
+        "detail": "An AI assessment of your Round 1 negotiation is released here."
+      },
+      {
+        "label": "Final experience survey",
+        "detail": "A few questions about your overall experience in this study."
+      }
+    ],
+    "control": [
+      {
+        "label": "Pre-study survey",
+        "detail": "A few quick questions about your negotiation background and confidence."
+      },
+      {
+        "label": "Read a short negotiation guide",
+        "detail": "A brief introduction to five key principles for effective negotiation."
+      },
+      {
+        "label": "Negotiate (Round 1)",
+        "detail": "A text-based conversation with an AI counterpart in an assigned scenario."
+      },
+      {
+        "label": "Quick check-in survey",
+        "detail": "A quick check-in about how you felt during the negotiation."
+      },
+      {
+        "label": "Negotiate (Round 2)",
+        "detail": "A second negotiation scenario."
+      },
+      {
+        "label": "Self-efficacy check",
+        "detail": "A few questions about how you felt during the second negotiation."
+      },
+      {
+        "label": "Your AI assessment",
+        "detail": "An AI assessment of your Round 1 negotiation is released here."
+      },
+      {
+        "label": "Final experience survey",
+        "detail": "A few questions about your overall experience in this study."
+      }
+    ]
+  }
+}

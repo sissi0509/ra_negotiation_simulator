@@ -1,0 +1,14 @@
+{
+  "id": "s1_baseline",
+  "survey_key": "pre",
+  "title": "Pre-Study Survey",
+  "subtitle": "Before you start, please answer a few questions about your negotiation experience.",
+  "scale": { "min": 1, "max": 7, "minLabel": "Strongly Disagree", "maxLabel": "Strongly Agree" },
+  "questions": [
+    { "id": "q1", "text": "I feel confident in my negotiation skills." },
+    { "id": "q2", "text": "I am aware of my strengths in negotiation." },
+    { "id": "q3", "text": "I am aware of my weaknesses in negotiation." },
+    { "id": "q4", "text": "I know how to improve my negotiation performance." }
+  ],
+  "note": "⚠️ Content pending professor confirmation. Currently from experiment_design.md."
+}

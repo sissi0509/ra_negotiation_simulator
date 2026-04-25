@@ -4,6 +4,7 @@ import { Transcript } from "@/lib/transcript";
 import { DebriefStoredMessage } from "@/lib/debriefSessionStore";
 import { callClaude } from "@/lib/callClaude";
 import { getDb } from "@/lib/mongodb";
+import { COLLECTIONS } from "@/lib/dbCollections";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
   // Save to DB best-effort — do not let a DB failure block the response.
   try {
     const db = await getDb();
-    await db.collection("debriefs").updateOne(
+    await db.collection(COLLECTIONS.debriefs).updateOne(
       { debrief_id },
       { $set: { assessment, assessment_generated_at: new Date() } },
       { upsert: true }

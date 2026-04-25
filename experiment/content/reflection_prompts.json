@@ -1,0 +1,35 @@
+{
+  "id": "reflection_prompts",
+  "title": "Reflect on Your Negotiation",
+  "subtitle": "Take a few minutes to review your transcript and answer the following questions. There are no right or wrong answers.",
+  "instruction": "Read through your conversation transcript on the left, then respond to each prompt below.",
+  "prompts": [
+    {
+      "id": "p1",
+      "question": "Identify one moment where your response could have been better.",
+      "placeholder": "Describe the moment (e.g., when you said X, or when the counterpart said Y)..."
+    },
+    {
+      "id": "p2",
+      "question": "What did you do in that moment?",
+      "placeholder": "Describe what you said or did..."
+    },
+    {
+      "id": "p3",
+      "question": "Why do you think it did not go well?",
+      "placeholder": "What were you thinking at that point? Why did you respond that way?..."
+    },
+    {
+      "id": "p4",
+      "question": "What would you do differently next time?",
+      "placeholder": "If you could replay that moment, what would you say or do instead?..."
+    },
+    {
+      "id": "p5",
+      "question": "What is one takeaway for future negotiations?",
+      "placeholder": "What is one thing you will try to do differently in your next negotiation?..."
+    }
+  ],
+  "cta": "Submit reflection",
+  "note": "⚠️ Group B only. Content from experiment_design.md — not yet confirmed by professor."
+}

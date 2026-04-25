@@ -1,6 +1,6 @@
 # Experiment Design — AI Negotiation Training System
 
-**Version:** 2.0 (revised with related work context)
+**Version:** 2.1 (survey instrument finalized)
 **Status:** Infrastructure complete; experiment not yet run
 
 ---
@@ -50,8 +50,8 @@ This creates a **2 (scenario order) × 3 (condition)** design with 6 sub-conditi
 ### Fixed Settings Across All Groups
 
 - **AI personality:** `aggressive` for all groups and all rounds. Rationale: holds AI counterpart behavior constant so any behavioral change is attributable to the participant; aggressive personality creates the most diagnostic variance in behavioral codes.
-- **Standardized user context:** each participant receives a shared backstory before each round (e.g., "Your current salary is $72k. You have received a competing offer at $88k.") so all participants within a scenario start from the same position.
-- **Hidden Zone of Possible Agreement (ZOPA):** the AI counterpart is given a secret target range in its prompt (e.g., salary ceiling $105k, floor $90k). The participant does not know this range. The final agreed number is used to compute the outcome score.
+- **Standardized user context:** each participant receives a shared scenario description before each round. Full text is in `experiment/content/scenario_contexts.json`. The context describes the participant's alternative option (BATNA) in detail but withholds the AI's opening offer — that is revealed at the start of the conversation.
+- **Hidden Zone of Possible Agreement (ZOPA):** the AI counterpart is given a secret range in its prompt (salary: floor $90k, ceiling $103k; apartment: floor $2,000/mo, ceiling $2,200/mo). The participant does not know this range. The outcome score is computed on the primary item only (base salary / monthly rent). Secondary package items are tracked separately.
 
 ---
 
@@ -60,27 +60,27 @@ This creates a **2 (scenario order) × 3 (condition)** design with 6 sub-conditi
 High-level sequence for all participants:
 
 ```
-Pre-Survey (baseline)
+S1 — Pre-Survey (baseline, all groups)
     ↓
 Getting to Yes Introduction (all groups)
     ↓
 Round 1 Negotiation
     ↓
-Post-Round-1 Self-Efficacy Survey  ⚠️ [not yet implemented]
+S2 — Post-Round-1 Survey: self-efficacy + insight (all groups, BEFORE debrief)
     ↓
 Debrief Intervention  (Group A: Sage / Group B: written prompts / Group C: none)
     ↓
-Post-Debrief Survey
+S3 — Post-Reflection Survey: insight + readiness (Groups A and B only)
     ↓
 Round 2 Negotiation
     ↓
-Post-Round-2 Self-Efficacy Survey  ⚠️ [not yet implemented]
+S4 — Post-Round-2 Survey: self-efficacy + insight (all groups, identical to S2)
     ↓
-Post-Round-2 Survey
+S5 — Perceived Transfer Survey (all groups)
     ↓
-AI Assessment Released (both rounds)
+AI Assessment Released — Round 1 only (all groups)
     ↓
-Final Experience Survey
+S6 — Final Experience Survey (all groups)
 ```
 
 ---
@@ -105,9 +105,11 @@ Questions (1–7 Likert):
 
 ---
 
-### Step 3 — Getting to Yes Introduction (All Groups) ⚠️ *(not yet implemented)*
+### Step 3 — Getting to Yes Introduction (All Groups)
 
 Before starting the first negotiation, all participants read a brief introduction to the five Getting to Yes principles (Fisher, Ury & Patton, 1981). This gives everyone a common theoretical baseline to work from during practice and ensures the debrief can refer to these principles without them being unfamiliar.
+
+> Content is in `experiment/content/gty_intro.json`. Page not yet built — `app/gty-intro/page.tsx` is a pending implementation item.
 
 The five principles presented to participants:
 1. **Separate the people from the problem** — address relationship and substance separately; avoid personal attacks
@@ -122,10 +124,12 @@ All three groups see this introduction equally — it is a constant across condi
 
 ### Step 4 — Round 1 Negotiation
 
-Before the negotiation starts, the participant receives a standardized scenario description that explains their role, the context, and their starting position. For example ⚠️ *(scenario prompts not yet finalized)*:
+Before the negotiation starts, the participant receives a standardized scenario description. The context gives full details about their alternative option (BATNA) but withholds the AI counterpart's opening offer — that is revealed at the start of the conversation. Full context text is in `experiment/content/scenario_contexts.json`.
 
-- **Salary scenario:** "You are negotiating your salary for a new job offer. Your current salary is $72k. You have received a competing offer at $88k. You would like to negotiate the best possible offer from this employer."
-- **Apartment rent scenario:** "You are negotiating rent for an apartment you want to move into. The landlord has proposed $2,100/month. You are currently paying $1,800/month elsewhere and would like to secure the best possible rate."
+- **Salary scenario:** Participant is a new graduate choosing between two job offers. Their alternative (Company B) offers $88k base, 20 days PTO, hybrid work, and a flexible start date. They negotiate with Company A's HR manager, whose opening package is revealed at the start of the conversation. The negotiation covers base salary, start date, PTO, signing bonus, equity, and relocation — only some of which are proactively offered.
+- **Apartment rent scenario:** Participant has just moved to a new city and is choosing between two apartments. Their alternative (Apartment B) is $1,950/month with heat and water included (~$1,990/month effective). They negotiate with the landlord of Apartment A, whose opening terms are revealed at the start of the conversation. The negotiation covers monthly rent, lease length, utilities, parking, and move-in terms.
+
+Both scenarios are designed as multi-issue packages so that all five Getting to Yes dimensions (D1–D5) can meaningfully fire during behavioral coding. The AI counterpart's opening position is anchored above their true flexibility, and secondary items (signing bonus, utilities, etc.) are not volunteered — the participant must ask or propose them.
 
 This standardized context ensures all participants within a scenario start from the same position, making outcomes comparable across groups.
 
@@ -133,23 +137,28 @@ The participant then negotiates with the AI counterpart in a text-based chat. Th
 
 The AI counterpart:
 - Uses the `aggressive` personality
-- Operates within the hidden Zone of Possible Agreement range
+- Operates within the hidden Zone of Possible Agreement range (base salary $90k–$103k; monthly rent $2,000–$2,200)
 - Receives a standardized role prompt so behavior is consistent across participants
+- Outcome score is computed on the primary item only (base salary / monthly rent); secondary package items are tracked separately as "unlocked items" by the AI coder
 
 ---
 
-### Step 5 — Post-Round-1 Self-Efficacy Survey ⚠️ *(not yet implemented — all groups)*
+### Step 5 — Post-Round-1 Survey (S2) *(all groups)*
 
-Received by all three groups immediately after Round 1 ends, **before** any debrief activity begins.
+Received by all three groups immediately after Round 1 ends, **before** any debrief activity begins. Timing is critical — this must fire before any reflection to avoid inflating scores.
 
-Purpose: capture perceived confidence and performance before reflection, so the debrief cannot inflate post-round ratings.
+Two subscales, analyzed separately:
 
-Questions (1–7 Likert):
-1. How confident do you feel in your ability to negotiate effectively?
-2. How well do you think you performed in this negotiation?
-3. How prepared did you feel going into this negotiation?
+**Subscale A — Self-Efficacy (1–7 Likert):**
+1. I feel confident in my ability to negotiate effectively.
+2. I believe I could handle a similar negotiation successfully.
 
-> ⚠️ Timing is critical. The current post-round-1 survey fires after the debrief — a new pre-debrief trigger is needed before running the study.
+**Subscale B — Negotiation Insight (1–7 Likert):**
+3. I have a clear understanding of what I did well in this negotiation.
+4. I understand what I should do differently next time.
+5. I understand why I got the outcome I did.
+
+> The S2 → S4 delta on each subscale is the primary self-report dependent variable. See `metric_papers/survey_instrument.md` for full rationale and references.
 
 ---
 
@@ -181,16 +190,17 @@ No reflection activity. Proceeds directly to Round 2.
 
 ---
 
-### Step 7 — Post-Debrief Survey *(Groups A and B only)* ⚠️ *(not yet implemented)*
+### Step 7 — Post-Reflection Survey (S3) *(Groups A and B only)*
 
-Captures the immediate impact of the reflection activity. Group C skips this step and proceeds directly to Round 2.
+Captures the immediate impact of the reflection activity. Group C skips this step and proceeds directly to Round 2. Survey subtitle is group-specific: Group A sees "your conversation with Sage", Group B sees "the written reflection you just completed."
 
 Questions (1–7 Likert):
-1. I understand my performance more clearly
-2. I understand what I should improve next time
-3. I can identify key moments that affected the negotiation
-4. I feel more prepared for a similar negotiation
-5. The reflection activity helped me think deeply
+1. I understand my negotiation performance more clearly now.
+2. I understand what I should improve next time.
+3. I can identify key moments that affected the negotiation.
+4. I feel more prepared for a similar negotiation.
+
+> Q1–Q2 measure insight (primary comparison: Group A vs. Group B). Q3–Q4 are secondary face-valid items.
 
 ---
 
@@ -202,27 +212,40 @@ Round 2 measures whether learning from the debrief transfers to a new negotiatio
 
 ---
 
-### Step 9 — Post-Round-2 Self-Efficacy Survey ⚠️ *(not yet implemented)*
+### Step 9 — Post-Round-2 Survey (S4) *(all groups)*
 
-Same three self-efficacy questions as Step 5, captured after Round 2 ends.
+Identical items to Step 5 (S2). Captured immediately after Round 2 ends, **before** S5. The S4 − S2 delta on each subscale is the primary self-report dependent variable.
+
+**Subscale A — Self-Efficacy (1–7 Likert):**
+1. I feel confident in my ability to negotiate effectively.
+2. I believe I could handle a similar negotiation successfully.
+
+**Subscale B — Negotiation Insight (1–7 Likert):**
+3. I have a clear understanding of what I did well in this negotiation.
+4. I understand what I should do differently next time.
+5. I understand why I got the outcome I did.
+
+> ⚠️ Do not change S4 questions independently of S2. Both must stay in sync.
 
 ---
 
-### Step 10 — Post-Round-2 Survey *(Groups A and B only)* ⚠️ *(not yet implemented)*
+### Step 10 — Post-Round-2 Perceived Transfer Survey (S5) *(all groups)*
 
-Captures perceived improvement after completing both rounds. Group C skips this step.
+Captures perceived improvement after completing both rounds. All three groups receive this survey — Group C's responses serve as a no-intervention transfer baseline.
 
 Questions (1–7 Likert):
-1. I felt more confident in the second negotiation
-2. I applied what I learned from the first round
-3. I had a clearer strategy in the second negotiation
-4. I handled the second negotiation more effectively
+1. I felt more confident in the second negotiation than the first.
+2. I applied what I learned from the first round.
+3. I had a clearer strategy in the second negotiation.
+4. I handled the second negotiation more effectively.
 
 ---
 
 ### Step 11 — AI Assessment Released *(all groups)*
 
-After all behavioral measurements are complete, all participants receive their AI assessment report for both rounds. This report was auto-generated at the end of each negotiation session but withheld until this point to avoid influencing Round 2 behavior.
+After all behavioral measurements are complete, all participants receive an AI-generated assessment of their **Round 1** negotiation. Group A's assessment is based on the Sage debrief conversation; Groups B and C receive a transcript-only assessment generated from the same final assessment protocol. The assessment was generated earlier but withheld until this point to avoid influencing Round 2 behavior.
+
+> This is a product feature — not a research dependent variable. It is shown to all participants as a useful closing experience.
 
 ---
 
@@ -253,14 +276,15 @@ Group C receives only the shared core questions.
 
 ### What Data Is Collected
 
-| Source | Data |
-|---|---|
-| Round 1 & 2 transcripts | Full conversation text, final agreed deal value |
-| Pre-survey | Baseline self-awareness and confidence (4 items) |
-| Post-round self-efficacy surveys | Perceived confidence and performance before each debrief (3 items × 2 rounds) |
-| Post-debrief survey | Immediate reflection impact (5 items) |
-| Post-round-2 survey | Perceived improvement (4 items) |
-| Final experience survey | System usability and trust (5 items) |
+| Source | Data | Groups |
+|---|---|---|
+| Round 1 & 2 transcripts | Full conversation text, final agreed deal value | All |
+| S1 — Baseline survey | Self-efficacy (1 item) + self-knowledge (3 items) | All |
+| S2 — Post-Round-1 survey | Self-efficacy (2 items) + insight (3 items) | All |
+| S3 — Post-reflection survey | Insight (2 items) + custom (2 items) | A and B only |
+| S4 — Post-Round-2 survey | Self-efficacy (2 items) + insight (3 items) — identical to S2 | All |
+| S5 — Perceived transfer survey | Subjective improvement (4 items) | All |
+| S6 — Final experience survey | System experience (4–7 items) | All |
 
 ---
 
@@ -312,10 +336,16 @@ The outcome score and the behavioral dimension ratios are collected as separate 
 
 ### Survey Analysis
 
-Survey measures track three constructs:
-- **Self-awareness:** pre-survey → post-debrief → post-round-2 change in perceived clarity of strengths/weaknesses
-- **Self-efficacy:** post-round-1 → post-round-2 delta in perceived confidence (pre-debrief timing)
-- **System experience:** final survey ratings of usefulness and trust
+Two primary self-report deltas, both computed as S4 − S2:
+- **Self-efficacy delta** (S4 Q1–Q2 mean − S2 Q1–Q2 mean) — did participants get more confident? Grounded in Bandura (1977) and Rigotti et al. (2008) OSS-6.
+- **Insight delta** (S4 Q3–Q5 mean − S2 Q3–Q5 mean) — did participants develop clearer understanding of their performance? Grounded in Grant et al. (2002) SRIS-IN.
+
+Secondary measures:
+- **S3 insight score** (Q1–Q2 mean) — immediate reflection impact; compare Group A vs. Group B only
+- **S5 perceived transfer** (Q1–Q4 mean) — subjective improvement across rounds; compare all three groups
+- **S1** used as baseline covariate (Q1 = baseline self-efficacy; Q2–Q4 = baseline self-knowledge)
+
+See `metric_papers/survey_instrument.md` for full item list, construct definitions, and references.
 
 ---
 
@@ -348,9 +378,8 @@ Recruitment: Northeastern University students.
 
 **Measurement:**
    1. Can the researcher serve as the human validator for the behavioral coding reliability spot-check, or is a blind second coder required?
-   2. Should the survey questions be grounded in established scales from the literature (e.g., validated self-efficacy or self-awareness instruments)? If so, which ones are appropriate for this context? And who will be responsible for manually reviewing or validating survey responses?
+   2. S2/S4 use 2 self-efficacy items (adapted from OSS-6) and 3 insight items (adapted from SRIS-IN). Is this sufficient, or should the full OSS-6 (6 items) be adopted for stronger psychometric validity?
+   3. S5 is now administered to all three groups (Group C as no-intervention baseline). Confirm this is appropriate.
 
-
-**Pending implementation:**
-   1. Pre-debrief self-efficacy survey (both rounds) — confirm timing and build before running the study.
-   2. Separate experiment transcripts and experiment debriefs database collections — agreed schema, not yet wired into the API routes.
+**Survey instrument:**
+   Full item list, construct definitions, references, and analysis plan are in `metric_papers/survey_instrument.md`.

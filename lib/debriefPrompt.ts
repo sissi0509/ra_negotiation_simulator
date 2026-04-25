@@ -154,6 +154,25 @@ End with one short sentence noting the session was not completed.`;
   return { system, userMessage };
 }
 
+// ── Stage 3a: Transcript-only assessment (Groups B & C — no debrief) ─────────
+// Uses the same protocol file but without debrief conversation or plan context.
+
+export function buildTranscriptOnlyAssessmentPrompt(transcript: Transcript): string {
+  const protocol = loadPromptFile("final_assessment_protocol.md");
+  const formattedTranscript = formatTranscript(transcript);
+
+  return `[FINAL ASSESSMENT PROTOCOL]
+${protocol}
+
+---
+
+[NEGOTIATION TRANSCRIPT]
+${formattedTranscript}
+
+[CONTEXT]
+This participant did not complete a guided debrief session. There is no debrief conversation, pre-assessment plan, or session summary available. Base your assessment solely on the negotiation transcript above. Do not mention the absence of a debrief in your response — write the assessment as if the transcript is the only input.`;
+}
+
 // ── Stage 3: Assessment prompt ───────────────────────────────────────────────
 
 export function buildAssessmentPrompt(

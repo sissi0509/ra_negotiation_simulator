@@ -1,0 +1,30 @@
+{
+  "id": "s6_experience",
+  "survey_key": "final",
+  "title": "Final Survey",
+  "subtitle": "Thank you for completing the study. Please answer a few final questions about your experience.",
+  "scale": { "min": 1, "max": 7, "minLabel": "Strongly Disagree", "maxLabel": "Strongly Agree" },
+  "questions_all_groups": [
+    { "id": "q1", "text": "I found the negotiation practice useful." },
+    { "id": "q2", "text": "I would use this system again." },
+    { "id": "q3", "text": "I found the experience engaging." },
+    { "id": "q4", "text": "I trust the feedback provided by the system." }
+  ],
+  "questions_by_condition": {
+    "ai_debrief": [
+      { "id": "q5", "text": "The AI-guided debrief helped me understand my performance." },
+      { "id": "q6", "text": "The debrief conversation felt natural." },
+      { "id": "q7", "text": "I felt comfortable sharing my reasoning during the debrief." },
+      { "id": "suggestions", "text": "Do you have any suggestions for improving this training system?", "type": "text", "optional": true }
+    ],
+    "static_reflection": [
+      { "id": "q5", "text": "The written reflection prompts helped me think about my performance." },
+      { "id": "q6", "text": "The transcript was useful for reflection." },
+      { "id": "suggestions", "text": "Do you have any suggestions for improving this training system?", "type": "text", "optional": true }
+    ],
+    "control": [
+      { "id": "suggestions", "text": "Do you have any suggestions for improving this training system?", "type": "text", "optional": true }
+    ]
+  },
+  "note": "⚠️ Content pending professor confirmation. All items are custom face-valid questions — this is a product feature survey, not a research DV."
+}

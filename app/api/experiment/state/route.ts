@@ -32,13 +32,20 @@ export async function GET() {
 //   consent_given       boolean
 //   started_at          ISO string (set once on first begin)
 //   completed_at        ISO string
-//   surveys_done.pre    boolean
-//   surveys_done.post_r1  boolean
-//   surveys_done.post_r2  boolean
-//   surveys_done.final  boolean
+//   steps_done.pre                boolean
+//   steps_done.gty_intro          boolean
+//   steps_done.s2_efficacy        boolean
+//   steps_done.s3_debrief         boolean
+//   steps_done.s4_efficacy        boolean
+//   steps_done.s5_improvement     boolean
+//   steps_done.final              boolean
+//   steps_done.round1_complete    boolean
+//   steps_done.debrief_complete   boolean
+//   steps_done.reflection_complete boolean
+//   steps_done.round2_complete    boolean
 //
-// Pass only the fields you want to change. Dot-notation keys for surveys_done are
-// expanded server-side — send { surveys_done: { pre: true } } not the dot path.
+// Pass only the fields you want to change. Dot-notation keys for steps_done are
+// expanded server-side — send { steps_done: { pre: true } } not the dot path.
 export async function PATCH(req: Request) {
   const session = await auth();
   if (!session?.user?.email) {
@@ -54,12 +61,15 @@ export async function PATCH(req: Request) {
     if (key in body) $set[key] = body[key];
   }
 
-  // surveys_done — accept as a nested object, expand to dot-notation for MongoDB
-  if (body.surveys_done && typeof body.surveys_done === "object") {
-    const SURVEY_KEYS = ["pre", "post_r1", "post_r2", "final"] as const;
-    for (const key of SURVEY_KEYS) {
-      if (key in body.surveys_done) {
-        $set[`surveys_done.${key}`] = body.surveys_done[key];
+  // steps_done — accept as a nested object, expand to dot-notation for MongoDB
+  if (body.steps_done && typeof body.steps_done === "object") {
+    const STEP_KEYS = [
+      "pre", "gty_intro", "s2_efficacy", "s3_debrief", "s4_efficacy", "s5_improvement", "final",
+      "round1_complete", "debrief_complete", "reflection_complete", "round2_complete",
+    ] as const;
+    for (const key of STEP_KEYS) {
+      if (key in body.steps_done) {
+        $set[`steps_done.${key}`] = body.steps_done[key];
       }
     }
   }

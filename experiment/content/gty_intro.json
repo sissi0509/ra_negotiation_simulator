@@ -1,0 +1,34 @@
+{
+  "id": "gty_intro",
+  "title": "Before You Begin",
+  "subtitle": "You are about to take part in a negotiation exercise.",
+  "body": "Below are five principles that research has shown lead to better outcomes in negotiation. Read them carefully and try to apply them during your practice.",
+  "principles": [
+    {
+      "number": 1,
+      "title": "Separate the people from the problem",
+      "description": "Keep the relationship separate from the substance. Try to understand the other side's perspective, acknowledge their emotions, and listen carefully. Attacking the person makes agreement harder, even if you win the argument."
+    },
+    {
+      "number": 2,
+      "title": "Focus on interests, not positions",
+      "description": "Try to understand why each side wants what they want — not just what they are asking for. The reasons behind a demand often reveal room for agreement."
+    },
+    {
+      "number": 3,
+      "title": "Invent options for mutual gain",
+      "description": "Look for creative solutions that could expand value for both sides before deciding how to divide it. Don't assume the only option is to split the difference."
+    },
+    {
+      "number": 4,
+      "title": "Insist on objective criteria",
+      "description": "Look for an independent standard that both sides can accept, such as market rates, precedent, or expert opinion. Agreeing on a fair basis for the decision makes it easier for both sides to say yes."
+    },
+    {
+      "number": 5,
+      "title": "Know your best alternative",
+      "description": "Know your best option if this negotiation fails. This is your walk-away point. The stronger your alternative, the more confidently you can negotiate, and the clearer you will be about when to walk away."
+    }
+  ],
+  "cta": "I've read this — let's begin"
+}

@@ -9,11 +9,13 @@ interface Props {
   assessmentRetryUsed?: boolean;
   endedByUser?: boolean;
   summaryRegenerating?: boolean;
+  isExperiment?: boolean;
   onRevealAssessment: () => void;
   onRetryAssessment?: () => void;
   onRegenerateSummary?: () => void;
   onDownload: () => void;
   onBack: () => void;
+  onContinue?: () => void;
 }
 
 export default function DebriefEndState({
@@ -25,11 +27,13 @@ export default function DebriefEndState({
   assessmentRetryUsed = false,
   endedByUser = false,
   summaryRegenerating = false,
+  isExperiment = false,
   onRevealAssessment,
   onRetryAssessment,
   onRegenerateSummary,
   onDownload,
   onBack,
+  onContinue,
 }: Props) {
   return (
     <div className="flex flex-col gap-6 px-8 py-8">
@@ -40,7 +44,7 @@ export default function DebriefEndState({
             <p className="text-xs font-semibold uppercase tracking-wide text-indigo-400">
               {endedByUser ? "Partial Debrief Summary" : "Debrief Summary"}
             </p>
-            {onRegenerateSummary && (
+            {onRegenerateSummary && !isExperiment && (
               <button
                 onClick={onRegenerateSummary}
                 disabled={summaryRegenerating}
@@ -67,8 +71,8 @@ export default function DebriefEndState({
         </div>
       )}
 
-      {/* Assessment: loading → button → revealed (or failed → retry) */}
-      {assessmentVisible && assessment ? (
+      {/* Assessment: hidden in experiment mode (withheld until Step 11) */}
+      {!isExperiment && assessmentVisible && assessment ? (
         <div className="rounded-xl border border-emerald-100 bg-emerald-50 px-6 py-5">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-emerald-500">
             AI Assessment
@@ -77,7 +81,7 @@ export default function DebriefEndState({
             {assessment}
           </p>
         </div>
-      ) : assessmentFailed && !assessmentRetryUsed ? (
+      ) : !isExperiment && assessmentFailed && !assessmentRetryUsed ? (
         <div className="rounded-xl border border-red-100 bg-red-50 px-6 py-5">
           <p className="mb-1 text-sm font-semibold text-red-700">
             Assessment unavailable
@@ -95,7 +99,7 @@ export default function DebriefEndState({
             Try Again
           </button>
         </div>
-      ) : assessmentFailed && assessmentRetryUsed ? (
+      ) : !isExperiment && assessmentFailed && assessmentRetryUsed ? (
         <div className="rounded-xl border border-gray-200 bg-gray-50 px-6 py-5">
           <p className="mb-1 text-sm font-semibold text-gray-700">
             Assessment unavailable
@@ -104,7 +108,7 @@ export default function DebriefEndState({
             The AI could not be reached after multiple attempts. Your session is fully saved — only the assessment is missing. You can close this page safely.
           </p>
         </div>
-      ) : (
+      ) : !isExperiment ? (
         <div className="rounded-xl border border-gray-200 bg-white px-6 py-5">
           <p className="mb-1 text-sm font-semibold text-gray-800">
             Want an objective assessment?
@@ -121,22 +125,33 @@ export default function DebriefEndState({
             {assessmentReady ? "Get AI Assessment" : "Assessment Loading…"}
           </button>
         </div>
-      )}
+      ) : null}
 
       {/* Action row */}
       <div className="flex flex-wrap gap-3 border-t border-gray-100 pt-4">
-        <button
-          onClick={onDownload}
-          className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
-        >
-          Download Report
-        </button>
-        <button
-          onClick={onBack}
-          className="rounded-md border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-50"
-        >
-          Back to Simulator
-        </button>
+        {isExperiment ? (
+          <button
+            onClick={onContinue}
+            className="rounded-md bg-indigo-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+          >
+            Continue to next step →
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={onDownload}
+              className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            >
+              Download Report
+            </button>
+            <button
+              onClick={onBack}
+              className="rounded-md border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-50"
+            >
+              Back to Simulator
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

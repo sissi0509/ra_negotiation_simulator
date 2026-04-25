@@ -33,12 +33,21 @@ export interface ExperimentRound {
   personality: string;           // personality id, e.g. "aggressive"
 }
 
-// Four survey checkpoints across the experiment.
-export interface ExperimentSurveyFlags {
-  pre: boolean;      // before round 1 negotiation
-  post_r1: boolean;  // after round 1 intervention (debrief / reflection / nothing)
-  post_r2: boolean;  // after round 2 negotiation
-  final: boolean;    // exit experience survey at the very end
+// All step checkpoints across the experiment — surveys and activity steps.
+export interface ExperimentStepsFlags {
+  // Surveys
+  pre: boolean;              // S1 — baseline, before round 1
+  gty_intro: boolean;        // Getting to Yes intro seen, after S1
+  s2_efficacy: boolean;      // S2 — self-efficacy, after round 1, before debrief
+  s3_debrief: boolean;       // S3 — post-debrief/reflection survey, Groups A/B only
+  s4_efficacy: boolean;      // S4 — self-efficacy, after round 2
+  s5_improvement: boolean;   // S5 — learning transfer, Groups A/B only
+  final: boolean;            // S6 — final experience survey
+  // Activity steps
+  round1_complete: boolean;       // Round 1 negotiation ended
+  debrief_complete: boolean;      // Sage debrief session ended (Group A)
+  reflection_complete: boolean;   // Written reflection submitted (Group B)
+  round2_complete: boolean;       // Round 2 negotiation ended
 }
 
 export type ExperimentStatus = "active" | "completed" | "withdrawn";
@@ -59,7 +68,7 @@ export interface ExperimentUser {
   current_round: number;         // which round they are currently on (starts at 1)
   status: ExperimentStatus;
   consent_given: boolean;
-  surveys_done: ExperimentSurveyFlags;
+  steps_done: ExperimentStepsFlags;
 
   // Timestamps (ISO strings)
   enrolled_at: string;           // set by researcher when account is created
@@ -71,14 +80,17 @@ export interface ExperimentUser {
 
 // Returns the scenario/personality for the participant's current round.
 export function currentRoundAssignment(user: ExperimentUser): ExperimentRound | null {
-  return user.rounds.find((r) => r.round === user.current_round) ?? null;
+  return user.rounds?.find((r) => r.round === user.current_round) ?? null;
 }
 
 // Which survey type is due next for this participant?
-export function nextSurveyDue(user: ExperimentUser): keyof ExperimentSurveyFlags | null {
-  if (!user.surveys_done.pre) return "pre";
-  if (!user.surveys_done.post_r1) return "post_r1";
-  if (!user.surveys_done.post_r2) return "post_r2";
-  if (!user.surveys_done.final) return "final";
+export function nextSurveyDue(user: ExperimentUser): keyof ExperimentStepsFlags | null {
+  if (!user.steps_done?.pre) return "pre";
+  if (!user.steps_done?.gty_intro) return "gty_intro";
+  if (!user.steps_done?.s2_efficacy) return "s2_efficacy";
+  if (user.condition !== "control" && !user.steps_done?.s3_debrief) return "s3_debrief";
+  if (!user.steps_done?.s4_efficacy) return "s4_efficacy";
+  if (user.condition !== "control" && !user.steps_done?.s5_improvement) return "s5_improvement";
+  if (!user.steps_done?.final) return "final";
   return null;
 }

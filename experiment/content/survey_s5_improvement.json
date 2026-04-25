@@ -1,0 +1,19 @@
+{
+  "id": "s5_improvement",
+  "survey_key": "s5_improvement",
+  "title": "Post-Round-2 Survey",
+  "subtitle": "You have completed both rounds. Please answer a few questions about your experience.",
+  "scale": { "min": 1, "max": 7, "minLabel": "Strongly Disagree", "maxLabel": "Strongly Agree" },
+  "questions": [
+    { "id": "q1", "text": "I felt more confident in the second negotiation than the first." },
+    { "id": "q2", "text": "I applied what I learned from the first round." },
+    { "id": "q3", "text": "I had a clearer strategy in the second negotiation." },
+    { "id": "q4", "text": "I handled the second negotiation more effectively." }
+  ],
+  "groups": {
+    "ai_debrief": { "shown": true },
+    "static_reflection": { "shown": true },
+    "control": { "shown": true, "note": "Confirm with professor whether Group C receives this survey." }
+  },
+  "note": "⚠️ Content pending professor confirmation. Confirm whether Group C receives this survey."
+}

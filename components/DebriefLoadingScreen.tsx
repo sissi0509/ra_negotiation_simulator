@@ -58,7 +58,7 @@ export default function DebriefLoadingScreen({
           </p>
         </div>
 
-        <p className="text-center text-sm leading-relaxed text-gray-500">
+        <p className="text-justify text-sm leading-relaxed text-gray-500">
           {DEBRIEF_INTRO}
         </p>
 

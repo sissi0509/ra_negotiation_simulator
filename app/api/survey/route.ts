@@ -2,12 +2,15 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getDb } from "@/lib/mongodb";
 
-// Valid survey type values and their matching surveys_done flag path.
+// Valid survey type values and their matching steps_done flag path.
 const SURVEY_FLAG: Record<string, string> = {
-  pre: "surveys_done.pre",
-  post_r1: "surveys_done.post_r1",
-  post_r2: "surveys_done.post_r2",
-  final: "surveys_done.final",
+  pre: "steps_done.pre",
+  gty_intro: "steps_done.gty_intro",
+  s2_efficacy: "steps_done.s2_efficacy",
+  s3_debrief: "steps_done.s3_debrief",
+  s4_efficacy: "steps_done.s4_efficacy",
+  s5_improvement: "steps_done.s5_improvement",
+  final: "steps_done.final",
 };
 
 // POST /api/survey

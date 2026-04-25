@@ -1,0 +1,20 @@
+{
+  "id": "s2_efficacy",
+  "survey_key": "s2_efficacy",
+  "title": "Quick Check-In",
+  "subtitle": "Before moving on, please answer a few questions about how you felt during the negotiation.",
+  "scale": { "min": 1, "max": 7, "minLabel": "Strongly Disagree", "maxLabel": "Strongly Agree" },
+  "questions": [
+    { "id": "q1", "text": "I feel confident in my ability to negotiate effectively." },
+    { "id": "q2", "text": "I believe I could handle a similar negotiation successfully." },
+    { "id": "q3", "text": "I have a clear understanding of what I did well in this negotiation." },
+    { "id": "q4", "text": "I understand what I should do differently next time." },
+    { "id": "q5", "text": "I understand why I got the outcome I did." }
+  ],
+  "subscales": {
+    "self_efficacy": ["q1", "q2"],
+    "insight": ["q3", "q4", "q5"]
+  },
+  "timing_note": "Fires immediately after Round 1 ends, BEFORE any debrief activity begins. Timing is critical — do not move this survey.",
+  "note": "⚠️ Pending professor confirmation. Q1–Q2 adapted from OSS-6 (Rigotti et al., 2008). Q3–Q5 adapted from SRIS-IN (Grant et al., 2002). S2 and S4 must stay identical."
+}

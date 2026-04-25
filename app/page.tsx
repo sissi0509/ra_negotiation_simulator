@@ -14,6 +14,8 @@ import ExportModal from "@/components/ExportModal";
 import ActionBar from "@/components/ActionBar";
 import scenarios from "@/content/scenarios.json";
 import personalities from "@/content/personalities.json";
+import experimentIntro from "@/experiment/content/experiment_intro.json";
+import scenarioContexts from "@/experiment/content/scenario_contexts.json";
 import { isUserSigningOff } from "@/lib/endDetection";
 import { buildTranscript } from "@/lib/transcript";
 import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY as DEBRIEF_SESSION_KEY_CONST } from "@/app/debrief/page";
@@ -22,30 +24,11 @@ import type { ExperimentUser, ExperimentCondition } from "@/lib/appMode";
 
 const SESSION_KEY = "negotiation_session_id";
 
-// ── Condition-specific step lists ─────────────────────────────────────────────
-const CONDITION_STEPS: Record<ExperimentCondition, { label: string; detail: string }[]> = {
-  ai_debrief: [
-    { label: "Complete a short survey", detail: "A few quick questions about your negotiation background." },
-    { label: "Negotiate (Round 1)", detail: "A text conversation with an AI counterpart in an assigned scenario." },
-    { label: "Reflect with an AI coach", detail: "Sage, an AI coach, will guide you through key moments from your negotiation." },
-    { label: "Receive your assessment", detail: "A structured report on your strengths and areas to improve." },
-    { label: "Negotiate (Round 2)", detail: "A second scenario to apply what you learned." },
-    { label: "Complete a final survey", detail: "A few closing questions before you finish." },
-  ],
-  static_reflection: [
-    { label: "Complete a short survey", detail: "A few quick questions about your negotiation background." },
-    { label: "Negotiate (Round 1)", detail: "A text conversation with an AI counterpart in an assigned scenario." },
-    { label: "Review and reflect", detail: "Read your transcript and write a short reflection on your approach." },
-    { label: "Negotiate (Round 2)", detail: "A second scenario." },
-    { label: "Complete a final survey", detail: "A few closing questions before you finish." },
-  ],
-  control: [
-    { label: "Complete a short survey", detail: "A few quick questions about your negotiation background." },
-    { label: "Negotiate (Round 1)", detail: "A text conversation with an AI counterpart in an assigned scenario." },
-    { label: "Negotiate (Round 2)", detail: "A second scenario." },
-    { label: "Complete a final survey", detail: "A few closing questions before you finish." },
-  ],
-};
+// ── Condition-specific step lists (sourced from experiment/content/experiment_intro.json) ──
+const CONDITION_STEPS = experimentIntro.steps_by_condition as Record<
+  ExperimentCondition,
+  { label: string; detail: string }[]
+>;
 
 function ExperimentIntroScreen({
   experimentState,
@@ -55,19 +38,19 @@ function ExperimentIntroScreen({
   onBegin: () => void;
 }) {
   const [consented, setConsented] = useState(false);
-  const steps = CONDITION_STEPS[experimentState.condition];
+  const steps = CONDITION_STEPS[experimentState.condition] ?? [];
   // If they already consented in a previous session, skip the checkbox.
   const alreadyConsented = experimentState.consent_given;
+
+  const { badge, subtitle, consent_text, cta } = experimentIntro;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
       <div className="flex w-full max-w-lg flex-col gap-8 rounded-xl border border-gray-200 bg-white px-8 py-10 shadow-sm">
         <div className="flex flex-col gap-1">
-          <p className="text-xs font-medium uppercase tracking-wide text-gray-400">Research Study</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-400">{badge}</p>
           <h1 className="text-xl font-semibold text-gray-900">Welcome, {experimentState.name?.split(" ")[0] ?? "Participant"}</h1>
-          <p className="text-sm text-gray-500">
-            Here&apos;s what you&apos;ll do. Please read carefully before continuing.
-          </p>
+          <p className="text-sm text-gray-500">{subtitle}</p>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -92,9 +75,7 @@ function ExperimentIntroScreen({
               onChange={(e) => setConsented(e.target.checked)}
               className="mt-0.5 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
             />
-            <span className="text-sm text-gray-600">
-              I understand the study procedure and agree to participate. I know I can stop at any time by contacting the researcher.
-            </span>
+            <span className="text-sm text-gray-600">{consent_text}</span>
           </label>
         )}
 
@@ -103,7 +84,7 @@ function ExperimentIntroScreen({
           disabled={!alreadyConsented && !consented}
           className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          I understand — let&apos;s begin
+          {cta}
         </button>
       </div>
     </div>
@@ -142,8 +123,8 @@ export default function Home() {
 
   // On mount: restore session from server if we have a saved session ID
   useEffect(() => {
-    // Show intro on first visit — skip if already onboarded
-    if (!localStorage.getItem("intro_seen")) {
+    // Show intro on first visit — product mode only (experiment mode has its own intro screen)
+    if (!isExperiment && !localStorage.getItem("intro_seen")) {
       setShowIntro(true);
     }
 
@@ -154,6 +135,41 @@ export default function Home() {
         .then((data: ExperimentUser | null) => {
           if (data) {
             setExperimentState(data);
+            // Skip the intro screen on return visits — consent already given.
+            if (data.consent_given) setShowExperimentIntro(false);
+
+            // If between steps, auto-redirect to wherever the user should be.
+            // Use DB step flags (not localStorage) to determine position reliably.
+            if (data.consent_given) {
+              const due = nextSurveyDue(data);
+              const s = data.steps_done ?? {};
+              const lastRunId = localStorage.getItem("experiment_last_run_id") ?? "";
+              const runParam = lastRunId ? `&run_id=${lastRunId}` : "";
+              // Redirect back to wherever the participant should be.
+              if (due === "pre") { window.location.replace("/survey?type=pre"); return; }
+              if (due === "gty_intro") { window.location.replace("/gty-intro"); return; }
+              // Only redirect if the preceding activity step is done (not mid-negotiation/debrief).
+              if (due === "s2_efficacy" && s.round1_complete) { window.location.replace(`/survey?type=s2_efficacy${runParam}`); return; }
+              if (due === "s3_debrief" && s.round1_complete) {
+                if (data.condition === "ai_debrief" && !s.debrief_complete) { window.location.replace("/debrief"); return; }
+                if (data.condition === "static_reflection") {
+                  if (s.reflection_complete) { window.location.replace(`/survey?type=s3_debrief${runParam}`); }
+                  else { window.location.replace(`/reflection?run_id=${lastRunId}&round=1`); }
+                  return;
+                }
+              }
+              if (due === "s4_efficacy" && s.round2_complete) { window.location.replace(`/survey?type=s4_efficacy${runParam}`); return; }
+              if (due === "s5_improvement") { window.location.replace(`/survey?type=s5_improvement${runParam}`); return; }
+              if (due === "final") {
+                // All groups pass through the transition notice before the AI assessment
+                window.location.replace("/transition"); return;
+              }
+              if (due === null) {
+                // All steps complete — send to the study complete screen
+                window.location.replace("/complete"); return;
+              }
+            }
+
             const assignment = currentRoundAssignment(data);
             if (assignment) {
               setSelectedScenario(assignment.scenario);
@@ -194,6 +210,63 @@ export default function Home() {
       .catch(() => localStorage.removeItem(SESSION_KEY))
       .finally(() => setIsInitializing(false));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // In experiment mode: redirect to the appropriate post-round survey when the conversation ends.
+  // Also stores the transcript in localStorage so the debrief page can read it (Group A).
+  useEffect(() => {
+    if (!conversationEnded || !isExperiment || !experimentState) return;
+    void (async () => {
+      const { current_round, steps_done } = experimentState;
+
+      // Store transcript for the debrief page before leaving.
+      if (scenario && personality && startedAt && messages.length > 0) {
+        const transcript = buildTranscript(messages, scenario.id, scenario.name, personality.id, personality.name, startedAt, sessionId ?? undefined);
+        localStorage.removeItem(DEBRIEF_SESSION_KEY_CONST);
+        localStorage.setItem(DEBRIEF_PENDING_KEY, JSON.stringify(transcript));
+      }
+
+      // Save run_id so we can resume to the correct survey if user navigates away and comes back.
+      if (sessionId) localStorage.setItem("experiment_last_run_id", sessionId);
+      // Save round 1 run_id separately — used by the /assessment page for Groups B & C.
+      if (current_round === 1 && sessionId) {
+        localStorage.setItem("experiment_round1_run_id", sessionId);
+        // Groups B & C: pre-generate the transcript-only assessment in the background now
+        // so it is ready long before the participant reaches /assessment after Round 2.
+        // Group A's assessment is generated at the end of the Sage debrief instead.
+        if (experimentState.condition !== "ai_debrief") {
+          fetch("/api/assessment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ run_id: sessionId }),
+          }).catch(() => {}); // fire-and-forget
+        }
+      }
+      // Clear the active session so the home page doesn't restore the completed negotiation.
+      localStorage.removeItem(SESSION_KEY);
+
+      // Mark the round as complete in the DB — AWAIT before navigating so the flag is
+      // saved before we leave. This ensures the auto-redirect on / works correctly if the
+      // user somehow navigates back to the simulator.
+      const roundFlag = current_round === 1 ? "round1_complete" : "round2_complete";
+      const surveyType = current_round === 1 && !steps_done.s2_efficacy ? "s2_efficacy"
+        : current_round === 2 && !steps_done.s4_efficacy ? "s4_efficacy"
+        : null;
+
+      const patch: Record<string, unknown> = { steps_done: { [roundFlag]: true } };
+      // Advance current_round so the setup screen shows the correct round 2 assignment.
+      if (current_round === 1) patch.current_round = 2;
+
+      await fetch("/api/experiment/state", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      }).catch(() => {});
+
+      if (surveyType) {
+        window.location.replace(`/survey?type=${surveyType}${sessionId ? `&run_id=${sessionId}` : ""}`);
+      }
+    })();
+  }, [conversationEnded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-save completed transcript to backend whenever the conversation ends.
   // Fire-and-forget: the user doesn't need feedback for this background save.
@@ -343,7 +416,7 @@ export default function Home() {
     return <ExperimentIntroScreen
       experimentState={experimentState}
       onBegin={() => {
-        // Mark started_at and consent_given on first begin.
+        // Mark started_at and consent_given on first begin, then go straight to pre-survey.
         const patch: Record<string, unknown> = { consent_given: true };
         if (!experimentState.started_at) patch.started_at = new Date().toISOString();
         fetch("/api/experiment/state", {
@@ -351,8 +424,7 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(patch),
         }).catch(() => {});
-        setExperimentState((prev) => prev ? { ...prev, consent_given: true } : prev);
-        setShowExperimentIntro(false);
+        window.location.replace("/survey?type=pre");
       }}
     />;
   }
@@ -479,6 +551,18 @@ export default function Home() {
     fetchReply(next, isUserSigningOff(text));
   }
 
+  // In experiment mode, augment the scenario with the participant-facing context
+  // (backstory / situation) from scenario_contexts.json. SceneModal renders it
+  // as a highlighted "Your Situation" card if the field is present.
+  const scenarioWithContext = isExperiment && scenario
+    ? {
+        ...scenario,
+        backstory:
+          (scenarioContexts.scenarios as Record<string, { participant_context?: string }>)[scenario.id]
+            ?.participant_context ?? undefined,
+      }
+    : scenario;
+
   // ── Chat Screen ──────────────────────────────────────────────────────────
   if (sessionActive && scenario && personality) {
     return (
@@ -514,7 +598,11 @@ export default function Home() {
           </div>
         )}
 
-        {conversationEnded ? (
+        {conversationEnded && isExperiment ? (
+          <div className="border-t border-gray-200 px-6 py-4 text-center text-sm text-gray-400">
+            Saving your session…
+          </div>
+        ) : conversationEnded ? (
           <EndStatePrompt onStartNew={handleReset} onExport={handleExport} onDebrief={handleDebrief} userTurns={messages.filter((m) => m.role === "user").length} debriefRequired={isExperiment} />
         ) : (
           <MessageInput onSend={handleSend} disabled={isLoading} />
@@ -556,16 +644,17 @@ export default function Home() {
           experimentState ? (() => {
             const due = nextSurveyDue(experimentState);
             const assignment = currentRoundAssignment(experimentState);
-            // Pre-survey must be completed before negotiating.
-            const needsPreSurvey = due === "pre";
+            const blockingStep = due === "pre" ? { label: "pre-study survey", href: "/survey?type=pre" }
+              : due === "gty_intro" ? { label: "negotiation guide", href: "/gty-intro" }
+              : null;
             return (
               <div className="flex flex-col gap-3">
-                {needsPreSurvey && (
+                {blockingStep && (
                   <div className="rounded-md bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
                     <p className="font-medium">Before you start</p>
-                    <p className="mt-0.5">Please complete the pre-study survey first.</p>
-                    <Link href="/survey?type=pre" className="mt-2 block font-medium text-amber-900 underline">
-                      Go to Survey →
+                    <p className="mt-0.5">Please complete the {blockingStep.label} first.</p>
+                    <Link href={blockingStep.href} className="mt-2 block font-medium text-amber-900 underline">
+                      Continue →
                     </Link>
                   </div>
                 )}
@@ -595,7 +684,7 @@ export default function Home() {
 
         <button
           onClick={handleStart}
-          disabled={!canStart || (isExperiment && nextSurveyDue(experimentState!) === "pre")}
+          disabled={!canStart || (isExperiment && (nextSurveyDue(experimentState!) === "pre" || nextSurveyDue(experimentState!) === "gty_intro"))}
           className="rounded-md bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
         >
           Start
@@ -627,9 +716,9 @@ export default function Home() {
         </div>
       )}
 
-      {showModal && scenario && personality && (
+      {showModal && scenarioWithContext && personality && (
         <SceneModal
-          scenario={scenario}
+          scenario={scenarioWithContext}
           personality={personality}
           onBegin={handleBegin}
           onBack={() => setShowModal(false)}
