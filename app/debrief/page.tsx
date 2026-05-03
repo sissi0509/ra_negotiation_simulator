@@ -41,6 +41,7 @@ export default function DebriefPage() {
   const [assessmentReady, setAssessmentReady] = useState(false);
   const [assessmentVisible, setAssessmentVisible] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
+  const [pendingReply, setPendingReply] = useState<string | null>(null);
   const [showEndChoice, setShowEndChoice] = useState(false);
   const [endedByUser, setEndedByUser] = useState(false);
   const [summaryError, setSummaryError] = useState<string | null>(null);
@@ -189,9 +190,12 @@ export default function DebriefPage() {
 
   // ── Handlers ──────────────────────────────────────────────────────────────
 
-  async function handleStart() {
+  // Called on mount by DebriefLoadingScreen — runs Stage 1 + Stage 2 opening in the background
+  // while the read-timer countdown is still going.
+  async function handlePrepare() {
     if (!transcript) return;
     setStartError(null);
+    setPendingReply(null);
     setIsLoading(true);
 
     const newDebriefId = generateId();
@@ -230,18 +234,23 @@ export default function DebriefPage() {
         throw new Error(errData.error || `Debrief API error ${debriefRes.status}`);
       }
       const { reply } = await debriefRes.json();
-
-      const chunks = reply.split("[BREAK]").map((c: string) => c.trim()).filter(Boolean);
-      setSessionActive(true);
-      setMessages([{ role: "assistant", text: chunks[0] ?? reply, timestamp: new Date().toISOString() }]);
-      for (let i = 1; i < chunks.length; i++) {
-        await new Promise((r) => setTimeout(r, 600));
-        setMessages((prev) => [...prev, { role: "assistant", text: chunks[i], timestamp: new Date().toISOString() }]);
-      }
+      setPendingReply(reply);
     } catch (err) {
       setStartError(err instanceof Error ? err.message : "Something went wrong starting the debrief. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  // Called when the user clicks "Start Debrief" — applies the pre-fetched opening reply.
+  async function handleBegin() {
+    if (!pendingReply) return;
+    const chunks = pendingReply.split("[BREAK]").map((c: string) => c.trim()).filter(Boolean);
+    setSessionActive(true);
+    setMessages([{ role: "assistant", text: chunks[0] ?? pendingReply, timestamp: new Date().toISOString() }]);
+    for (let i = 1; i < chunks.length; i++) {
+      await new Promise((r) => setTimeout(r, 600));
+      setMessages((prev) => [...prev, { role: "assistant", text: chunks[i], timestamp: new Date().toISOString() }]);
     }
   }
 
@@ -640,8 +649,10 @@ export default function DebriefPage() {
         personalityName={transcript.personality_name}
         userTurnCount={userTurnCount}
         isLoading={isLoading}
+        isPrepared={pendingReply !== null}
         error={startError}
-        onStart={handleStart}
+        onPrepare={handlePrepare}
+        onBegin={handleBegin}
       />
     );
   }

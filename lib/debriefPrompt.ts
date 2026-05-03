@@ -185,8 +185,11 @@ export function buildAssessmentPrompt(
   const formattedTranscript = formatTranscript(transcript);
 
   const keyMomentsSummary = plan.key_moments
-    .map((m) => `- ${m.title}: ${m.diagnostic_insight}`)
-    .join("\n");
+    .map(
+      (m) =>
+        `- ${m.title}\n  Insight: ${m.diagnostic_insight}\n  Why it mattered: ${m.why_it_mattered}\n  Reframing principle: ${m.improved_move.principle}\n  Example move: "${m.improved_move.alternative_response}"`
+    )
+    .join("\n\n");
 
   const additionalObs =
     plan.additional_observations.length > 0

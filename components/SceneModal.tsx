@@ -1,5 +1,10 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { isExperiment } from "@/lib/appMode";
 import { SCENE_MODAL_TIP } from "@/content/uiStrings";
+
+const READ_SECONDS = 30;
 
 interface Scenario {
   id: string;
@@ -29,7 +34,6 @@ function BackstoryBlock({ text }: { text: string }) {
   return (
     <div className="flex flex-col gap-2">
       {paragraphs.map((para, i) => {
-        // Match "Some label (optional note):" at the start of the paragraph
         const labelMatch = para.match(/^([^:]+:\s*)/);
         if (labelMatch && i > 0) {
           const label = labelMatch[1];
@@ -51,6 +55,27 @@ function BackstoryBlock({ text }: { text: string }) {
 }
 
 export default function SceneModal({ scenario, personality, onBegin, onBack }: Props) {
+  // Only apply the timer in experiment mode (where backstory is shown and skipping matters)
+  const useTimer = isExperiment && !!scenario.backstory;
+  const [secondsLeft, setSecondsLeft] = useState(useTimer ? READ_SECONDS : 0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!useTimer) return;
+    timerRef.current = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          clearInterval(timerRef.current!);
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [useTimer]);
+
+  const canBegin = secondsLeft === 0;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-6">
       <div className="flex w-full max-w-md flex-col rounded-xl bg-white shadow-lg max-h-full overflow-hidden">
@@ -68,9 +93,14 @@ export default function SceneModal({ scenario, personality, onBegin, onBack }: P
           </div>
 
           {scenario.backstory && (
-            <div className="rounded-md border border-blue-100 bg-blue-50 px-4 py-3 flex flex-col gap-1">
-              <p className="text-xs font-medium uppercase tracking-wide text-blue-400 mb-1">Your Situation</p>
-              <BackstoryBlock text={scenario.backstory} />
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-gray-500">
+                Read your situation carefully. You may want to take a note of the key details before you begin.
+              </p>
+              <div className="rounded-md border border-blue-100 bg-blue-50 px-4 py-3 flex flex-col gap-1">
+                <p className="text-xs font-medium uppercase tracking-wide text-blue-400 mb-1">Your Situation</p>
+                <BackstoryBlock text={scenario.backstory} />
+              </div>
             </div>
           )}
 
@@ -96,12 +126,23 @@ export default function SceneModal({ scenario, personality, onBegin, onBack }: P
               Go Back
             </button>
           )}
-          <button
-            onClick={onBegin}
-            className="flex-1 rounded-md bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-700"
-          >
-            Begin Negotiation
-          </button>
+          {canBegin ? (
+            <button
+              onClick={onBegin}
+              className="flex-1 rounded-md bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-700"
+            >
+              Begin Negotiation
+            </button>
+          ) : (
+            <div className="flex flex-1 items-center justify-center gap-3 rounded-md border border-gray-200 bg-gray-50 px-5 py-2.5">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 bg-white">
+                <span className="text-sm font-semibold text-gray-400 tabular-nums">
+                  {secondsLeft}
+                </span>
+              </div>
+              <span className="text-sm text-gray-400">Please read your situation</span>
+            </div>
+          )}
         </div>
 
       </div>

@@ -11,7 +11,7 @@
  *   node run_test.js                          -- run with config.json
  *   node run_test.js --brief briefs/foo.md    -- load brief from file
  *
- * Requires: Node 18+, app running at base_url, ANTHROPIC_API_KEY in env or .env.local
+ * Requires: Node 18+, app running at base_url, OPENAI_API_KEY in env or .env.local
  */
 
 const fs = require("fs");
@@ -43,7 +43,7 @@ if (briefIdx !== -1 && args[briefIdx + 1]) {
 
 const BASE_URL      = config.base_url      || "http://localhost:3000";
 const MODE          = config.mode          || "full";
-const SIM_MODEL     = config.sim_model     || "claude-haiku-4-5-20251001";
+const SIM_MODEL     = config.sim_model     || "gpt-4o-mini";
 const TEST_USER_ID  = config.test_user_id  || null;
 
 // Load scenario metadata so the simulated user knows their situation
@@ -69,8 +69,8 @@ function loadEnvVar(key) {
   return null;
 }
 
-const ANTHROPIC_API_KEY = loadEnvVar("ANTHROPIC_API_KEY");
-if (!ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY not found. Set it in env or negotiation-simulator/.env.local");
+const OPENAI_API_KEY = loadEnvVar("OPENAI_API_KEY");
+if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY not found. Set it in env or negotiation-simulator/.env.local");
 
 const TEST_API_KEY = loadEnvVar("TEST_API_KEY");
 
@@ -96,28 +96,29 @@ async function postApp(route, body) {
   return res.json();
 }
 
-/** Call Anthropic API with the simulated user persona. */
+/** Call OpenAI API with the simulated user persona. */
 async function callSimUser(systemPrompt, messages) {
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
+      "Authorization": `Bearer ${OPENAI_API_KEY}`,
     },
     body: JSON.stringify({
       model: SIM_MODEL,
       max_tokens: 300,
-      system: systemPrompt,
-      messages,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...messages,
+      ],
     }),
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Anthropic API → ${res.status}: ${text}`);
+    throw new Error(`OpenAI API → ${res.status}: ${text}`);
   }
   const data = await res.json();
-  return data.content[0].text.trim();
+  return data.choices[0].message.content.trim();
 }
 
 /** Strip [BREAK] markers and [seq:N] headers from display text. */

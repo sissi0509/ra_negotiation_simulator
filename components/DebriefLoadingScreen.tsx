@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
-import { DEBRIEF_INTRO } from "@/content/debriefIntro";
+"use client";
 
-const LOADING_MESSAGES = [
-  "Analyzing your negotiation…",
-  "Still working…",
-  "Hang tight…",
-  "Almost ready…",
-];
+import { useState, useEffect, useRef } from "react";
+import { DEBRIEF_INTRO } from "@/content/debriefIntro";
+import { isExperiment } from "@/lib/appMode";
+
+const READ_SECONDS = 15;
 
 interface Props {
   scenarioName: string;
   personalityName: string;
   userTurnCount: number;
   isLoading?: boolean;
+  isPrepared?: boolean;
   error?: string | null;
-  onStart: () => void;
+  onPrepare: () => void;
+  onBegin: () => void;
 }
 
 export default function DebriefLoadingScreen({
@@ -22,22 +22,35 @@ export default function DebriefLoadingScreen({
   personalityName,
   userTurnCount,
   isLoading = false,
+  isPrepared = false,
   error = null,
-  onStart,
+  onPrepare,
+  onBegin,
 }: Props) {
-  const [msgIndex, setMsgIndex] = useState(0);
+  const [secondsLeft, setSecondsLeft] = useState(isExperiment ? READ_SECONDS : 0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const prepareCalledRef = useRef(false);
   const turnLabel = userTurnCount === 1 ? "1 turn" : `${userTurnCount} turns`;
 
+  // Kick off API preparation immediately on mount — runs in parallel with the countdown.
+  // Guard ref prevents React Strict Mode's double-invoke from creating two DB documents.
   useEffect(() => {
-    if (!isLoading) {
-      setMsgIndex(0);
-      return;
-    }
-    const id = setInterval(() => {
-      setMsgIndex((i) => (i + 1) % LOADING_MESSAGES.length);
-    }, 10000);
-    return () => clearInterval(id);
-  }, [isLoading]);
+    if (prepareCalledRef.current) return;
+    prepareCalledRef.current = true;
+    onPrepare();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Read-timer countdown (experiment mode only).
+  useEffect(() => {
+    if (!isExperiment || secondsLeft === 0) return;
+    timerRef.current = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) { clearInterval(timerRef.current!); return 0; }
+        return s - 1;
+      });
+    }, 1000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50">
@@ -62,48 +75,50 @@ export default function DebriefLoadingScreen({
           {DEBRIEF_INTRO}
         </p>
 
-        {isLoading && (
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2">
-              <svg
-                className="h-4 w-4 animate-spin text-indigo-400"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-              <p className="text-sm text-gray-500">
-                {LOADING_MESSAGES[msgIndex]}
-              </p>
+        {/* Bottom action area — three states */}
+        {secondsLeft > 0 ? (
+          // Still in the read-timer window: show countdown circle.
+          // A subtle note lets the user know preparation is already running.
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-indigo-200 bg-indigo-50">
+              <span className="text-sm font-semibold text-indigo-400 tabular-nums">
+                {secondsLeft}
+              </span>
             </div>
-            <p className="text-xs text-gray-400">This may take 1–2 minutes.</p>
+            <p className="text-xs text-gray-400">Please read before continuing</p>
+            {isLoading && (
+              <p className="text-xs text-indigo-400">Preparing your debrief…</p>
+            )}
           </div>
+        ) : isPrepared ? (
+          // Ready — both countdown done and API preparation complete.
+          <button
+            onClick={onBegin}
+            className="rounded-md bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-600"
+          >
+            Start Debrief
+          </button>
+        ) : isLoading ? (
+          // Countdown finished but API still working.
+          <button
+            disabled
+            className="rounded-md bg-indigo-300 px-5 py-2.5 text-sm font-medium text-white cursor-not-allowed"
+          >
+            Preparing your debrief…
+          </button>
+        ) : (
+          // Error state — let the user retry preparation.
+          <button
+            onClick={onPrepare}
+            className="rounded-md bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-600"
+          >
+            Try Again
+          </button>
         )}
 
         {error && (
           <p className="text-center text-xs text-red-500">{error}</p>
         )}
-
-        <button
-          onClick={onStart}
-          disabled={isLoading}
-          className="rounded-md bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
-        >
-          {isLoading ? "Starting…" : "Start Debrief"}
-        </button>
       </div>
     </div>
   );

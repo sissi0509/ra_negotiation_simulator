@@ -8,6 +8,7 @@ import {
 import { Transcript } from "@/lib/transcript";
 import { callClaude } from "@/lib/callClaude";
 import { getDb } from "@/lib/mongodb";
+import { COLLECTIONS } from "@/lib/dbCollections";
 
 const SESSION_COMPLETE_MARKER = "--- Session Complete ---";
 
@@ -59,14 +60,11 @@ export async function POST(req: NextRequest) {
       : messages;
 
   try {
-    const response = await callClaude({
+    const reply = await callClaude({
       max_tokens: 300,
       system: systemPrompt,
       messages: apiMessages,
     });
-
-    const reply =
-      response.content[0].type === "text" ? response.content[0].text : "";
 
     // Build the updated messages list (user messages sent + Sage's reply).
     // The bootstrap "(Begin the debrief…)" message is excluded — it's not in `messages`.
@@ -85,7 +83,7 @@ export async function POST(req: NextRequest) {
     if (debrief_id) {
       getDb()
         .then((db) =>
-          db.collection("debriefs").updateOne(
+          db.collection(COLLECTIONS.debriefs).updateOne(
             { debrief_id },
             { $set: { messages: updatedMessages } }
           )
@@ -106,7 +104,7 @@ export async function POST(req: NextRequest) {
       if (debrief_id) {
         getDb()
           .then((db) =>
-            db.collection("debriefs").updateOne(
+            db.collection(COLLECTIONS.debriefs).updateOne(
               { debrief_id },
               { $set: { debrief_summary: sessionSummary } }
             )

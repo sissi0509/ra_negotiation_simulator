@@ -9,7 +9,6 @@ const SURVEY_FLAG: Record<string, string> = {
   s2_efficacy: "steps_done.s2_efficacy",
   s3_debrief: "steps_done.s3_debrief",
   s4_efficacy: "steps_done.s4_efficacy",
-  s5_improvement: "steps_done.s5_improvement",
   final: "steps_done.final",
 };
 

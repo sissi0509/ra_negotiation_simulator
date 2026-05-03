@@ -5,6 +5,60 @@ import { isExperiment } from "@/lib/appMode";
 import type { ExperimentCondition } from "@/lib/appMode";
 import { ASSESSMENT_PAGE } from "@/experiment/content/uiStrings";
 
+const SECTION_HEADERS = new Set(["Context", "Strengths", "Areas for Improvement", "Next Steps"]);
+
+const SECTION_META: Record<string, { icon: string; accent: string; label: string }> = {
+  "Context": { icon: "🗂", accent: "border-blue-400 bg-blue-50", label: "text-blue-700" },
+  "Strengths": { icon: "✦", accent: "border-emerald-400 bg-emerald-50", label: "text-emerald-700" },
+  "Areas for Improvement": { icon: "◈", accent: "border-amber-400 bg-amber-50", label: "text-amber-700" },
+  "Next Steps": { icon: "→", accent: "border-indigo-400 bg-indigo-50", label: "text-indigo-700" },
+};
+
+function AssessmentBody({ text }: { text: string }) {
+  type Section = { heading: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+
+  for (const raw of text.split("\n")) {
+    const line = raw.trimEnd();
+    if (SECTION_HEADERS.has(line.trim())) {
+      if (current) sections.push(current);
+      current = { heading: line.trim(), lines: [] };
+    } else if (current) {
+      current.lines.push(line);
+    }
+  }
+  if (current) sections.push(current);
+
+  if (sections.length === 0) {
+    return (
+      <p className="whitespace-pre-wrap text-justify text-sm leading-relaxed text-gray-800">
+        {text}
+      </p>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {sections.map(({ heading, lines }) => {
+        const meta = SECTION_META[heading] ?? { icon: "•", accent: "border-gray-300 bg-gray-50", label: "text-gray-700" };
+        const body = lines.join("\n").trim();
+        return (
+          <div key={heading} className={`rounded-lg border-l-4 px-5 py-4 ${meta.accent}`}>
+            <p className={`mb-2 flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest ${meta.label}`}>
+              <span>{meta.icon}</span>
+              {heading}
+            </p>
+            <p className="whitespace-pre-wrap text-justify text-sm leading-relaxed text-gray-800">
+              {body}
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function AssessmentPage() {
   const [condition, setCondition] = useState<ExperimentCondition | null>(null);
   const [assessment, setAssessment] = useState<string | null>(null);
@@ -19,12 +73,10 @@ export default function AssessmentPage() {
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data) return;
-        const prerequisite =
-          data.condition === "control"
-            ? data.steps_done?.s4_efficacy
-            : data.steps_done?.s5_improvement;
-        if (!prerequisite) { window.location.replace("/"); return; }
-        if (data.steps_done?.final) { window.location.replace("/"); return; }
+        // Combined S4+S5 survey must be completed before the assessment is shown.
+        if (!data.steps_done?.s4_efficacy) { window.location.replace("/"); return; }
+        // If the final experience survey is already done the study is complete.
+        if (data.steps_done?.final) { window.location.replace("/complete"); return; }
         setCondition(data.condition as ExperimentCondition);
       })
       .catch(() => {});
@@ -112,13 +164,11 @@ export default function AssessmentPage() {
             </p>
           </div>
         ) : assessment ? (
-          <div className="rounded-xl border border-emerald-100 bg-emerald-50 px-6 py-5">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-emerald-600">
+          <div className="space-y-6">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
               {isDebrief ? ASSESSMENT_PAGE.assessment_label_ai_debrief : ASSESSMENT_PAGE.assessment_label_other}
             </p>
-            <p className="whitespace-pre-wrap text-justify text-sm leading-relaxed text-gray-800">
-              {assessment}
-            </p>
+            <AssessmentBody text={assessment} />
           </div>
         ) : (
           <div className="rounded-lg border border-red-100 bg-red-50 px-5 py-4">
@@ -132,7 +182,14 @@ export default function AssessmentPage() {
         {!loading && (
           <div className="mt-8">
             <button
-              onClick={() => window.location.replace("/survey?type=final")}
+              onClick={async () => {
+                await fetch("/api/experiment/state", {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ steps_done: { assessment_complete: true } }),
+                }).catch(() => {});
+                window.location.replace("/survey?type=final");
+              }}
               className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
             >
               {ASSESSMENT_PAGE.cta}

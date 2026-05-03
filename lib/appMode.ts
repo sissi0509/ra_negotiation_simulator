@@ -41,13 +41,13 @@ export interface ExperimentStepsFlags {
   s2_efficacy: boolean;      // S2 — self-efficacy, after round 1, before debrief
   s3_debrief: boolean;       // S3 — post-debrief/reflection survey, Groups A/B only
   s4_efficacy: boolean;      // S4 — self-efficacy, after round 2
-  s5_improvement: boolean;   // S5 — learning transfer, Groups A/B only
-  final: boolean;            // S6 — final experience survey
+  final: boolean;            // S6 — final experience survey, after assessment
   // Activity steps
   round1_complete: boolean;       // Round 1 negotiation ended
   debrief_complete: boolean;      // Sage debrief session ended (Group A)
   reflection_complete: boolean;   // Written reflection submitted (Group B)
   round2_complete: boolean;       // Round 2 negotiation ended
+  assessment_complete: boolean;   // AI assessment viewed and dismissed (all groups)
 }
 
 export type ExperimentStatus = "active" | "completed" | "withdrawn";
@@ -90,7 +90,6 @@ export function nextSurveyDue(user: ExperimentUser): keyof ExperimentStepsFlags 
   if (!user.steps_done?.s2_efficacy) return "s2_efficacy";
   if (user.condition !== "control" && !user.steps_done?.s3_debrief) return "s3_debrief";
   if (!user.steps_done?.s4_efficacy) return "s4_efficacy";
-  if (user.condition !== "control" && !user.steps_done?.s5_improvement) return "s5_improvement";
   if (!user.steps_done?.final) return "final";
   return null;
 }

@@ -79,7 +79,9 @@ the assessment must be comprehensive regardless.
 
 For each key_moment, describe the user's behaviour (what they did or did not
 do), explain the likely consequence if the pattern continues, and reference
-the diagnostic insight as context. Do not simply repeat the packet verbatim —
+the diagnostic insight as context. Close each moment with the reframing
+principle from the improved_move — one sentence stating the alternative lens,
+grounded in what actually happened. Do not simply repeat the packet verbatim —
 synthesise it into flowing prose.
 
 Also incorporate any additional_observations from the DebriefPlan that add
@@ -96,12 +98,11 @@ Write as flowing prose, not a bullet list.
 Provide a short, practical plan the user can apply immediately. Use a plain
 list format (dash and space before each item). Include:
 
-- 2–3 behavioral rules: simple cues for the next negotiation
-- 2 ready-to-use sentence templates:
-  - one interest-focused line (e.g., "Can you help me understand what's
-    driving that for you?")
-  - one objective-criteria line (e.g., "What standard would we use to
-    evaluate that?")
+- 2–3 behavioral rules: simple cues for the next negotiation, drawn from the
+  reframing principles in the key moments
+- 2 ready-to-use sentence templates drawn from the example moves in the key
+  moments — adapt them to sound natural, not scripted
 - 1 simple drill they can do before their next negotiation
 
-Keep it short, practical, and grounded in this specific scenario.
+Keep it short, practical, and grounded in this specific scenario. Do not use
+generic templates unrelated to what happened in this negotiation.

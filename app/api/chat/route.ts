@@ -4,7 +4,7 @@ import path from "path";
 import scenarios from "@/content/scenarios.json";
 import personalities from "@/content/personalities.json";
 import { saveSession, StoredMessage } from "@/lib/sessionStore";
-import { callClaude } from "@/lib/callClaude";
+import OpenAI from "openai";
 import { getDb } from "@/lib/mongodb";
 import { auth } from "@/auth";
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   const personalityPrompt = loadPrompt(`personality_${personality_id}.md`);
   const simulatorRules = loadPrompt("simulator_rules.md");
 
-  const systemPrompt = `${scenarioPrompt}\n\n${personalityPrompt}\n\n${simulatorRules}`;
+  const systemPrompt = `${personalityPrompt}\n\n${scenarioPrompt}\n\n${simulatorRules}`;
 
   // Claude requires at least one message. When messages is empty the app is
   // asking for the AI's opening line, so we inject a silent bootstrap prompt.
@@ -46,14 +46,16 @@ export async function POST(req: NextRequest) {
       : (messages as Message[]);
 
   try {
-    const response = await callClaude({
+    const openai = new OpenAI();
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       max_tokens: 200,
-      system: systemPrompt,
-      messages: apiMessages,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...apiMessages,
+      ],
     });
-
-    const reply =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    const reply = response.choices[0].message.content ?? "";
 
     // Persist session so the conversation survives a page refresh.
     // The bootstrap synthetic user message is NOT stored — only real turns.

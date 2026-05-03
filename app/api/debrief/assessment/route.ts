@@ -35,12 +35,10 @@ export async function POST(req: NextRequest) {
 
   let assessment: string;
   try {
-    const response = await callClaude({
+    assessment = await callClaude({
       max_tokens: 2048,
       messages: [{ role: "user", content: prompt }],
     });
-    assessment =
-      response.content[0].type === "text" ? response.content[0].text : "";
   } catch (err) {
     console.error("Assessment generation error:", err);
     return NextResponse.json(

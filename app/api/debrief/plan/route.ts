@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { buildPlanPrompt, DebriefPlan } from "@/lib/debriefPrompt";
 import { saveDebriefSession } from "@/lib/debriefSessionStore";
 import { Transcript } from "@/lib/transcript";
-import { callClaude, FALLBACK_MODEL } from "@/lib/callClaude";
+import { callClaude } from "@/lib/callClaude";
 import { getDb } from "@/lib/mongodb";
+import { COLLECTIONS } from "@/lib/dbCollections";
 import { auth } from "@/auth";
 
 export async function POST(req: NextRequest) {
@@ -31,13 +32,9 @@ export async function POST(req: NextRequest) {
 
   try {
     const prompt = buildPlanPrompt(transcript);
-    const response = await callClaude(
-      { max_tokens: 4096, messages: [{ role: "user", content: prompt }] },
-      FALLBACK_MODEL
+    const text = await callClaude(
+      { max_tokens: 4096, messages: [{ role: "user", content: prompt }] }
     );
-
-    const text =
-      response.content[0].type === "text" ? response.content[0].text : "";
 
     // Extract JSON — strip any markdown fences Claude might add
     const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -72,7 +69,7 @@ export async function POST(req: NextRequest) {
     // Create the initial debrief document in MongoDB — all metadata set here
     // so per-turn message appends have a complete record to update.
     const db = await getDb();
-    await db.collection("debriefs").updateOne(
+    await db.collection(COLLECTIONS.debriefs).updateOne(
       { debrief_id },
       {
         $set: {

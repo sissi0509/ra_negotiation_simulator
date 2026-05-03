@@ -64,12 +64,10 @@ export async function POST(req: NextRequest) {
   const prompt = buildTranscriptOnlyAssessmentPrompt(transcript);
   let assessment: string;
   try {
-    const response = await callClaude({
+    assessment = await callClaude({
       max_tokens: 2048,
       messages: [{ role: "user", content: prompt }],
     });
-    assessment =
-      response.content[0].type === "text" ? response.content[0].text : "";
   } catch (err) {
     console.error("Transcript assessment generation error:", err);
     return NextResponse.json({ error: "Failed to generate assessment." }, { status: 500 });

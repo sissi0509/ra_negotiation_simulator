@@ -1,8 +1,8 @@
 {
   "id": "s4_efficacy",
   "survey_key": "s4_efficacy",
-  "title": "Quick Check-In",
-  "subtitle": "Before moving on, please answer a few questions about how you felt during the negotiation.",
+  "title": "Post-Round Survey",
+  "subtitle": "You have completed both rounds. Please answer a few questions before continuing.",
   "scale": { "min": 1, "max": 7, "minLabel": "Strongly Disagree", "maxLabel": "Strongly Agree" },
   "questions": [
     { "id": "q1", "text": "I feel confident in my ability to negotiate effectively." },
@@ -11,10 +11,17 @@
     { "id": "q4", "text": "I understand what I should do differently next time." },
     { "id": "q5", "text": "I understand why I got the outcome I did." }
   ],
+  "questions_transfer": [
+    { "id": "t1", "text": "I felt more confident in the second negotiation than the first." },
+    { "id": "t2", "text": "I applied what I learned from the first round." },
+    { "id": "t3", "text": "I had a clearer strategy in the second negotiation." },
+    { "id": "t4", "text": "I handled the second negotiation more effectively." }
+  ],
   "subscales": {
     "self_efficacy": ["q1", "q2"],
-    "insight": ["q3", "q4", "q5"]
+    "insight": ["q3", "q4", "q5"],
+    "transfer": ["t1", "t2", "t3", "t4"]
   },
-  "timing_note": "Fires immediately after Round 2 ends, BEFORE S5. Identical questions to S2 — the S4 − S2 delta on each subscale is the primary self-report dependent variable.",
-  "note": "⚠️ Intentionally identical to S2. Do not change questions independently — both must stay in sync."
+  "timing_note": "Fires immediately after Round 2. Combines S4 efficacy/insight (primary DVs, identical to S2) with S5 transfer items — all stored together under type s4_efficacy. S4 vs S5 items are distinguished by q vs t prefix in question IDs.",
+  "note": "⚠️ S4 questions (q1–q5) intentionally identical to S2. Do not change q-questions independently — both must stay in sync."
 }

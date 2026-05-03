@@ -1,4 +1,4 @@
-// Run with: npx ts-node --project tsconfig.json scripts/seed-participants.ts
+// Run with: npx tsx scripts/seed-participants.ts
 //
 // Creates one participant account per group (A, B, C) in the `users` collection.
 // Edit the entries below before running.
@@ -89,13 +89,13 @@ async function seed() {
         s2_efficacy: false,
         s3_debrief: false,
         s4_efficacy: false,
-        s5_improvement: false,
         final: false,
         // Activity steps
         round1_complete: false,
         debrief_complete: false,
         reflection_complete: false,
         round2_complete: false,
+        assessment_complete: false,
       },
       enrolled_at: new Date().toISOString(),
     });

@@ -10,7 +10,7 @@
  *   node generate_transcript.js --brief briefs/salary_low.md
  *   node generate_transcript.js --brief briefs/apartment_high.md
  *
- * Requires: Node 18+, app running at base_url, ANTHROPIC_API_KEY in env or .env.local
+ * Requires: Node 18+, app running at base_url, OPENAI_API_KEY in env or .env.local
  */
 
 const fs   = require("fs");
@@ -46,7 +46,7 @@ const SKILL_LEVEL  = pick("skill_level") || "unspecified";
 const USER_STYLE   = pick("user_style");
 const USER_ID      = pick("user_id")     || null;
 const BASE_URL     = pick("base_url")    || "http://localhost:3000";
-const SIM_MODEL    = pick("sim_model")   || "claude-haiku-4-5-20251001";
+const SIM_MODEL    = pick("sim_model")   || "gpt-4o-mini";
 
 if (!SCENARIO) {
   console.error("Brief file must include: scenario: salary_negotiation | apartment_rent");
@@ -69,8 +69,8 @@ function loadEnvVar(key) {
   return null;
 }
 
-const ANTHROPIC_API_KEY = loadEnvVar("ANTHROPIC_API_KEY");
-if (!ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY not found.");
+const OPENAI_API_KEY = loadEnvVar("OPENAI_API_KEY");
+if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY not found.");
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -94,26 +94,27 @@ async function postApp(route, body) {
 }
 
 async function callSimUser(systemPrompt, messages) {
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
-      "Content-Type":      "application/json",
-      "x-api-key":         ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${OPENAI_API_KEY}`,
     },
     body: JSON.stringify({
       model:      SIM_MODEL,
       max_tokens: 300,
-      system:     systemPrompt,
-      messages,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...messages,
+      ],
     }),
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Anthropic API → ${res.status}: ${text}`);
+    throw new Error(`OpenAI API → ${res.status}: ${text}`);
   }
   const data = await res.json();
-  return data.content[0].text.trim();
+  return data.choices[0].message.content.trim();
 }
 
 function clean(text) {

@@ -37,12 +37,12 @@ export async function GET() {
 //   steps_done.s2_efficacy        boolean
 //   steps_done.s3_debrief         boolean
 //   steps_done.s4_efficacy        boolean
-//   steps_done.s5_improvement     boolean
-//   steps_done.final              boolean
-//   steps_done.round1_complete    boolean
-//   steps_done.debrief_complete   boolean
-//   steps_done.reflection_complete boolean
-//   steps_done.round2_complete    boolean
+//   steps_done.final              boolean  (combined S5+S6 survey, before assessment)
+//   steps_done.round1_complete      boolean
+//   steps_done.debrief_complete     boolean
+//   steps_done.reflection_complete  boolean
+//   steps_done.round2_complete      boolean
+//   steps_done.assessment_complete  boolean
 //
 // Pass only the fields you want to change. Dot-notation keys for steps_done are
 // expanded server-side — send { steps_done: { pre: true } } not the dot path.
@@ -64,8 +64,8 @@ export async function PATCH(req: Request) {
   // steps_done — accept as a nested object, expand to dot-notation for MongoDB
   if (body.steps_done && typeof body.steps_done === "object") {
     const STEP_KEYS = [
-      "pre", "gty_intro", "s2_efficacy", "s3_debrief", "s4_efficacy", "s5_improvement", "final",
-      "round1_complete", "debrief_complete", "reflection_complete", "round2_complete",
+      "pre", "gty_intro", "s2_efficacy", "s3_debrief", "s4_efficacy", "final",
+      "round1_complete", "debrief_complete", "reflection_complete", "round2_complete", "assessment_complete",
     ] as const;
     for (const key of STEP_KEYS) {
       if (key in body.steps_done) {

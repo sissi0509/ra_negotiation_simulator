@@ -14,14 +14,11 @@ export async function POST(req: NextRequest) {
   const { system, userMessage } = buildPartialSummaryPrompt(messages);
 
   try {
-    const response = await callClaude({
+    const summary = await callClaude({
       max_tokens: 256,
       system,
       messages: [{ role: "user", content: userMessage }],
     });
-
-    const summary =
-      response.content[0].type === "text" ? response.content[0].text : "";
     return NextResponse.json({ summary });
   } catch (err) {
     console.error("Partial summary API error:", err);

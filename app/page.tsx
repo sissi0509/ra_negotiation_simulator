@@ -159,9 +159,10 @@ export default function Home() {
                 }
               }
               if (due === "s4_efficacy" && s.round2_complete) { window.location.replace(`/survey?type=s4_efficacy${runParam}`); return; }
-              if (due === "s5_improvement") { window.location.replace(`/survey?type=s5_improvement${runParam}`); return; }
               if (due === "final") {
-                // All groups pass through the transition notice before the AI assessment
+                // If assessment already viewed, go straight to the final survey.
+                // Otherwise go through the transition page first.
+                if (s.assessment_complete) { window.location.replace(`/survey?type=final${runParam}`); return; }
                 window.location.replace("/transition"); return;
               }
               if (due === null) {

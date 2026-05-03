@@ -37,20 +37,16 @@
         "detail": "A second negotiation scenario to apply what you learned."
       },
       {
-        "label": "Self-efficacy check",
-        "detail": "A few questions about how you felt during the second negotiation."
-      },
-      {
-        "label": "Learning reflection",
-        "detail": "Questions about what you learned and how your approach changed."
+        "label": "Post-round survey",
+        "detail": "Questions about how you felt and what you learned across both rounds."
       },
       {
         "label": "Your AI assessment",
         "detail": "An AI assessment of your Round 1 negotiation is released here."
       },
       {
-        "label": "Final experience survey",
-        "detail": "A few questions about your overall experience in this study."
+        "label": "Final survey",
+        "detail": "A few short questions about your overall experience in this study."
       }
     ],
     "static_reflection": [
@@ -83,20 +79,16 @@
         "detail": "A second negotiation scenario to apply what you learned."
       },
       {
-        "label": "Self-efficacy check",
-        "detail": "A few questions about how you felt during the second negotiation."
-      },
-      {
-        "label": "Learning reflection",
-        "detail": "Questions about what you learned and how your approach changed."
+        "label": "Post-round survey",
+        "detail": "Questions about how you felt and what you learned across both rounds."
       },
       {
         "label": "Your AI assessment",
         "detail": "An AI assessment of your Round 1 negotiation is released here."
       },
       {
-        "label": "Final experience survey",
-        "detail": "A few questions about your overall experience in this study."
+        "label": "Final survey",
+        "detail": "A few short questions about your overall experience in this study."
       }
     ],
     "control": [
@@ -121,16 +113,16 @@
         "detail": "A second negotiation scenario."
       },
       {
-        "label": "Self-efficacy check",
-        "detail": "A few questions about how you felt during the second negotiation."
+        "label": "Post-round survey",
+        "detail": "Questions about how you felt and what you learned across both rounds."
       },
       {
         "label": "Your AI assessment",
         "detail": "An AI assessment of your Round 1 negotiation is released here."
       },
       {
-        "label": "Final experience survey",
-        "detail": "A few questions about your overall experience in this study."
+        "label": "Final survey",
+        "detail": "A few short questions about your overall experience in this study."
       }
     ]
   }
