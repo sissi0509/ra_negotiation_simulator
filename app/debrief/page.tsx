@@ -12,9 +12,8 @@ import { buildDebriefText, downloadDebrief } from "@/lib/debriefExport";
 import DebriefUpload from "@/components/DebriefUpload";
 import UserMenu from "@/components/UserMenu";
 import { isExperiment } from "@/lib/appMode";
+import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY } from "@/lib/debriefKeys";
 
-export const DEBRIEF_PENDING_KEY = "debrief_pending";
-export const DEBRIEF_SESSION_KEY = "debrief_session_id";
 const DEBRIEF_STATE_KEY = "debrief_state";
 
 function generateId(): string {

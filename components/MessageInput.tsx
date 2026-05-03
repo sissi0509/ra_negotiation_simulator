@@ -18,8 +18,8 @@ export default function MessageInput({ onSend, disabled, defaultVoice = false }:
 
   useEffect(() => {
     const available = isSpeechAvailable();
-    setSpeechAvailable(available);
-    if (defaultVoice && available) setVoiceMode(true);
+    setSpeechAvailable(available); // eslint-disable-line react-hooks/set-state-in-effect
+    if (defaultVoice && available) setVoiceMode(true); // eslint-disable-line react-hooks/set-state-in-effect
   }, [defaultVoice]);
 
   function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {

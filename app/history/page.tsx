@@ -7,6 +7,8 @@ interface TranscriptSummary {
   run_id: string;
   scenario_name: string;
   personality_name: string;
+  scenario_id?: string;
+  personality_id?: string;
   started_at: string;
   messages: { role: string }[];
   has_debrief: boolean;
@@ -131,7 +133,7 @@ function DetailView({ meta, detail, detailLoading, onBack, formatDate }: {
             {!detail.debrief ? (
               /* No debrief yet — prompt to start one */
               <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
-                <p className="text-sm font-medium text-gray-700">This negotiation hasn't been debriefed yet.</p>
+                <p className="text-sm font-medium text-gray-700">This negotiation hasn&apos;t been debriefed yet.</p>
                 <p className="text-xs text-gray-400">Debrief with Sage to get feedback and an AI assessment.</p>
                 <button
                   onClick={() => {

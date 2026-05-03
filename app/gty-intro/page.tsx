@@ -27,7 +27,7 @@ export default function GtyIntroPage() {
 
   // Reset and start timer whenever slide changes
   useEffect(() => {
-    setSecondsLeft(SECONDS_PER_SLIDE);
+    setSecondsLeft(SECONDS_PER_SLIDE); // eslint-disable-line react-hooks/set-state-in-effect
 
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {

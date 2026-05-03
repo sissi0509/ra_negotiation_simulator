@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { isExperiment } from "@/lib/appMode";
 
 type Stage = "negotiate" | "debrief" | "report";
@@ -22,16 +23,9 @@ export default function UserMenu({ stage }: Props) {
   const [confirmingSignOut, setConfirmingSignOut] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // In experiment mode participants have no access to navigation, history, or sign-out.
-  // Hooks are called above so React rules are satisfied.
-  if (isExperiment) return null;
-
-  const email = session?.user?.email ?? "";
-  const name = session?.user?.name ?? email;
-  const initial = (name[0] ?? "?").toUpperCase();
-
   // Close on outside click
   useEffect(() => {
+    if (isExperiment) return;
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
@@ -41,6 +35,13 @@ export default function UserMenu({ stage }: Props) {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
+
+  // In experiment mode participants have no access to navigation, history, or sign-out.
+  if (isExperiment) return null;
+
+  const email = session?.user?.email ?? "";
+  const name = session?.user?.name ?? email;
+  const initial = (name[0] ?? "?").toUpperCase();
 
   return (
     <div className="relative" ref={ref}>
@@ -97,27 +98,27 @@ export default function UserMenu({ stage }: Props) {
 
           {/* Navigation */}
           <div className="border-b border-gray-100 px-4 py-2 flex flex-col gap-0.5">
-            <a
+            <Link
               href="/"
               className="block w-full rounded-md px-2 py-1.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50"
               onClick={() => { localStorage.removeItem("negotiation_session_id"); localStorage.setItem("intro_seen", "true"); setOpen(false); }}
             >
               Simulator
-            </a>
-            <a
+            </Link>
+            <Link
               href="/history"
               className="block w-full rounded-md px-2 py-1.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50"
               onClick={() => setOpen(false)}
             >
               History
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               className="block w-full rounded-md px-2 py-1.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50"
               onClick={() => { localStorage.removeItem("intro_seen"); localStorage.removeItem("negotiation_session_id"); setOpen(false); }}
             >
               Welcome
-            </a>
+            </Link>
           </div>
 
           {/* Sign out */}

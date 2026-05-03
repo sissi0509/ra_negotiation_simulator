@@ -18,7 +18,7 @@ import experimentIntro from "@/experiment/content/experiment_intro.json";
 import scenarioContexts from "@/experiment/content/scenario_contexts.json";
 import { isUserSigningOff } from "@/lib/endDetection";
 import { buildTranscript } from "@/lib/transcript";
-import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY as DEBRIEF_SESSION_KEY_CONST } from "@/app/debrief/page";
+import { DEBRIEF_PENDING_KEY, DEBRIEF_SESSION_KEY as DEBRIEF_SESSION_KEY_CONST } from "@/lib/debriefKeys";
 import { isExperiment, currentRoundAssignment, nextSurveyDue } from "@/lib/appMode";
 import type { ExperimentUser, ExperimentCondition } from "@/lib/appMode";
 
