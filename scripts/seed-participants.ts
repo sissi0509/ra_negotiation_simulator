@@ -1,9 +1,9 @@
 // Run with: npx tsx scripts/seed-participants.ts
 
 // ─── EDIT THESE ──────────────────────────────────────────────
-const EMAIL = "zx@study.local"; // login email
-const PASSWORD = "password123-zx"; // login password
-const ID = "Pzx"; // participant ID (P01, P02, …)
+const EMAIL = "zx1@study.local"; // login email
+const PASSWORD = "password123-zx1"; // login password
+const ID = "Pzx1"; // participant ID (P01, P02, …)
 const GROUP = "A"; // "A" | "B" | "C"
 // ─────────────────────────────────────────────────────────────
 

@@ -100,12 +100,17 @@ export default function DebriefLoadingScreen({
           </button>
         ) : isLoading ? (
           // Countdown finished but API still working.
-          <button
-            disabled
-            className="rounded-md bg-indigo-300 px-5 py-2.5 text-sm font-medium text-white cursor-not-allowed"
-          >
-            Preparing your debrief…
-          </button>
+          <div className="flex flex-col items-center gap-2">
+            <button
+              disabled
+              className="w-full rounded-md bg-indigo-300 px-5 py-2.5 text-sm font-medium text-white cursor-not-allowed"
+            >
+              Preparing your debrief…
+            </button>
+            <p className="text-center text-xs text-gray-400">
+              This may take up to 1–2 minutes. Please stay on this page.
+            </p>
+          </div>
         ) : (
           // Error state — let the user retry preparation.
           <button
