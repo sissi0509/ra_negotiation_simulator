@@ -20,6 +20,16 @@ export default function CompletePage() {
             body: JSON.stringify({ status: "completed", completed_at: new Date().toISOString() }),
           }).catch(() => {});
         }
+        // Clear all experiment-related localStorage keys.
+        [
+          "negotiation_session_id",
+          "debrief_pending",
+          "debrief_state",
+          "experiment_debrief_id",
+          "experiment_last_run_id",
+          "experiment_round1_run_id",
+          "intro_seen",
+        ].forEach((k) => localStorage.removeItem(k));
       })
       .catch(() => {});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

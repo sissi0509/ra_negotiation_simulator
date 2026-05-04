@@ -1,7 +1,11 @@
 // Run with: npx tsx scripts/seed-participants.ts
-//
-// Creates one participant account per group (A, B, C) in the `users` collection.
-// Edit the entries below before running.
+
+// ─── EDIT THESE ──────────────────────────────────────────────
+const EMAIL = "zx@study.local"; // login email
+const PASSWORD = "password123-zx"; // login password
+const ID = "Pzx"; // participant ID (P01, P02, …)
+const GROUP = "A"; // "A" | "B" | "C"
+// ─────────────────────────────────────────────────────────────
 
 import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
@@ -10,44 +14,11 @@ import * as path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env.local") });
 
-const PARTICIPANTS = [
-  {
-    email: "participant-a@study.local",
-    name: "Participant A",
-    password: "study-password-a",
-    participant_id: "P01",
-    group: "A",
-    condition: "ai_debrief",
-    rounds: [
-      { round: 1, scenario: "salary_negotiation", personality: "aggressive" },
-      { round: 2, scenario: "apartment_rent", personality: "aggressive" },
-    ],
-  },
-  {
-    email: "participant-b@study.local",
-    name: "Participant B",
-    password: "study-password-b",
-    participant_id: "P02",
-    group: "B",
-    condition: "static_reflection",
-    rounds: [
-      { round: 1, scenario: "salary_negotiation", personality: "aggressive" },
-      { round: 2, scenario: "apartment_rent", personality: "aggressive" },
-    ],
-  },
-  {
-    email: "participant-c@study.local",
-    name: "Participant C",
-    password: "study-password-c",
-    participant_id: "P03",
-    group: "C",
-    condition: "control",
-    rounds: [
-      { round: 1, scenario: "salary_negotiation", personality: "aggressive" },
-      { round: 2, scenario: "apartment_rent", personality: "aggressive" },
-    ],
-  },
-];
+const CONDITION_MAP: Record<string, string> = {
+  A: "ai_debrief",
+  B: "static_reflection",
+  C: "control",
+};
 
 async function seed() {
   const uri = process.env.MONGODB_URI;
@@ -57,53 +28,59 @@ async function seed() {
     process.exit(1);
   }
 
+  const group = GROUP.toUpperCase();
+  const condition = CONDITION_MAP[group];
+  if (!condition) {
+    console.error(`Invalid GROUP "${GROUP}". Must be A, B, or C.`);
+    process.exit(1);
+  }
+
   const client = new MongoClient(uri);
   await client.connect();
   const db = client.db(dbName);
   const collection = db.collection("users");
 
-  for (const p of PARTICIPANTS) {
-    const existing = await collection.findOne({ email: p.email });
-    if (existing) {
-      console.log(`SKIP  ${p.email} — already exists`);
-      continue;
-    }
-
-    const password_hash = await bcrypt.hash(p.password, 10);
-    await collection.insertOne({
-      email: p.email,
-      name: p.name,
-      password_hash,
-      type: "participant",
-      participant_id: p.participant_id,
-      group: p.group,
-      condition: p.condition,
-      rounds: p.rounds,
-      current_round: 1,
-      status: "active",
-      consent_given: false,
-      steps_done: {
-        // Surveys
-        pre: false,
-        gty_intro: false,
-        s2_efficacy: false,
-        s3_debrief: false,
-        s4_efficacy: false,
-        final: false,
-        // Activity steps
-        round1_complete: false,
-        debrief_complete: false,
-        reflection_complete: false,
-        round2_complete: false,
-        assessment_complete: false,
-      },
-      enrolled_at: new Date().toISOString(),
-    });
-    console.log(`CREATED ${p.email} (Group ${p.group}, ${p.condition})`);
+  const existing = await collection.findOne({ email: EMAIL });
+  if (existing) {
+    console.log(`SKIP  ${EMAIL} — already exists`);
+    await client.close();
+    return;
   }
 
+  const password_hash = await bcrypt.hash(PASSWORD, 10);
+  await collection.insertOne({
+    email: EMAIL,
+    name: ID,
+    password_hash,
+    type: "participant",
+    participant_id: ID,
+    group,
+    condition,
+    rounds: [
+      { round: 1, scenario: "salary_negotiation", personality: "aggressive" },
+      { round: 2, scenario: "apartment_rent", personality: "aggressive" },
+    ],
+    current_round: 1,
+    status: "active",
+    consent_given: false,
+    steps_done: {
+      pre: false,
+      gty_intro: false,
+      s2_efficacy: false,
+      s3_debrief: false,
+      s4_efficacy: false,
+      final: false,
+      round1_complete: false,
+      debrief_complete: false,
+      reflection_complete: false,
+      round2_complete: false,
+      assessment_complete: false,
+    },
+    enrolled_at: new Date().toISOString(),
+  });
+
+  console.log(`CREATED ${EMAIL} — Group ${group} (${condition})`);
   await client.close();
-  console.log("Done.");
 }
 
 seed().catch((err) => {
